@@ -120,12 +120,14 @@ function getRightAutocompleteComboBox(label/*, operationComboBox*/) {
 		    }
 		    */
 
-			if (!value || value=='' || isValidClass(value)) {
-				return true;
-			}
-		    else {
-				return 'The right value needs to be a class';
-			}
+// GS: changed in order to accept free text in right value field
+//			if (!value || value=='' || isValidClass(value)) {
+//  		  return true;
+//			}
+//		  else {
+//		    return 'The right value needs to be a class';
+//			}
+        return true;
 		}
 	});
 }
@@ -171,7 +173,7 @@ function getConditionalRadioButtons() {
 function appInit(expression, reasonerValue, ontologyValue) {
 	var store = getAutocompleteStore();
 	
-	var filterComboBox = getStaticComboBox("having", 100, [ [ 'some', 'some' ], [ 'min', 'min' ], [ 'max', 'max' ], [ 'only', 'only' ],
+	var filterComboBox = getStaticComboBox("Restriction", 100, [ [ 'some', 'some' ], [ 'min', 'min' ], [ 'max', 'max' ], [ 'only', 'only' ],
 		[ 'value', 'value' ], [ 'exactly', 'exactly' ]]);
 	filterComboBox.disable();
 
@@ -184,7 +186,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 	operationComboBox.disable();
 	*/
 	
-	var rightField = getRightAutocompleteComboBox("being"/*, operationComboBox*/);
+	var rightField = getRightAutocompleteComboBox("Expression"/*, operationComboBox*/);
 	rightField.disable();
 	
 	var conditionalRadioButtons = getConditionalRadioButtons();
@@ -212,7 +214,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 			items: [ notCheckbox, termField ]
 		}, filterComboBox, {
 			xtype: 'compositefield',
-			fieldLabel : 'being',
+			fieldLabel : 'Expression',
 			items: [ /*operationComboBox,*/ rightField ]
 		}, conditionalRadioButtons ],
 		bodyStyle : 'padding:5px',
@@ -224,13 +226,13 @@ function appInit(expression, reasonerValue, ontologyValue) {
 					var selectedRadio = conditionalRadioButtons.getValue();
 					
 					if (queryLabel.getValue().length > 0 && !selectedRadio) {
-						Ext.MessageBox.alert('Error', 'A condition must be selected for this term');
+						Ext.MessageBox.alert('Error', 'Either a "Condition" must be selected or press the "Clear query" button to start with a new request');
 						return;
 					}
 
 					if (isValidRelation(termField.getValue())) {
 						if (!filterComboBox.getValue() || !rightField.getValue()) {
-							Ext.MessageBox.alert('Error', 'A filter and an right value must be selected for relations');
+							Ext.MessageBox.alert('Error', 'A "Restriction" and an "Expression" must be selected for relations');
 							return;
 						}
 						
