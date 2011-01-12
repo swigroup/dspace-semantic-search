@@ -17,6 +17,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.dspace.app.webui.servlet.DSpaceServlet;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.core.Context;
+import org.dspace.core.ConfigurationManager;
 
 /**
  * Servlet for exporting OAI qualified Dublin Core in OWL format
@@ -32,7 +33,7 @@ public class DspaceOntologyServlet extends DSpaceServlet
     {
         response.setContentType("application/rdf+xml; charset=UTF-8");
 
-        String oaiService = "http://repository.upatras.gr/dspace-oai/request?verb=ListRecords&metadataPrefix=qdc";
+        String oaiService = ConfigurationManager.getProperty("dspace.oai.url") + "/request?verb=ListRecords&metadataPrefix=qdc";
 
         try
         {
