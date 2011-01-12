@@ -33,7 +33,7 @@
       </repository>
 <repository>
   <id>patras</id>
-  <url>http://apollo.hpclab.ceid.upatras.gr/maven/</url>
+  <url>http://swig.hpclab.ceid.upatras.gr/maven/</url>
 </repository>
    </repositories>
 
