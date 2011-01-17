@@ -33,6 +33,8 @@ import org.semanticweb.owlapi.model.OWLNegativeObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 
+import org.dspace.core.ConfigurationManager;
+
 /**
  * Servlet for supporting semantic search in DSpace
  * 
@@ -71,8 +73,9 @@ public class SemanticSearchServlet extends DSpaceServlet
     protected void doDSGet(Context context, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, AuthorizeException
     {
-        String url = getActiveValueFromRequest(request, "URL",
-                "http://apollo.hpclab.ceid.upatras.gr:8000/jspui16/dspace-ont");
+        String ontoURL = ConfigurationManager.getProperty("dspace.baseUrl") + request.getContextPath() + "/dspace-ont";
+        String url = getActiveValueFromRequest(request, "URL", ontoURL);
+        
         String reasoner = getActiveValueFromRequest(request, "reasoner",
                 SupportedReasoner.PELLET.name());
 
