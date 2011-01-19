@@ -296,7 +296,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 			xtype : 'button',
 			text : 'Save options',
 			handler: function (event, button) {
-				window.location = 'semantic-search?URL=' + escape(ontologyTextField.getValue()).replace('+', '%2B') + '&reasoner=' + reasonerCombobox.getValue();				
+				window.location = 'semantic-search?URL=' + encodeURI(ontologyTextField.getValue()).replace('+', '%2B') + '&reasoner=' + reasonerCombobox.getValue();				
 			}
 		} ]
 	});
@@ -324,7 +324,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 			text : 'Search',
 			handler: function(event) {
 			    if (queryLabel.getValue().length>0) {
-					window.location = 'semantic-search?semantic=true&syntax=man&expression=' + escape(queryLabel.getValue()); 
+					window.location = 'semantic-search?semantic=true&syntax=man&expression=' + encodeURI(queryLabel.getValue()); 
 				}
 			}
 		}, {
