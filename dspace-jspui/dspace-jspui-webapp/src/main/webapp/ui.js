@@ -306,11 +306,15 @@ function appInit(expression, reasonerValue, ontologyValue) {
 		anchor : "-10px",
 		value: expression
 	});
+
+        var reasonerLabel = new Ext.form.Label({
+                text : "Loaded reasoner is " + reasonerValue
+        });
 	
 	var queryExplain = new Ext.form.FieldSet( {
 		labelWidth : 100,
-		bodyStyle : 'font:12px tahoma,arial,helvetica,sans-serif;',
-		items: [ queryLabel ]
+		bodyStyle : 'font:12px tahoma,arial,helvetica,sans-serif; text-align:right;',
+		items: [ queryLabel, reasonerLabel ]
 	});
 
 	var searchPanel = new Ext.Panel( {
