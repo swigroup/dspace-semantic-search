@@ -73,7 +73,8 @@ public class SemanticSearchServlet extends DSpaceServlet
     protected void doDSGet(Context context, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, AuthorizeException
     {
-        String ontoURL = ConfigurationManager.getProperty("dspace.baseUrl") + request.getContextPath() + "/dspace-ont";
+        //String ontoURL = ConfigurationManager.getProperty("dspace.baseUrl") + request.getContextPath() + "/dspace-ont";
+        String ontoURL = "http://repository.upatras.gr/dspace/dspace-ont";
         String url = getActiveValueFromRequest(request, "URL", ontoURL);
         
         String reasoner = getActiveValueFromRequest(request, "reasoner",
