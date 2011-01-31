@@ -76,9 +76,6 @@ public class SemanticSearchServlet extends DSpaceServlet
         String ontoURL = ConfigurationManager.getProperty("dspace.baseUrl") + request.getContextPath() + "/dspace-ont";
         String url = getActiveValueFromRequest(request, "URL", ontoURL);
         String reasoner = getActiveValueFromRequest(request, "reasoner", SupportedReasoner.PELLET.name());
-        
-        String reasoner = getActiveValueFromRequest(request, "reasoner",
-                SupportedReasoner.PELLET.name());
 
         SemanticUnit semanticUnit = null;
 
