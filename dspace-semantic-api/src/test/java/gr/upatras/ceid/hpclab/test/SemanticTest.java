@@ -6,13 +6,12 @@ import gr.upatras.ceid.hpclab.reasoner.SupportedReasoner;
 
 public class SemanticTest
 {
-    public static String ONTOLOGY = "http://apollo.hpclab.ceid.upatras.gr:8000/jspui16/dspace-ont";
-
     protected SemanticUnit semanticUnit;
-    
-    public SemanticTest(SupportedReasoner reasoner) throws SemanticSearchException,
-            InstantiationException, IllegalAccessException, ClassNotFoundException
+
+    public SemanticTest(SupportedReasoner reasoner, String ontology)
+            throws SemanticSearchException, InstantiationException, IllegalAccessException,
+            ClassNotFoundException
     {
-        semanticUnit = SemanticUnit.getInstance(ONTOLOGY, reasoner);
+        semanticUnit = SemanticUnit.getInstance(ontology, reasoner);
     }
 }

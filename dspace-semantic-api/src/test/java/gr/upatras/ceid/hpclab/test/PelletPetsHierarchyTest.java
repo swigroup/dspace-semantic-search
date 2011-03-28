@@ -9,13 +9,13 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class OWLHierarchyTest extends SemanticTest
+public class PelletPetsHierarchyTest extends SemanticTest
 {
-    public OWLHierarchyTest() throws SemanticSearchException, InstantiationException,
+    public PelletPetsHierarchyTest() throws SemanticSearchException, InstantiationException,
             IllegalAccessException, ClassNotFoundException
     {
-        super(SupportedReasoner.PELLET);
-        
+        super(SupportedReasoner.PELLET,
+                "http://protege.cim3.net/file/pub/ontologies/people.pets/people+pets.owl");
     }
 
     @Test
@@ -23,13 +23,14 @@ public class OWLHierarchyTest extends SemanticTest
     {
         OWLDSpaceQueryManager queryManager = new OWLDSpaceQueryManager(semanticUnit);
         List<String> classList = queryManager.getFullClassList();
- 
+
         for (String value : classList)
         {
             System.out.println(value);
         }
-        
-        Assert.assertEquals(60, classList.size());
+
+        Assert.assertNotNull(classList);
+        Assert.assertTrue(classList.size() > 0);
     }
 
     @Test
@@ -37,13 +38,14 @@ public class OWLHierarchyTest extends SemanticTest
     {
         OWLDSpaceQueryManager queryManager = new OWLDSpaceQueryManager(semanticUnit);
         List<String> objectPropertiesList = queryManager.getFullObjectPropertiesList();
- 
+
         for (String value : objectPropertiesList)
         {
             System.out.println(value);
         }
-       
-        Assert.assertEquals(14, objectPropertiesList.size());
+
+        Assert.assertNotNull(objectPropertiesList);
+        Assert.assertTrue(objectPropertiesList.size() > 0);
     }
 
     @Test
@@ -51,12 +53,13 @@ public class OWLHierarchyTest extends SemanticTest
     {
         OWLDSpaceQueryManager queryManager = new OWLDSpaceQueryManager(semanticUnit);
         List<String> dataPropertiesList = queryManager.getFullDataPropertiesList();
- 
+
         for (String value : dataPropertiesList)
         {
             System.out.println(value);
         }
-       
-        Assert.assertEquals(1, dataPropertiesList.size());
+
+        Assert.assertNotNull(dataPropertiesList);
+        Assert.assertTrue(dataPropertiesList.size() > 0);
     }
 }

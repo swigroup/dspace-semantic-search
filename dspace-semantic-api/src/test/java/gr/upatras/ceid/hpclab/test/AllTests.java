@@ -5,9 +5,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses( { 
-    OWLQueryFactPlusPlusReasonerTest.class, 
-    OWLQueryPelletReasonerTest.class,
-    OWLHierarchyTest.class
+    PelletDSpaceTest.class,
+    PelletPetsTest.class,
+    PelletPetsHierarchyTest.class
 })
 public class AllTests
 {
