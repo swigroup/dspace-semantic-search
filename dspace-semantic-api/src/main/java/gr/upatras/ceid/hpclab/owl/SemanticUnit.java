@@ -40,6 +40,16 @@ public class SemanticUnit
             throws SemanticSearchException, InstantiationException, IllegalAccessException,
             ClassNotFoundException
     {
+        OWLDSpaceQueryManager owlQueryManager = setOntology(url);
+
+        importsClosure = manager.getImportsClosure(ontology);
+
+        setReasoner(supportedReasoner);
+        setBidirectionalShortFormProvider(owlQueryManager);
+    }
+
+    public OWLDSpaceQueryManager setOntology(String url) throws SemanticSearchException
+    {
         OWLDSpaceQueryManager owlQueryManager = new OWLDSpaceQueryManager(this);
 
         manager = OWLManager.createOWLOntologyManager();
@@ -53,17 +63,24 @@ public class SemanticUnit
 
             throw new SemanticSearchException("Could not load ontology", exception);
         }
+        
+        return owlQueryManager;
+    }
 
-        importsClosure = manager.getImportsClosure(ontology);
-
-        OWLReasonerFactory owlReasonerFactory = (OWLReasonerFactory) Class.forName(
-                supportedReasoner.toString()).newInstance();
-        reasoner = owlReasonerFactory.getReasoner(ontology);
-
+    public void setBidirectionalShortFormProvider(OWLDSpaceQueryManager owlQueryManager)
+    {
         Map<String, String> namespaces = owlQueryManager.buildNamespaceMapFromImportsClosure();
         shortFormProvider = new QNameShortFormProvider(namespaces);
 
         bidirectionalShortFormProvider = BidirectionalShortFormProviderFactory.getInstance(this);
+    }
+
+    public void setReasoner(SupportedReasoner supportedReasoner) throws InstantiationException,
+            IllegalAccessException, ClassNotFoundException
+    {
+        OWLReasonerFactory owlReasonerFactory = (OWLReasonerFactory) Class.forName(
+                supportedReasoner.toString()).newInstance();
+        reasoner = owlReasonerFactory.getReasoner(ontology);
     }
 
     public static SemanticUnit getInstance(String url, SupportedReasoner supportedReasoner)
@@ -73,6 +90,10 @@ public class SemanticUnit
         if (!semanticUnitMap.containsKey(url))
         {
             semanticUnitMap.put(url, new SemanticUnit(url, supportedReasoner));
+        }
+        else
+        {
+            semanticUnitMap.get(url).setReasoner(supportedReasoner);
         }
 
         return semanticUnitMap.get(url);
