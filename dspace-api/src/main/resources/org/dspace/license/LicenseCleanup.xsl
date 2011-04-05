@@ -20,7 +20,7 @@
       
       Version: $Revision: 5860 $
       
-      Date: $Date: 2010-11-16 19:15:13 +0100 (mar 16 de nov de 2010) $
+      Date: $Date: 2010-11-16 20:15:13 +0200 (Tue, 16 Nov 2010) $
    -->
 
    <xsl:output method="xml" indent="yes" />

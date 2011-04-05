@@ -10,7 +10,7 @@ package org.purl.sword.base;
 /**
  * List of the namespaces that are used by SWORD. 
  * 
- * Last updated on: $Date: 2010-11-12 06:34:07 +0100 (vie 12 de nov de 2010) $
+ * Last updated on: $Date: 2010-11-12 07:34:07 +0200 (Fri, 12 Nov 2010) $
  * 
  * @author Neil Taylor
  * @version $Revision: 5845 $
