@@ -14,7 +14,7 @@
    <parent>
       <groupId>org.dspace</groupId>
       <artifactId>dspace-jspui</artifactId>
-      <version>1.7.1</version>
+      <version>1.7.1-SNAPSHOT</version>
    </parent>
 
    <!--
@@ -23,9 +23,9 @@
       into the snapshot repository below.
    -->
    <scm>
-      <connection>scm:svn:http://scm.dspace.org/svn/repo/dspace/tags/dspace-1.7.1</connection>
-      <developerConnection>scm:svn:https://scm.dspace.org/svn/repo/dspace/tags/dspace-1.7.1</developerConnection>
-      <url>http://scm.dspace.org/svn/repo/dspace/tags/dspace-1.7.1</url>
+      <connection>scm:svn:http://scm.dspace.org/svn/repo/dspace/trunk/dspace-jspui/dspace-jspui-webapp</connection>
+      <developerConnection>scm:svn:https://scm.dspace.org/svn/repo/dspace/trunk/dspace-jspui/dspace-jspui-webapp</developerConnection>
+      <url>http://scm.dspace.org/svn/repo/dspace/trunk/dspace-jspui/dspace-jspui-webapp</url>
    </scm>
 
    <build>
@@ -54,6 +54,30 @@
                </execution>
             </executions>
          </plugin>
+
+           <plugin>
+                <groupId>com.google.code.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <header>http://scm.dspace.org/svn/repo/licenses/LICENSE_HEADER</header>
+                    <includes>
+                        <include>src/**</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/ext-3.3.0/**</exclude>
+                    </excludes>
+                    <properties />
+                    <encoding>UTF-8</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
       </plugins>
    </build>
 
@@ -117,6 +141,10 @@
       <dependency>
          <groupId>org.dspace</groupId>
          <artifactId>dspace-jspui-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.dspace</groupId>
+         <artifactId>dspace-semantic-api</artifactId>
       </dependency>
       <dependency>
       	<groupId>javax.servlet</groupId>

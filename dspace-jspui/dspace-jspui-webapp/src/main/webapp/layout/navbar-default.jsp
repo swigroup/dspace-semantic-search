@@ -100,6 +100,8 @@
               <%-- <input type="text" name="query" id="tequery" size="10"/><input type=image border="0" src="<%= request.getContextPath() %>/image/search-go.gif" name="submit" alt="Go" value="Go"/> --%>
               <input type="text" name="query" id="tequery" size="8"/><input type="submit" name="submit" value="<fmt:message key="jsp.layout.navbar-default.go"/>" />
               <br/><a href="<%= request.getContextPath() %>/advanced-search"><fmt:message key="jsp.layout.navbar-default.advanced"/></a>
+              <br/>&nbsp<br/><a href="<%= request.getContextPath() %>/semantic-search">
+              <fmt:message key="jsp.layout.navbar-default.semantic"/></a>              
 <%
 			if (ConfigurationManager.getBooleanProperty("webui.controlledvocabulary.enable"))
 			{

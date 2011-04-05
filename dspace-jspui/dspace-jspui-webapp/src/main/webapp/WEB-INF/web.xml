@@ -474,6 +474,21 @@
     <servlet-class>org.dspace.app.webui.servlet.ShibbolethServlet</servlet-class>
   </servlet>
 
+  <!--  Semantic Search Servlets -->
+
+  <servlet>
+    <servlet-name>find</servlet-name>
+    <servlet-class>gr.upatras.ceid.hpclab.servlet.Find</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>semantic-search</servlet-name>
+    <servlet-class>gr.upatras.ceid.hpclab.servlet.SemanticSearchServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>dspace-ont</servlet-name>
+    <servlet-class>gr.upatras.ceid.hpclab.servlet.DspaceOntologyServlet</servlet-class>
+  </servlet>
+  
   <servlet-mapping>
     <servlet-name>shibboleth-login</servlet-name>
     <url-pattern>/shibboleth-login</url-pattern>
@@ -750,6 +765,21 @@
   <servlet-mapping>
       <servlet-name>AuthorityChooseServlet</servlet-name>
       <url-pattern>/choices/*</url-pattern>
+  </servlet-mapping>
+
+  <!--  Semantic Search Servlet Mappings -->
+
+  <servlet-mapping>
+    <servlet-name>find</servlet-name>
+    <url-pattern>/find</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>semantic-search</servlet-name>
+    <url-pattern>/semantic-search</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>dspace-ont</servlet-name>
+    <url-pattern>/dspace-ont</url-pattern>
   </servlet-mapping>
 
   <!-- Icon MIME type -->
