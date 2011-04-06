@@ -20,7 +20,7 @@
       
       Version: $Revision: 5844 $
       
-      Date: $Date: 2010-11-12 06:29:14 +0100 (vie 12 de nov de 2010) $
+      Date: $Date: 2010-11-12 07:29:14 +0200 (Fri, 12 Nov 2010) $
       
       Copyright (c) 2002-2005, Hewlett-Packard Company and Massachusetts
       Institute of Technology.  All rights reserved.
