@@ -28,6 +28,7 @@
   <h5><a href="#browse">Browse</a></h5>
   <h5><a href="#search">Search</a></h5>
   <h5><a href="#advanced">Advanced Search</a></h5>
+  <h5><a href="#semantic">Semantic Search</a></h5>
   <h5><a href="#subjectsearch">Subject Category Search</a></h5>
   <h5><a href="#communities">Communities</a></h5>
   <h5><a href="#collections">Collections</a></h5>
@@ -208,6 +209,215 @@ order and allows you to see the subcommunities and collections within each commu
 <p><strong>Note: You must use the 
   input boxes in order. If you leave the first one blank your search will not 
   work. </strong></p>
+<hr />
+
+<table>
+    <tr>
+    <td class="leftAlign"><a name="semantic"></a><strong>SEMANTIC SEARCH</strong></td>
+    <td class="rightAlign"><a href="#contents">top</a></td>
+    </tr>
+</table>
+    <p>
+        Semantic Search is a novel feature that allows "intelligent" search in DSpace, by taking advantage of Semantic Web technologies. Semantic search, in
+        collaboration with the appropriate inference engine, allows for the construction, submission and evaluation of semantic queries. Queries follow a
+        special OWL syntax known as "Manchester syntax", which maps Description Logics symbols to English words and phrases. More information about Manchester
+        syntax can be found <a href="http://www.w3.org/TR/owl2-manchester-syntax/">here</a>.
+    </p>
+    <p>
+          <img
+            src="http://dspace-semantic-search.googlecode.com/svn/images/ss-interface.jpg"
+            alt="http://dspace-semantic-search.googlecode.com/svn/images/ss-interface.jpg"
+            width="500"
+            border="0"/>
+    </p>
+    <p>
+        <a name="How_to_Formulate_a_Semantic_Query"></a>
+        <b>How to Formulate a Semantic Query</b>
+    </p>
+    <p>
+        Depending on how familiar you are with Manchester syntax, you can choose among two alternative options for constructing your query in the Semantic
+        Search interface, as described below.
+    </p>
+    <p>
+        <b>1.</b>
+        In case you are an expert user, accustomed to ontologies and Manchester syntax, you can directly jump to the "<i>Generated</i> <i>query</i>" field and
+        type your query there:
+    </p>
+    <p>
+          <img 
+            src="http://dspace-semantic-search.googlecode.com/svn/images/ss-gc-interface.jpg" 
+            alt="http://dspace-semantic-search.googlecode.com/svn/images/ss-gc-interface.jpg"
+            width="500"
+            border="0"/>
+    </p>
+    <p>
+        This is a fully editable text area that leaves at your responsibility the creation of a syntactically correct query. Keep in mind, though, that all
+        provided entities (class names, properties, individuals) should be supplied along with their corresponding prefixes. Hence, don't choose this direct
+        method of query construction until you have a basic knowledge of the underlying ontology.
+    </p>
+    <p>
+        <b>2.</b>
+        If your don't know all syntactic details of Manchester syntax, you can be guided in the creation of your query, by following a step-by-step approach:
+    </p>
+    <p>
+          <img
+            src="http://dspace-semantic-search.googlecode.com/svn/images/ss-cq-interface.jpg"
+            alt="http://dspace-semantic-search.googlecode.com/svn/images/ss-cq-interface.jpg"
+            width="500"
+            border="0" />
+    </p>
+    <p>
+        <b>Step 1 (S1):</b>
+        Here, you can either provide a property or a class name. An auto-complete mechanism is triggered as soon as you start typing a word, suggesting names for classes and properties of the loaded
+        ontology. Suggested values are grouped under the title <i>Types</i> -for classes- and <i>Relations</i> -for properties. Mark the check box "<i>not</i>"
+        only if you want to declare the negation of the class expression you are going to construct. You don't have to worry about prefixes at this point, they
+        are added automatically by the system during the last step (Step 5). In case you have selected a property name, the subsequent fields become active so
+        you can proceed with Step 2. Otherwise you jump to the last step (Step 5) of the query formulation process.
+    </p>
+    <p>
+        <b>Step 2 (S2):</b>
+        As long as you have entered a property name in the previous field, you should now set a number-, value- or existential restriction. For this reason,
+        the "Restriction" drop down menu provides you with available Manchester syntax keywords. This should be your middle atom of the query.
+    </p>
+    <p>
+        <b>Step 3 (S3):</b>
+        "Expression" is an editable, free-text box where you can supply a single class name or expression, an individual or a positive integer, optionally
+        followed by a class. In case you enter a class name, the auto-complete facility is triggered and makes helpful suggestions. Then move to Step 4 in
+        order to proceed with your query's evaluation.
+    </p>
+    <p>
+        <b>Step 4 (S4):</b>
+        By pressing "<i>Add Term" </i>the query constructed so far will appear inside the "Generated query" box. If you want to make your search more specific,
+        you can combine your query with more class expressions. To do this you either select a conjunction ("and") or a disjunction ("or") and then go back to
+        Step 1 to create your next operand.
+    </p>
+    <p>
+        <b>Step 5 (S5):</b>
+        This is the final step where you can finally submit your query. Just press the "<i>Search</i>" button and then all matching results will appear below
+        the Semantic Search interface, in the form of a table.
+    </p>
+    <p>
+        <a name="Examples"></a>
+        <b>Examples</b>
+    </p>
+    <p>
+        For example, suppose you want to retrieve a list of all repository items, namely all instances of the "Item" class. This is the simplest case of a
+        semantic query and is expressed through the following single-class expression:
+    </p>
+    <p>
+        <code>dspace-ont:Item</code>
+    </p>
+    <p>
+        To perform this search, you need to type (or select) the word "Item" in the "<i>Search for</i>" field (S1), then press the "<i>Add term</i>" button
+        (S4), and finally evaluate your query by requesting a "<i>Search</i>" (S5):
+    </p>
+    <p>
+          <img
+            src="http://dspace-semantic-search.googlecode.com/svn/images/simple-query.jpg"
+            alt="http://dspace-semantic-search.googlecode.com/svn/images/simple-query.jpg"
+            width="500"
+            border="0"/>
+    </p>
+    <p>
+        If you want to obtain all DSpace items that consist of more than one DSpace-specific types (e.g. they are <i>both</i> a learning object <i>and</i> a
+        book or a paper <i>and</i> a dataset) you need the following query:
+    </p>
+    <p>
+        <code>dcterms:type min 2 dspace-ont:DspaceType</code>
+    </p>
+    <p>
+        In this case, you need to start with the "<i>Search</i> <i>for</i>" field (S1) and seek for the "type" relation from the auto-complete suggestion list.
+        Select the "min" keyword from the "<i>Restriction</i>" drop down menu (S2), type in the "<i>Expression</i>" field the phrase "2 dspace-ont:DspaceType"
+        (S3), and finally press the "Add term" (S4) and "Search" (S5) buttons successively:
+    </p>
+          <img
+            src="http://dspace-semantic-search.googlecode.com/svn/images/complex-query.jpg"
+            alt="http://dspace-semantic-search.googlecode.com/svn/images/complex-query.jpg"
+            width="500"
+            border="0"/>
+    </p>
+    <p>
+        <a name="Other_Tabs"></a>
+        <b>Other Tabs</b>
+    </p>
+    <p>
+        The <b><i>Options</i></b> tab includes options that give you the ability to change: a) the ontology against which the search will be performed and b)
+        the underlying reasoner. By default, the Semantic Search service loads your repository's specific ontology and the "Pellet" reasoner. For querying a
+        different ontology, you just need to provide a valid URL of an OWL/OWL 2-compliant ontology in the "<i>Ontology</i>" text box. For using a different
+        reasoner, choose among the currently available Pellet and FaCT++ from the drop down menu of the "<i>Reasoner</i>" field. Press the "<i>Save options</i>
+        " button to commit your changes.
+    </p>
+    <p>
+          <img
+            src="http://dspace-semantic-search.googlecode.com/svn/images/options.gif"
+            alt="http://dspace-semantic-search.googlecode.com/svn/images/options.gif"
+            width="500"
+            border="0" />
+    </p>
+    <p>
+        The <b><i>Advanced topics</i></b> tab is currently inactive and is reserved for future extensions of the system.
+    </p>
+    <p>
+        <a name="Results"></a>
+        <b>Results</b>
+    </p>
+    <p>
+        Results returned by Semantic Search are not merely DSpace items, as is the case with the traditional search facilities of the repository. They can be
+        entities of any type. You can, for example, retrieve all items written by a particular author with the following query:
+    </p>
+    <p>
+        dspace-ont:author some (foaf:name value "Georgia")
+    </p>
+    <p>
+        Results appear as shown in the next picture (organized in a two-column table):
+    </p>
+    <p>
+          <img
+            src="http://dspace-semantic-search.googlecode.com/svn/images/results.gif"
+            alt="http://dspace-semantic-search.googlecode.com/svn/images/results.gif"
+            width="400"
+            border="0"/>
+    </p>
+    <p>
+        The right column (<i>Value</i>) contains the retrieved results which are linkable entities. In this case, item Handle IDs are shown. The left column (        <i>Type</i>) gives a hint about the class to which the entity belongs.
+    </p>
+    <p>
+        <a name="The_Navigation_Pane"></a>
+        <b>The Navigation Pane</b>
+    </p>
+    <p>
+        When you click a result a new page is created on the fly - the navigation pane. This page gives a detailed view of the selected entity and allows
+        navigation among other instances which this entity may be related to:
+    </p>
+    <p>
+          <img
+            src="http://dspace-semantic-search.googlecode.com/svn/images/navigation-pane.gif"
+            alt="http://dspace-semantic-search.googlecode.com/svn/images/navigation-pane.gif"
+            width="700"
+            border="0"/>
+    <p>
+        More specifically, through the navigation pane you can obtain detailed reference to the entity's ontological information. You are given information
+        about the:
+    </p>
+    <ul type="disc">
+        <li>
+            <i>Classes</i>
+            to which the selected entity belongs
+        </li>
+        <li>
+            <i>Object Properties</i>
+            that relate the current entity to other entities
+        </li>
+        <li>
+            <i>Data Properties</i>
+            and <i>Annotation Properties</i> that show the entity's relations with text (literal) values.
+        </li>
+    </ul>
+    <p>
+        Each class name is a link that, if selected, all the instances of this class are shown. In fact, you are redirected back to the Semantic Search page
+        with the specific class already predefined.
+    </p>
+    
 <hr />
 
 <table>
