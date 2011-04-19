@@ -281,7 +281,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 					form.getForm().reset();
 				}
 				else {
-					 Ext.MessageBox.alert('Error', 'Can not add term until the information were valid');	
+					 Ext.MessageBox.alert('Error', 'Can not add term until the information are valid');	
 				}
 			}
 		} ]
