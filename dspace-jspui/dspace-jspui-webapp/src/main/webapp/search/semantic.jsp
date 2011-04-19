@@ -71,9 +71,10 @@
 
   <table width="100%" border="0">
     <tr>
+      <td width="25%"/>
       <td>
         <div id="destino" style="width:500px; margin:auto; margin-top:20px;"></div>
-      <td align="left" valign="top" width="10%" class="standard">
+      <td align="left" valign="top" width="25%" class="standard">
         <dspace:popup page="<%= LocaleSupport.getLocalizedMessage(pageContext,\"help.index\") + \"#semantic\"%>"><fmt:message key="jsp.help"/></dspace:popup>
       </td>
     </tr> 
