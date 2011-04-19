@@ -68,22 +68,25 @@
 
 <dspace:layout locbar="nolink" titlekey="jsp.search.semantic.title">
 
+
   <table width="100%" border="0">
     <tr>
-      <td align="right" width="75%">
-        <div id="destino" style="width:500px; margin:auto; margin-right:5px; margin-top:20px;"></div>
-      <td align="left" valign="top" class="standard">
+      <td>
+        <div id="destino" style="width:500px; margin:auto; margin-top:20px;"></div>
+      <td align="left" valign="top" width="10%" class="standard">
         <dspace:popup page="<%= LocaleSupport.getLocalizedMessage(pageContext,\"help.index\") + \"#semantic\"%>"><fmt:message key="jsp.help"/></dspace:popup>
       </td>
     </tr> 
   </table> 
-     
+  
   <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/ext-all.css" />
   <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/xtheme-gray.css" />  
   <script type="text/javascript" src="ext-3.3.0/adapter/prototype/ext-prototype-adapter.js"></script>
   <script type="text/javascript" src="ext-3.3.0/ext-all.js"></script>
   <script type="text/javascript" src="grouping-combobox.js"></script>  
   <script type="text/javascript" src="ui.js"></script>  
+
+
 
 <style type="text/css">
 .x-combo-list-group {
@@ -325,5 +328,5 @@
   <%
       }
   %>
-
+  
 </dspace:layout>
