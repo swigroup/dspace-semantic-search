@@ -22,10 +22,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.dspace.app.webui.servlet.DSpaceServlet;
 import org.dspace.app.webui.util.JSPManager;
+import org.dspace.app.webui.util.UIUtil;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.core.Context;
+import org.dspace.core.LogManager;
 import org.semanticweb.owlapi.expression.ParserException;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
@@ -40,6 +43,7 @@ import org.semanticweb.owlapi.model.OWLNegativeDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLNegativeObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.util.Version;
 
 import org.dspace.core.ConfigurationManager;
 
@@ -50,148 +54,190 @@ import org.dspace.core.ConfigurationManager;
  */
 
 @SuppressWarnings("serial")
-public class SemanticSearchServlet extends DSpaceServlet
-{
-    private boolean isABrowsingPage(HttpServletRequest request)
-    {
-        String url = request.getParameter("indURI");
+public class SemanticSearchServlet extends DSpaceServlet {
+	/** Logger */
+	private static Logger log = Logger.getLogger(SemanticSearchServlet.class);
 
-        return (url != null);
-    }
+	private boolean isABrowsingPage(HttpServletRequest request) {
+		String url = request.getParameter("indURI");
 
-    private String getActiveValueFromRequest(HttpServletRequest request, String param,
-            String defaultValue)
-    {
-        String finalValue = defaultValue;
+		return (url != null);
+	}
 
-        if (request.getParameter(param) != null)
-        {
-            finalValue = request.getParameter(param);
-        }
-        else if (request.getSession().getAttribute(param) != null)
-        {
-            finalValue = (String) request.getSession().getAttribute(param);
-        }
+	private String getActiveValueFromRequest(HttpServletRequest request,
+			String param, String defaultValue) {
+		String finalValue = defaultValue;
 
-        request.getSession().setAttribute(param, finalValue);
+		if (request.getParameter(param) != null) {
+			finalValue = request.getParameter(param);
+		} else if (request.getSession().getAttribute(param) != null) {
+			finalValue = (String) request.getSession().getAttribute(param);
+		}
 
-        return finalValue;
-    }
+		request.getSession().setAttribute(param, finalValue);
 
-    protected void doDSGet(Context context, HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, AuthorizeException
-    {
-        String ontoURL = ConfigurationManager.getProperty("dspace.baseUrl") + request.getContextPath() + "/dspace-ont";
-        String url = getActiveValueFromRequest(request, "URL", ontoURL);
-        String reasoner = getActiveValueFromRequest(request, "reasoner", SupportedReasoner.PELLET.name());
+		return finalValue;
+	}
 
-        SemanticUnit semanticUnit = null;
+	protected void doDSGet(Context context, HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException,
+			SQLException, AuthorizeException {
+		String ontoURL = ConfigurationManager.getProperty("dspace.baseUrl")
+				+ request.getContextPath() + "/dspace-ont";
+		String url = getActiveValueFromRequest(request, "URL", ontoURL);
+		String reasoner = getActiveValueFromRequest(request, "reasoner",
+				SupportedReasoner.PELLET.name());
 
-        try
-        {
-            semanticUnit = SemanticUnit.getInstance(url, SupportedReasoner.valueOf(reasoner));
-        }
-        catch (Exception exception)
-        {
-            JSPUILogger.logException(exception.getMessage(), request, exception);
-        }
+		SemanticUnit semanticUnit = null;
 
-        if (isABrowsingPage(request))
-        {
-            showIndividualProperties(request, response, semanticUnit);
-        }
-        else
-        {
-            executeQueryExpression(request, semanticUnit);
+		try {
+			semanticUnit = SemanticUnit.getInstance(url, SupportedReasoner
+					.valueOf(reasoner));
+			Version v = semanticUnit.getReasoner().getReasonerVersion();
+			String version = Integer.toString(v.getMajor()) + "."
+					+ Integer.toString(v.getMinor());
+			long startTime = System.nanoTime();
+			if (semanticUnit.initializeReasoner(semanticUnit.getReasoner()) > 0) {
+				double totalTime = (System.nanoTime() - startTime) / 1.0E06;
+				log.info(LogManager.getHeader(context, "SemanticSearch-Init",
+						"Reasoner: "
+								+ semanticUnit.getReasoner().getReasonerName()
+								+ " version: " + version
+								+ " initialized. Total time: " + totalTime
+								+ " ms."));
+			}
+		} catch (Exception exception) {
+			JSPUILogger
+					.logException(exception.getMessage(), request, exception);
+		}
 
-            JSPManager.showJSP(request, response, "/search/semantic.jsp");
-        }
-    }
+		if (isABrowsingPage(request)) {
+			showIndividualProperties(request, response, semanticUnit);
+		} else {
+			if (request.getParameter("expression") != null) {
 
-    private void executeQueryExpression(HttpServletRequest request, SemanticUnit semanticUnit)
-    {
-        String expression = request.getParameter("expression");
+				long startTime = System.nanoTime();
 
-        if (expression != null)
-        {
-            OWLDSpaceQueryManager owlQueryManager = new OWLDSpaceQueryManager(semanticUnit);
+				executeQueryExpression(request, semanticUnit);
 
-            try
-            {
-                SortedSet<OWLIndividual> result = owlQueryManager.executeQuery(expression);
+				double totalTime = (System.nanoTime() - startTime) / 1.0E06;
 
-                request.getSession().setAttribute("ResultSet", result.toArray());
-            }
-            catch (SQLException exception)
-            {
-                JSPUILogger.logException("Could not resolve reference to a DSpace Handle", request,
-                        exception);
-            }
-            catch (ParserException exception)
-            {
-                JSPUILogger.logException("The input expression can not be parsed", request,
-                        exception);
-            }
-        }
-    }
+				// TODO: Number of results should be returned by appropriate
+				// method (executeQueryExpression)
+				Object[] results = (Object[]) request.getSession()
+						.getAttribute("ResultSet");
+				String resultsSize = "No results!";
+				if (results != null) {
+					resultsSize = Integer.toString(results.length);
+				}
+				String logInfo = UIUtil.getRequestLogInfo(request);
+				log.info(LogManager.getHeader(context, "SemanticSearch",
+						"query=\"" + request.getParameter("expression")
+								+ "\", reasoner="
+								+ semanticUnit.getReasoner().getReasonerName()
+								+ ", results=(" + resultsSize + "), time= "
+								+ totalTime + " ms." + "\n" + logInfo));
+			}
+			JSPManager.showJSP(request, response, "/search/semantic.jsp");
+		}
+	}
 
-    public void showIndividualProperties(HttpServletRequest request, HttpServletResponse response,
-            SemanticUnit semanticUnit) throws ServletException, IOException
-    {
-        /*
-         * IMPORTANT: reasoner implementations seem only to support the getIndividuals method. It is
-         * difficult then to extract inferenced assertions for individuals therefore, like in coode
-         * browser implementation, we fall back to only *referenced* (explicit) axioms and
-         * assertions.
-         */
+	private void executeQueryExpression(HttpServletRequest request,
+			SemanticUnit semanticUnit) {
+		String expression = request.getParameter("expression");
 
-        IRI indIRI = IRI.create(request.getParameter("indURI"));
+		if (expression != null) {
+			OWLDSpaceQueryManager owlQueryManager = new OWLDSpaceQueryManager(
+					semanticUnit);
 
-        OWLIndividual individual = semanticUnit.getManager().getOWLDataFactory()
-                .getOWLNamedIndividual(indIRI);
-        request.setAttribute("individual", individual);
+			try {
+				// clear result set in case executeQuery throws errors
+				request.getSession().removeAttribute("ResultSet");
+				SortedSet<OWLIndividual> result = owlQueryManager
+						.executeQuery(expression);
+				request.getSession()
+						.setAttribute("ResultSet", result.toArray());
 
-        OWLDSpaceQueryManager queryManager = new OWLDSpaceQueryManager(semanticUnit);
-        Set<OWLClass> types = queryManager.getOWLClasses(individual);
-        request.setAttribute("class_types", types);
-        request.setAttribute("ont_uri", semanticUnit.getOntology().getOntologyID().getOntologyIRI()
-                .toString());
+			} catch (SQLException exception) {
+				JSPUILogger.logException(
+						"Could not resolve reference to a DSpace Handle",
+						request, exception);
+			} catch (ParserException exception) {
+				JSPUILogger.logException(
+						"The input expression can not be parsed", request,
+						exception);
+			} catch (NullPointerException exception) {
+				JSPUILogger.logException(
+						"Reasoner threw Null Pointer Exception", request,
+						exception);
+				log.error("reasoner NPE", exception);
+			}
 
-        extractAssertionsFromOntologyRefereningAxioms(request, semanticUnit, individual);
+		}
+	}
 
-        JSPManager.showJSP(request, response, "/search/showIndProperties.jsp");
-    }
+	public void showIndividualProperties(HttpServletRequest request,
+			HttpServletResponse response, SemanticUnit semanticUnit)
+			throws ServletException, IOException {
+		/*
+		 * IMPORTANT: reasoner implementations seem only to support the
+		 * getIndividuals method. It is difficult then to extract inferenced
+		 * assertions for individuals therefore, like in coode browser
+		 * implementation, we fall back to only *referenced* (explicit) axioms
+		 * and assertions.
+		 */
 
-    private void extractAssertionsFromOntologyRefereningAxioms(HttpServletRequest request,
-            SemanticUnit semanticUnit, OWLIndividual individual)
-    {
-        SortedSet<OWLObjectPropertyAssertionAxiom> object_assertions = new TreeSet<OWLObjectPropertyAssertionAxiom>();
-        SortedSet<OWLNegativeObjectPropertyAssertionAxiom> negative_object_assertions = new TreeSet<OWLNegativeObjectPropertyAssertionAxiom>();
-        SortedSet<OWLDataPropertyAssertionAxiom> data_assertions = new TreeSet<OWLDataPropertyAssertionAxiom>();
-        SortedSet<OWLNegativeDataPropertyAssertionAxiom> negative_data_assertions = new TreeSet<OWLNegativeDataPropertyAssertionAxiom>();
-        SortedSet<OWLAnnotationAxiom> annotations = new TreeSet<OWLAnnotationAxiom>();
+		IRI indIRI = IRI.create(request.getParameter("indURI"));
 
-        for (OWLOntology ont : semanticUnit.getImportsClosure())
-        {
-            for (OWLAxiom ax : ont.getReferencingAxioms((OWLEntity) individual))
-            {
-                if (ax.getAxiomType() == AxiomType.OBJECT_PROPERTY_ASSERTION)
-                    object_assertions.add((OWLObjectPropertyAssertionAxiom) ax);
-                if (ax.getAxiomType() == AxiomType.NEGATIVE_OBJECT_PROPERTY_ASSERTION)
-                    negative_object_assertions.add((OWLNegativeObjectPropertyAssertionAxiom) ax);
-                if (ax.getAxiomType() == AxiomType.DATA_PROPERTY_ASSERTION)
-                    data_assertions.add((OWLDataPropertyAssertionAxiom) ax);
-                if (ax.getAxiomType() == AxiomType.NEGATIVE_DATA_PROPERTY_ASSERTION)
-                    negative_data_assertions.add((OWLNegativeDataPropertyAssertionAxiom) ax);
-                if (ax.getAxiomType() == AxiomType.ANNOTATION_ASSERTION)
-                    annotations.add((OWLAnnotationAssertionAxiom) ax);
-            }
-        }
+		OWLIndividual individual = semanticUnit.getManager()
+				.getOWLDataFactory().getOWLNamedIndividual(indIRI);
+		request.setAttribute("individual", individual);
 
-        request.setAttribute("object_assertions", object_assertions);
-        request.setAttribute("negative_object_assertions", negative_object_assertions);
-        request.setAttribute("data_assertions", data_assertions);
-        request.setAttribute("negative_data_assertions", negative_data_assertions);
-        request.setAttribute("annotations", annotations);
-    }
+		OWLDSpaceQueryManager queryManager = new OWLDSpaceQueryManager(
+				semanticUnit);
+		Set<OWLClass> types = queryManager.getOWLClasses(individual);
+		request.setAttribute("class_types", types);
+		request.setAttribute("ont_uri", semanticUnit.getOntology()
+				.getOntologyID().getOntologyIRI().toString());
+
+		extractAssertionsFromOntologyRefereningAxioms(request, semanticUnit,
+				individual);
+
+		JSPManager.showJSP(request, response, "/search/showIndProperties.jsp");
+	}
+
+	private void extractAssertionsFromOntologyRefereningAxioms(
+			HttpServletRequest request, SemanticUnit semanticUnit,
+			OWLIndividual individual) {
+		SortedSet<OWLObjectPropertyAssertionAxiom> object_assertions = new TreeSet<OWLObjectPropertyAssertionAxiom>();
+		SortedSet<OWLNegativeObjectPropertyAssertionAxiom> negative_object_assertions = new TreeSet<OWLNegativeObjectPropertyAssertionAxiom>();
+		SortedSet<OWLDataPropertyAssertionAxiom> data_assertions = new TreeSet<OWLDataPropertyAssertionAxiom>();
+		SortedSet<OWLNegativeDataPropertyAssertionAxiom> negative_data_assertions = new TreeSet<OWLNegativeDataPropertyAssertionAxiom>();
+		SortedSet<OWLAnnotationAxiom> annotations = new TreeSet<OWLAnnotationAxiom>();
+
+		for (OWLOntology ont : semanticUnit.getImportsClosure()) {
+			for (OWLAxiom ax : ont.getReferencingAxioms((OWLEntity) individual)) {
+				if (ax.getAxiomType() == AxiomType.OBJECT_PROPERTY_ASSERTION)
+					object_assertions.add((OWLObjectPropertyAssertionAxiom) ax);
+				if (ax.getAxiomType() == AxiomType.NEGATIVE_OBJECT_PROPERTY_ASSERTION)
+					negative_object_assertions
+							.add((OWLNegativeObjectPropertyAssertionAxiom) ax);
+				if (ax.getAxiomType() == AxiomType.DATA_PROPERTY_ASSERTION)
+					data_assertions.add((OWLDataPropertyAssertionAxiom) ax);
+				if (ax.getAxiomType() == AxiomType.NEGATIVE_DATA_PROPERTY_ASSERTION)
+					negative_data_assertions
+							.add((OWLNegativeDataPropertyAssertionAxiom) ax);
+				if (ax.getAxiomType() == AxiomType.ANNOTATION_ASSERTION)
+					annotations.add((OWLAnnotationAssertionAxiom) ax);
+			}
+		}
+
+		request.setAttribute("object_assertions", object_assertions);
+		request.setAttribute("negative_object_assertions",
+				negative_object_assertions);
+		request.setAttribute("data_assertions", data_assertions);
+		request.setAttribute("negative_data_assertions",
+				negative_data_assertions);
+		request.setAttribute("annotations", annotations);
+	}
 }
