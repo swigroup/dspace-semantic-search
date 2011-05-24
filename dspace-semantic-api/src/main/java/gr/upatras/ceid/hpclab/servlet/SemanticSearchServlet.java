@@ -171,6 +171,11 @@ public class SemanticSearchServlet extends DSpaceServlet {
 						"Reasoner threw Null Pointer Exception", request,
 						exception);
 				log.error("reasoner NPE", exception);
+			} catch (Exception exception) {
+				JSPUILogger.logException(
+						"Reasoner threw an Exception", request,
+						exception);
+				log.error("reasoner Exception", exception);
 			}
 
 		}
