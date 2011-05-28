@@ -36,7 +36,7 @@
             .getParameter("expression");
     String reasoner = (String) session.getAttribute("reasoner");
 
-    String localContext = "&expression=" + expression;
+    String localContext = "&expression=" + URLEncoder.encode(expression, "UTF-8");
 
     if (URL.equals(""))
     {
