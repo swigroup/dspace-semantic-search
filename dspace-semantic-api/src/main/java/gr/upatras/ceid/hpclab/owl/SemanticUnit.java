@@ -101,7 +101,7 @@ public class SemanticUnit {
 			log.info("Reasoner flushed.");
 			status = 1;
 		}
-		// Initialize the reasoner: Precompute all inferences. Silenty ignore
+		// Initialize the reasoner: Precompute all inferences. Silently ignore
 		// NPEs.
 		for (InferenceType t : InferenceType.values()) {
 			try {

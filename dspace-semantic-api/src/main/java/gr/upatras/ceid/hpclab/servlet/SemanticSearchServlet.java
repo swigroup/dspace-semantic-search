@@ -104,7 +104,10 @@ public class SemanticSearchServlet extends DSpaceServlet {
 								+ semanticUnit.getReasoner().getReasonerName()
 								+ " version: " + version
 								+ " initialized. Total time: " + totalTime
-								+ " ms."));
+								+ " ms."
+								+ "Ontology URI: "
+								+ url
+				));
 			}
 		} catch (Exception exception) {
 			JSPUILogger
@@ -136,7 +139,10 @@ public class SemanticSearchServlet extends DSpaceServlet {
 								+ "\", reasoner="
 								+ semanticUnit.getReasoner().getReasonerName()
 								+ ", results=(" + resultsSize + "), time= "
-								+ totalTime + " ms." + "\n" + logInfo));
+								+ totalTime + " ms." 
+								+ "Ontology URL: "
+								+ url
+								+ "\n" + logInfo));
 			}
 			JSPManager.showJSP(request, response, "/search/semantic.jsp");
 		}
