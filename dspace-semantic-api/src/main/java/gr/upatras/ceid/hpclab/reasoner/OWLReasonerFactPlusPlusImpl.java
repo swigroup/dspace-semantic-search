@@ -15,9 +15,9 @@ import uk.ac.manchester.cs.factplusplus.owlapiv3.FaCTPlusPlusReasonerFactory;
 
 import org.apache.log4j.Logger;
 
-public class OWLReasonerFactoryFactPlusPlusImpl implements OWLReasonerFactory
+public class OWLReasonerFactPlusPlusImpl implements OWLReasonerFactory
 {
-    private static final Logger log = Logger.getLogger(OWLReasonerFactoryFactPlusPlusImpl.class);
+    private static final Logger log = Logger.getLogger(OWLReasonerFactPlusPlusImpl.class);
 
     public OWLReasoner getReasoner(OWLOntology ontology)
     {

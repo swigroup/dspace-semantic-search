@@ -33,7 +33,7 @@ public class Find extends HttpServlet
 
         try
         {
-            semanticUnit = SemanticUnit.getInstance(url, SupportedReasoner.FACTPLUSPLUS);
+            semanticUnit = SemanticUnit.getInstance(url, SupportedReasoner.FACTPLUSPLUS,false, request.getSession().getId());
         }
         catch (Exception exception)
         {

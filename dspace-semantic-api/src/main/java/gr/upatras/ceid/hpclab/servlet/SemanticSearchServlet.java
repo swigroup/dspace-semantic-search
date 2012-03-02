@@ -33,7 +33,6 @@ import org.semanticweb.owlapi.expression.ParserException;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLAnnotationAxiom;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
@@ -87,12 +86,16 @@ public class SemanticSearchServlet extends DSpaceServlet {
 		String url = getActiveValueFromRequest(request, "URL", ontoURL);
 		String reasoner = getActiveValueFromRequest(request, "reasoner",
 				SupportedReasoner.PELLET.name());
+		boolean reload = request.getParameter("reload") == null ? false 
+				: Boolean.parseBoolean((String) request.getParameter("reload")) ;
 
+		String sid = request.getSession().getId();
+		
 		SemanticUnit semanticUnit = null;
 
 		try {
 			semanticUnit = SemanticUnit.getInstance(url, SupportedReasoner
-					.valueOf(reasoner));
+					.valueOf(reasoner), reload, sid);
 			Version v = semanticUnit.getReasoner().getReasonerVersion();
 			String version = Integer.toString(v.getMajor()) + "."
 					+ Integer.toString(v.getMinor());
@@ -208,23 +211,20 @@ public class SemanticSearchServlet extends DSpaceServlet {
 				semanticUnit);
 		Set<OWLClass> types = queryManager.getOWLClasses(individual);
 		request.setAttribute("class_types", types);
-		request.setAttribute("ont_uri", semanticUnit.getOntology()
-				.getOntologyID().getOntologyIRI().toString());
-
-		extractAssertionsFromOntologyRefereningAxioms(request, semanticUnit,
+		extractAssertionsFromOntologyReferencingAxioms(request, semanticUnit,
 				individual);
 
 		JSPManager.showJSP(request, response, "/search/showIndProperties.jsp");
 	}
 
-	private void extractAssertionsFromOntologyRefereningAxioms(
+	private void extractAssertionsFromOntologyReferencingAxioms(
 			HttpServletRequest request, SemanticUnit semanticUnit,
 			OWLIndividual individual) {
 		SortedSet<OWLObjectPropertyAssertionAxiom> object_assertions = new TreeSet<OWLObjectPropertyAssertionAxiom>();
 		SortedSet<OWLNegativeObjectPropertyAssertionAxiom> negative_object_assertions = new TreeSet<OWLNegativeObjectPropertyAssertionAxiom>();
 		SortedSet<OWLDataPropertyAssertionAxiom> data_assertions = new TreeSet<OWLDataPropertyAssertionAxiom>();
 		SortedSet<OWLNegativeDataPropertyAssertionAxiom> negative_data_assertions = new TreeSet<OWLNegativeDataPropertyAssertionAxiom>();
-		SortedSet<OWLAnnotationAxiom> annotations = new TreeSet<OWLAnnotationAxiom>();
+		SortedSet<OWLAnnotationAssertionAxiom> annotations = new TreeSet<OWLAnnotationAssertionAxiom>();
 
 		for (OWLOntology ont : semanticUnit.getImportsClosure()) {
 			for (OWLAxiom ax : ont.getReferencingAxioms((OWLEntity) individual)) {

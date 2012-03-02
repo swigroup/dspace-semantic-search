@@ -7,7 +7,6 @@
    <groupId>org.dspace</groupId>
    <artifactId>dspace-semantic-api</artifactId>
    <name>DSpace Semantic API :: API and Implementation</name>
-   <packaging>jar</packaging>
    <description>Libraries for DSpace Semantic Search Engine</description>
 
    <parent>
@@ -35,6 +34,11 @@
   <id>patras</id>
   <url>http://swig.hpclab.ceid.upatras.gr/maven/</url>
 </repository>
+<repository>
+	<id>berkeleybop</id>
+	<name>berkeleybop</name>
+	<url>http://code.berkeleybop.org/maven/repository/</url>
+</repository>
    </repositories>
 
    <dependencies>
@@ -47,14 +51,14 @@
        <artifactId>dspace-jspui-api</artifactId>
      </dependency>
      <dependency>
-       <groupId>org.semanticweb.owl</groupId>
+       <groupId>owlapi</groupId>
        <artifactId>owlapi</artifactId>
-       <version>3.1.0</version>
+       <version>3.2.4</version>
      </dependency>
      <dependency>
        <groupId>uk.ac.manchester.cs</groupId>
        <artifactId>factplusplus</artifactId>
-       <version>1.5.0</version>            
+       <version>1.5.2</version>            
      </dependency>      
      <dependency>
        <groupId>junit</groupId>
@@ -96,6 +100,11 @@
        <groupId>org.jgrapht</groupId>
        <artifactId>jgrapht</artifactId>
        <version>0.7.3</version>
+     </dependency>
+     <dependency>
+       <groupId>org.semanticweb</groupId>
+       <artifactId>HermiT</artifactId>
+       <version>1.3.4</version>
      </dependency>
    </dependencies>
 

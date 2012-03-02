@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dspace.core.LogManager;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -26,6 +27,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.BidirectionalShortFormProvider;
 import org.semanticweb.owlapi.util.QNameShortFormProvider;
 import org.semanticweb.owlapi.util.ShortFormProvider;
+import org.semanticweb.owlapi.util.Version;
 
 public class SemanticUnit {
 	private OWLOntologyManager manager;
@@ -37,7 +39,7 @@ public class SemanticUnit {
 
 	private static final Logger log = Logger.getLogger(SemanticUnit.class);
 
-	private static Map<String, SemanticUnit> semanticUnitMap = new HashMap<String, SemanticUnit>();
+	private static Map<SemanticUnitMapKey, SemanticUnit> semanticUnitMap = new HashMap<SemanticUnitMapKey, SemanticUnit>();
 
 	private SemanticUnit(String url, SupportedReasoner supportedReasoner)
 			throws SemanticSearchException, InstantiationException,
@@ -48,6 +50,16 @@ public class SemanticUnit {
 
 		setReasoner(supportedReasoner);
 		setBidirectionalShortFormProvider(owlQueryManager);
+	}
+
+	//copying constructor, for the ontological part ('ontology registry')
+	
+	public SemanticUnit(SemanticUnit orig) {
+		manager = orig.manager;
+		ontology = orig.ontology;
+		importsClosure = orig.importsClosure;
+		shortFormProvider = orig.shortFormProvider;
+		bidirectionalShortFormProvider = orig.bidirectionalShortFormProvider;		
 	}
 
 	public OWLDSpaceQueryManager setOntology(String url)
@@ -83,8 +95,21 @@ public class SemanticUnit {
 		OWLReasonerFactory owlReasonerFactory = (OWLReasonerFactory) Class
 				.forName(supportedReasoner.toString()).newInstance();
 
+		long startTime = System.nanoTime();
+		
 		reasoner = owlReasonerFactory.getReasoner(ontology);
-
+		
+		double totalTime = (System.nanoTime() - startTime) / 1.0E06;
+		Version v = reasoner.getReasonerVersion();
+		String version = Integer.toString(v.getMajor()) + "."
+				+ Integer.toString(v.getMinor());
+		log.info(LogManager.getHeader(null, "SemanticSearch-Inst",
+				"Reasoner: "
+						+ getReasoner().getReasonerName()
+						+ " version: " + version
+						+ " created. Total time: " + totalTime
+						+ " ms."
+		));
 	}
 
 	/** Initialize the  reasoner by precomputing inferences and flushing changes
@@ -96,6 +121,8 @@ public class SemanticUnit {
 	public int initializeReasoner(OWLReasoner reasoner) {
 		int status = 0;
 		// in case ontology has changed.
+		//FIXME: getPendingChanges appear always empty!
+		
 		if (!reasoner.getPendingChanges().isEmpty()) {
 			reasoner.flush();
 			log.info("Reasoner flushed.");
@@ -118,19 +145,40 @@ public class SemanticUnit {
 	}
 
 	public static SemanticUnit getInstance(String url,
-			SupportedReasoner supportedReasoner)
+			SupportedReasoner supportedReasoner, boolean reload, String sid)
 			throws SemanticSearchException, InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
-		if (!semanticUnitMap.containsKey(url)) {
-			SemanticUnit su = new SemanticUnit(url, supportedReasoner);
-			semanticUnitMap.put(url, su);
+		
+		SemanticUnitMapKey key = new SemanticUnitMapKey(url, supportedReasoner, sid);
+		
+		if (reload) { //replace your su with a fresh one
+ 			SemanticUnit su = new SemanticUnit(url, supportedReasoner);
+			semanticUnitMap.put(key, su);
 		}
-		// don't re-instatiate the reasoner if you don't have to
-		else if (!reasonerExists(semanticUnitMap.get(url), supportedReasoner)) {
-			semanticUnitMap.get(url).setReasoner(supportedReasoner);
+		
+		if (!semanticUnitMap.containsKey(key)){ //new user or reasoner change or ontology change
+			SemanticUnitMapKey key2 = new SemanticUnitMapKey(url, supportedReasoner, "*");
+			if (!semanticUnitMap.containsKey(key2)){ //no-one uses your ontology and reasoner.
+				SemanticUnitMapKey key3 = new SemanticUnitMapKey(url, SupportedReasoner.ANY, "*");
+				if (!semanticUnitMap.containsKey(key3)) {  //no-one uses your ontology.
+					SemanticUnit su = new SemanticUnit(url, supportedReasoner);
+					semanticUnitMap.put(key, su); 
+				}
+				else { //someone uses your ontology. 
+					SemanticUnit su_orig = semanticUnitMap.get(key2);
+					//Make a copy of the original (cached) Semantic Unit.
+					SemanticUnit su = new SemanticUnit(su_orig);
+					//Set the reasoner to the user-selected.
+					su.setReasoner (supportedReasoner);	
+					semanticUnitMap.put(key, su);
+				}
+			}
+			else { //someone uses your ontology and your reasoner.
+				semanticUnitMap.put(key, semanticUnitMap.get(key2));
+			}
 		}
 
-		return semanticUnitMap.get(url);
+		return semanticUnitMap.get(key);
 	}
 
 	public OWLOntologyManager getManager() {
@@ -156,14 +204,6 @@ public class SemanticUnit {
 	public BidirectionalShortFormProvider getBidirectionalShortFormProvider() {
 		return bidirectionalShortFormProvider;
 	}
-
-	private static boolean reasonerExists(SemanticUnit su,
-			SupportedReasoner supportedReasoner) {
-
-		String currentReasoner = su.getReasoner().getReasonerName();
-
-		// at least works for Pellet!
-		return supportedReasoner.toString().contains(currentReasoner);
-
-	}
+	
+		
 }

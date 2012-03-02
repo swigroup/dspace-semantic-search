@@ -10,18 +10,28 @@ package gr.upatras.ceid.hpclab.reasoner;
 
 public enum SupportedReasoner
 {
-    FACTPLUSPLUS("gr.upatras.ceid.hpclab.reasoner.OWLReasonerFactoryFactPlusPlusImpl"), 
-    PELLET("gr.upatras.ceid.hpclab.reasoner.OWLReasonerPelletImpl");
+    FACTPLUSPLUS("gr.upatras.ceid.hpclab.reasoner.OWLReasonerFactPlusPlusImpl", "FaCT++"), 
+    PELLET("gr.upatras.ceid.hpclab.reasoner.OWLReasonerPelletImpl", "Pellet"),
+    HERMIT("gr.upatras.ceid.hpclab.reasoner.OWLReasonerHermiTImpl", "HermiT"),
+    ANY("gr.upatras.ceid.hpclab.reasoner.OWLReasonerPelletImpl", "ANY");
 
     private String classImpl;
+    private String friendlyName;
 
-    SupportedReasoner(String value)
+    SupportedReasoner(String value1, String value2)
     {
-        classImpl = value;
+        classImpl = value1;
+        friendlyName = value2;
     }
 
     public String toString()
     {
         return classImpl;
+    }
+    
+    public String getName()
+    {
+    	return friendlyName;
+
     }
 }
