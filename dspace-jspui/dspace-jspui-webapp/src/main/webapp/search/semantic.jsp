@@ -32,6 +32,7 @@
 <%
     String URL = session.getAttribute("URL") == null ? "" : (String) session
             .getAttribute("URL");
+	boolean reload = request.getParameter("reload") == null ? false : Boolean.parseBoolean((String) request.getParameter("reload")) ;
     String expression = request.getParameter("expression") == null ? "" : request
             .getParameter("expression");
     String reasoner = (String) session.getAttribute("reasoner");
@@ -62,7 +63,7 @@
         offset = length;
     int step = (length - offset) < 20 ? length - offset : 20;
     
-    SemanticUnit semanticUnit = SemanticUnit.getInstance(URL, SupportedReasoner.valueOf(reasoner));
+    SemanticUnit semanticUnit = SemanticUnit.getInstance(URL, SupportedReasoner.valueOf(reasoner),false, session.getId());
     OWLDSpaceQueryManager queryManager = new OWLDSpaceQueryManager(semanticUnit);
 %>
 

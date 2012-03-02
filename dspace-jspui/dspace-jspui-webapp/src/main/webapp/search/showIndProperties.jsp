@@ -25,7 +25,7 @@
 <%@ page import="org.semanticweb.owlapi.model.OWLNegativeObjectPropertyAssertionAxiom"%>
 <%@ page import="org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom"%>
 <%@ page import="org.semanticweb.owlapi.model.OWLNegativeDataPropertyAssertionAxiom"%>
-<%@ page import="org.semanticweb.owlapi.model.OWLAnnotationAxiom"%>
+<%@ page import="org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom"%>
 <%@ page import="org.semanticweb.owlapi.model.OWLClass"%>
 <%@page import="org.semanticweb.owlapi.model.OWLOntology"%>
 <%@page import="org.semanticweb.owlapi.util.ShortFormProvider"%>
@@ -51,7 +51,7 @@
             .getAttribute("data_assertions");
     Set<OWLNegativeDataPropertyAssertionAxiom> negative_data_assertions = (Set<OWLNegativeDataPropertyAssertionAxiom>) request
             .getAttribute("negative_data_assertions");
-    Set<OWLAnnotationAxiom> annotations = (Set<OWLAnnotationAxiom>) request
+    Set<OWLAnnotationAssertionAxiom> annotations = (Set<OWLAnnotationAssertionAxiom>) request
             .getAttribute("annotations");
     Set<OWLClass> types = (Set<OWLClass>) request.getAttribute("class_types");
 
@@ -59,7 +59,7 @@
     String reasoner = (String) request.getSession().getAttribute("reasoner");
 
     SemanticUnit semanticUnit = SemanticUnit.getInstance(url, SupportedReasoner
-            .valueOf(reasoner));
+            .valueOf(reasoner), false, request.getSession().getId());
 
     Set<OWLOntology> importsClosure = semanticUnit.getImportsClosure();
     ShortFormProvider shortFormProvider = semanticUnit.getShortFormProvider();
@@ -454,7 +454,7 @@
 
       <%
           int row = 0;
-                  for (OWLAnnotationAxiom a : annotations)
+                  for (OWLAnnotationAssertionAxiom a : annotations)
                   {
                       OWLAnnotation annotation = a.getAnnotations().iterator().next();
                       IRI annotation_uri = annotation.getProperty().getIRI();
@@ -529,6 +529,11 @@
             returnValues[0] = literal.getLiteral();
             returnValues[1] = literal.getLang();
             returnValues[2] = literal.getDatatype().toString();
+            /* In case Datatype is xsd:anyURI, make value a link */
+            if (returnValues[2].equals("xsd:anyURI")) {
+            	returnValues[0] = "<A HREF='"+returnValues[0]+"' TARGET='_blank'>"
+            	+returnValues[0]+"</A>";
+            }
         }
 
         return returnValues;

@@ -287,7 +287,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 		} ]
 	});
 
-	var reasonerCombobox = getStaticComboBox("Reasoner", 200, [[ 'FACTPLUSPLUS', 'Fact++'], [ 'PELLET', 'Pellet' ]]);
+	var reasonerCombobox = getStaticComboBox("Reasoner", 200, [[ 'FACTPLUSPLUS', 'Fact++'], [ 'PELLET', 'Pellet' ], [ 'HERMIT', 'HermiT' ]]);
 	reasonerCombobox.setValue(reasonerValue);
 	
 	var ontologyTextField = new Ext.form.TextField({
@@ -305,6 +305,12 @@ function appInit(expression, reasonerValue, ontologyValue) {
 			text : 'Save options',
 			handler: function (event, button) {
 				window.location = 'semantic-search?URL=' + encodeURI(ontologyTextField.getValue()).replace('+', '%2B') + '&reasoner=' + reasonerCombobox.getValue();				
+			}
+		},{
+			xtype : 'button',
+			text : 'Reload',
+			handler: function (event, button) {
+				window.location = 'semantic-search?URL=' + encodeURI(ontologyTextField.getValue()).replace('+', '%2B') + '&reasoner=' + reasonerCombobox.getValue() + '&reload=true';				
 			}
 		} ]
 	});
