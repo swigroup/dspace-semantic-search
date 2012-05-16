@@ -112,41 +112,43 @@ public class SemanticSearchServlet extends DSpaceServlet {
 								+ url
 				));
 			}
+			if (isABrowsingPage(request)) {
+				showIndividualProperties(request, response, semanticUnit);
+			} else {
+				if (request.getParameter("expression") != null) {
+
+					startTime = System.nanoTime();
+
+					executeQueryExpression(request, semanticUnit);
+
+					double totalTime = (System.nanoTime() - startTime) / 1.0E06;
+
+					// TODO: Number of results should be returned by appropriate
+					// method (executeQueryExpression)
+					Object[] results = (Object[]) request.getSession()
+							.getAttribute("ResultSet");
+					String resultsSize = "No results!";
+					if (results != null) {
+						resultsSize = Integer.toString(results.length);
+					}
+					String logInfo = UIUtil.getRequestLogInfo(request);
+					log.info(LogManager.getHeader(context, "SemanticSearch",
+							"query=\"" + request.getParameter("expression")
+									+ "\", reasoner="
+									+ semanticUnit.getReasoner().getReasonerName()
+									+ ", results=(" + resultsSize + "), time= "
+									+ totalTime + " ms." 
+									+ "Ontology URL: "
+									+ url
+									+ "\n" + logInfo));
+				}
+			}
 		} catch (Exception exception) {
 			JSPUILogger
-					.logException(exception.getMessage(), request, exception);
+					.logException("Error", request, exception);
 		}
+          finally {    
 
-		if (isABrowsingPage(request)) {
-			showIndividualProperties(request, response, semanticUnit);
-		} else {
-			if (request.getParameter("expression") != null) {
-
-				long startTime = System.nanoTime();
-
-				executeQueryExpression(request, semanticUnit);
-
-				double totalTime = (System.nanoTime() - startTime) / 1.0E06;
-
-				// TODO: Number of results should be returned by appropriate
-				// method (executeQueryExpression)
-				Object[] results = (Object[]) request.getSession()
-						.getAttribute("ResultSet");
-				String resultsSize = "No results!";
-				if (results != null) {
-					resultsSize = Integer.toString(results.length);
-				}
-				String logInfo = UIUtil.getRequestLogInfo(request);
-				log.info(LogManager.getHeader(context, "SemanticSearch",
-						"query=\"" + request.getParameter("expression")
-								+ "\", reasoner="
-								+ semanticUnit.getReasoner().getReasonerName()
-								+ ", results=(" + resultsSize + "), time= "
-								+ totalTime + " ms." 
-								+ "Ontology URL: "
-								+ url
-								+ "\n" + logInfo));
-			}
 			JSPManager.showJSP(request, response, "/search/semantic.jsp");
 		}
 	}

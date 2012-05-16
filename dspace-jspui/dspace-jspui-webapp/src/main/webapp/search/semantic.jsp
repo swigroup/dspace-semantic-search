@@ -24,7 +24,9 @@
 <%@page import="gr.upatras.ceid.hpclab.reasoner.SupportedReasoner"%>
 <%@page import="gr.upatras.ceid.hpclab.owl.OWLDSpaceQueryManager"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Set"%>
+<%@page import="java.util.HashSet"%>
 <%@page import="org.semanticweb.owlapi.model.OWLClass"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace"%>
@@ -62,9 +64,20 @@
     if (offset > length)
         offset = length;
     int step = (length - offset) < 20 ? length - offset : 20;
+  
+    List<String> classList = new ArrayList<String>();
+    List<String> objectPropertiesList = new ArrayList<String>();
+    SemanticUnit semanticUnit = null;
+    OWLDSpaceQueryManager queryManager = null;
+    try {  
+    semanticUnit = SemanticUnit.getInstance(URL, SupportedReasoner.valueOf(reasoner),false, session.getId());
+    queryManager = new OWLDSpaceQueryManager(semanticUnit);
+    classList = queryManager.getFullClassList();
+    objectPropertiesList = queryManager.getFullObjectPropertiesList();
     
-    SemanticUnit semanticUnit = SemanticUnit.getInstance(URL, SupportedReasoner.valueOf(reasoner),false, session.getId());
-    OWLDSpaceQueryManager queryManager = new OWLDSpaceQueryManager(semanticUnit);
+    }
+    catch (Exception e) {
+    }
 %>
 
 <dspace:layout locbar="nolink" titlekey="jsp.search.semantic.title">
@@ -103,7 +116,7 @@
 
     <script type="text/javascript">      
       var dataClasses = [ 
-      <% List<String> classList = queryManager.getFullClassList();
+      <% 
       
          for (int i=0 ; i<classList.size() ; i++)
          {
@@ -115,9 +128,15 @@
       <%      }
          } %>
       ];
-      
+ 	 <% if (classList.isEmpty()) 
+	 	{
+	 %>
+	 	dataClasses = [['','','Types']];
+	 <%	}
+	 %>
+   
       var dataObjectProperties = [ 
-      <% List<String> objectPropertiesList = queryManager.getFullObjectPropertiesList();
+      <% 
       
          for (int i=0 ; i<objectPropertiesList.size() ; i++)
          {
@@ -129,7 +148,13 @@
       <%      }
          } %>
       ];
-      
+  	 <% if (objectPropertiesList.isEmpty()) 
+	 	{
+	 %>
+	 	dataObjectProperties = [['','','Relations']];
+	 <%	}
+	 %>
+     
       var dataFull = dataClasses.concat(dataObjectProperties);
     
       Ext.onReady(function() {

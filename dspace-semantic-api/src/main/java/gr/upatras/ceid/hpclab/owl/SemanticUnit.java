@@ -54,7 +54,7 @@ public class SemanticUnit {
 
 	//copying constructor, for the ontological part ('ontology registry')
 	
-	public SemanticUnit(SemanticUnit orig) {
+	private SemanticUnit(SemanticUnit orig) {
 		manager = orig.manager;
 		ontology = orig.ontology;
 		importsClosure = orig.importsClosure;
@@ -72,7 +72,7 @@ public class SemanticUnit {
 			ontology = manager.loadOntology(IRI.create(url));
 		} catch (OWLOntologyCreationException exception) {
 
-			throw new SemanticSearchException("Could not load ontology",
+			throw new SemanticSearchException("Failed to load ontology URL: "+url,
 					exception);
 		}
 

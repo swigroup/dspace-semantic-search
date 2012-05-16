@@ -36,7 +36,7 @@ import org.dspace.core.ConfigurationManager;
 public class DspaceOntologyServlet extends DSpaceServlet
 {
     protected void doDSGet(Context context, HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, AuthorizeException,
+             throws ServletException, IOException, SQLException, AuthorizeException,
             FileNotFoundException
     {
         response.setContentType("application/rdf+xml; charset=UTF-8");
@@ -59,8 +59,6 @@ public class DspaceOntologyServlet extends DSpaceServlet
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            request.setAttribute("error", ex.getMessage());
             throw new FileNotFoundException();
         }
     }
