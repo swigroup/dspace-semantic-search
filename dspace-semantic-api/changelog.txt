@@ -4,14 +4,14 @@ r234	- Handling of empty autocomplete lists in jsp, in case of exceptions.
         Put showJSP in finally block.                                            
       - Fixed issue 16.                                                         
 -------------------------------------------------------------------------------- 
-r219	DSpace 1.8.2 with SSv2.1 (SSv2.1_r2)	                        Apr 23, 2012
+r219	DSpace 1.8.2 with SSv2.1 (SSv2.1_r2)			Apr 23, 2012
 --------------------------------------------------------------------------------
 r203	- Update for DSpace 1.8.2 
       - Read oai base URL from “oai.cfg” 
       - HTML encoding for exception messages in the front-end 
       - Selective precomputation of reasoning operations                         
 --------------------------------------------------------------------------------
-r176	DSpace v1.7.2 with Semantic Search v2.1  (SSv2.1_r1)	         Mar 7, 2012
+r176	DSpace v1.7.2 with Semantic Search v2.1  (SSv2.1_r1)	Mar 7, 2012
 --------------------------------------------------------------------------------
 r171	DSpace Semantic API v2.1: 
       - Implemented persistent reasoner registry (Fixes issue 28) 
@@ -31,7 +31,7 @@ r169	- dspace-ont namespace change
       - re-enable dcterms:isPartOf for isPartOfSeries element
 	    
 --------------------------------------------------------------------------------
-      DSpace v1.7.1 with Semantic Search v2.0  (SSv2.0_r4)		       Jul 5, 2011 
+      DSpace v1.7.1 with Semantic Search v2.0  (SSv2.0_r4)	Jul 5, 2011 
 --------------------------------------------------------------------------------
 r156	 - Log ontology URL
 r155	Proper URL encoding of expression parameter
@@ -50,7 +50,7 @@ r144	help for semantic search added
 r143	help link for semantic search added
 r126	We capitalized class names and enabled two additional properties
 --------------------------------------------------------------------------------
-r122	DSpace v1.7.1 with Semantic Search v2.0  (SSv2.0_r3)		       Apr 5, 2011 
+r122	DSpace v1.7.1 with Semantic Search v2.0  (SSv2.0_r3)	Apr 5, 2011 
 --------------------------------------------------------------------------------
 r111	Preserve original references in the dspace.cfg
 r110	Allow reload of reasoner when user ask for changing it
@@ -64,7 +64,7 @@ r105	Now is mandatory that all source files have the license on the top in
 r104	Use only pellet based tests to avoid Fact++ instalation problems. Divide 
       test between pets and dspace ontologies.
 --------------------------------------------------------------------------------
-r58	  DSpace v1.7.0 with Semantic Search v2.0  (SSv2.0_r2)           Feb 7, 2011
+r58	  DSpace v1.7.0 with Semantic Search v2.0  (SSv2.0_r2)	Feb 7, 2011
 --------------------------------------------------------------------------------
 r42	  Tagging the 2.0 release of Semantic Search 
 r37	 revert ontoURL to previous value - fixed 
