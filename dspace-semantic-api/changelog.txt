@@ -1,0 +1,81 @@
+r234	- Handling of empty autocomplete lists in jsp, in case of exceptions. 
+      - Copying constructor of SU now has private access. 
+      - Enlarge try block in SemanticSearchServlet to handle null SUs. 
+        Put showJSP in finally block.                                            
+      - Fixed issue 16.                                                         
+-------------------------------------------------------------------------------- 
+r219	DSpace 1.8.2 with SSv2.1 (SSv2.1_r2)	                        Apr 23, 2012
+--------------------------------------------------------------------------------
+r203	- Update for DSpace 1.8.2 
+      - Read oai base URL from “oai.cfg” 
+      - HTML encoding for exception messages in the front-end 
+      - Selective precomputation of reasoning operations                         
+--------------------------------------------------------------------------------
+r176	DSpace v1.7.2 with Semantic Search v2.1  (SSv2.1_r1)	         Mar 7, 2012
+--------------------------------------------------------------------------------
+r171	DSpace Semantic API v2.1: 
+      - Implemented persistent reasoner registry (Fixes issue 28) 
+      - Updated ontology registry 
+      - Semantic Unit keys now depend also on Session IDs and reasoner type 
+      - Added Hermit 1.3.4 support 
+      - Added FaCT++ 1.5.2 support
+      - Updated dependencies in pom. Use berkeleybop repo 
+      - Upgraded to OWL API v3.2.4 
+      - Measure and log reasoner 'instantiation' time 
+      - (Ontology / XSLT changes) "	Mar 2, 2012	koutsomi
+r170	JSPUI updates for Semantic Search v2.1: 
+      - Added 'reload' button in Options 
+      - Various updates to reflect API changes 
+      - xsd:anyURI linking (fixes issue 19) "	Mar 2, 2012	
+r169	- dspace-ont namespace change 
+      - re-enable dcterms:isPartOf for isPartOfSeries element
+	    
+--------------------------------------------------------------------------------
+      DSpace v1.7.1 with Semantic Search v2.0  (SSv2.0_r4)		       Jul 5, 2011 
+--------------------------------------------------------------------------------
+r156	 - Log ontology URL
+r155	Proper URL encoding of expression parameter
+r154	Handle any kind of exception upon executeQuery
+r151	map isPartOfSeries to dc:isPartOf rather than dcterms:isPartOf which 
+      should be used as an object property only. 
+r150	- added semantic query logging 
+      - initialize reasoner 
+      - check session attribute ""resultset"" for nullity 
+      - catch NPEs on query execution
+r149	- Add the ability to initialize the reasoner by precomputing inferences 
+      - Do not reset reasoner instance if not necessary
+r148	typo corrected
+r147	fixed alignment for help link
+r144	help for semantic search added
+r143	help link for semantic search added
+r126	We capitalized class names and enabled two additional properties
+--------------------------------------------------------------------------------
+r122	DSpace v1.7.1 with Semantic Search v2.0  (SSv2.0_r3)		       Apr 5, 2011 
+--------------------------------------------------------------------------------
+r111	Preserve original references in the dspace.cfg
+r110	Allow reload of reasoner when user ask for changing it
+r109	Refactored tests to allow verification of pets/dspace ontologies based on 
+      Pellet
+r108	Skip license check from ext-3.3.0 library
+r107	Added DSpace license
+r106	Removed optional import reference
+r105	Now is mandatory that all source files have the license on the top in 
+      order to be compiled (maven-license-plugin in parent).
+r104	Use only pellet based tests to avoid Fact++ instalation problems. Divide 
+      test between pets and dspace ontologies.
+--------------------------------------------------------------------------------
+r58	  DSpace v1.7.0 with Semantic Search v2.0  (SSv2.0_r2)           Feb 7, 2011
+--------------------------------------------------------------------------------
+r42	  Tagging the 2.0 release of Semantic Search 
+r37	 revert ontoURL to previous value - fixed 
+r21	 Added some logging to verify what reasoner is instantiated
+r20	 Show the current reasoner being used
+r19	 The method "escape" was replaced with "encodeURI".
+r18	 The default ontology URL (under "options") has been parameterized 
+     according to the dspace.url parameter
+r16	 Namespaces for DSpace ontology have been updated
+r15	 We altered the URL for the XSL file "transformer.xslt". We now pass 
+     "tranformer.xslt" from its new location, namely from 
+     "http://swig.hpclab.ceid.upatras.gr/dspace-ont/".
+r14	 dspace.oai.url parameter from dspace.cfg is used for building the 
+     "ListRecords" OAI request
