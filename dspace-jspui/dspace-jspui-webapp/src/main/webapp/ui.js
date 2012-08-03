@@ -358,7 +358,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 			text : 'Reload',
 			formBind: true,
 			handler: function (event, button) {
-				window.location = 'semantic-search?URL=' + encodeURI(ontologyTextField.getValue()).replace('+', '%2B') + '&reasoner=' + reasonerCombobox.getValue() + '&reload=true';				
+				window.location = 'semantic-search?URL=' + encodeURI(ontologyCombobox.getValue()).replace('+', '%2B') + '&reasoner=' + reasonerCombobox.getValue() + '&reload=true';				
 			}
 		} ]
 	});
