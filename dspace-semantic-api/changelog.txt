@@ -1,5 +1,8 @@
+r251	- SemanticSearchServlet: print the class of generic reasoner exceptions
+		- more detailed reasoner version logging
+		- added ontology URL history in options (fixes issue 27)
 r234	- Handling of empty autocomplete lists in jsp, in case of exceptions. 	
-	- Copying constructor of SU now has private access. 
+		- Copying constructor of SU now has private access. 
       	- Enlarge try block in SemanticSearchServlet to handle null SUs. 
           Put showJSP in finally block.                                            
       	- Fixed issue 16.                                                         
