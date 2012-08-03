@@ -290,25 +290,73 @@ function appInit(expression, reasonerValue, ontologyValue) {
 	var reasonerCombobox = getStaticComboBox("Reasoner", 200, [[ 'FACTPLUSPLUS', 'Fact++'], [ 'PELLET', 'Pellet' ], [ 'HERMIT', 'HermiT' ]]);
 	reasonerCombobox.setValue(reasonerValue);
 	
-	var ontologyTextField = new Ext.form.TextField({
-		fieldLabel: 'Ontology',
-		width: 400,
-		value: ontologyValue
-	})
+    Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+	Ext.state.Manager.getProvider(); 
+    
+    var urlStore = new Ext.data.SimpleStore({ 
+        fields: ['url'] 
+        , data: Ext.state.Manager.get('URLStore', []) 
+    });
+    var path = window.location.pathname;
+    var defaultOnt = "http://"+window.location.host+path.substring(0, path.lastIndexOf('/'))+'/dspace-ont';
+    var aRecord = new urlStore.recordType({url:defaultOnt});
+    urlStore.insert(0, aRecord);
+    function saveURL(url) { 
+        if (Ext.isEmpty(url)) 
+            return;
+        
+        urlStore.clearFilter(false);
+
+        if (urlStore.find('url', url) < 0) { 
+            var data = [[url],'']; 
+            var count = urlStore.getTotalCount(); 
+            var limit = count > 10? 9: count; 
+             
+            for (var i = 1; i <= limit; i++) 
+                data.push([urlStore.getAt(i).get('url')]);
+            
+            if (Ext.state.Manager.getProvider()) 
+                Ext.state.Manager.set('URLStore', data); 
+             
+            urlStore.loadData(data); 
+        } 
+    }	
+	var ontologyCombobox = new Ext.form.ComboBox({
+		   fieldLabel:'Ontology',
+		   displayField: 'url',
+		   valueField: 'url',
+		   width: 400,
+		   vtype: 'url',
+		   vtypeText: 'Please enter a valid URL for your ontology',
+		   store: urlStore,
+		   triggerAction:'all',
+		   typeAhead:true,
+		   mode:'local',
+		   minChars:1,
+		   //forceSelection:true,
+		   hideTrigger:true,
+		   value: ontologyValue,
+		});
+	ontologyCombobox.setValue(ontologyValue);
 	
 	var optionsForm = new Ext.FormPanel( {
 		labelWidth : 60,
-		items : [ reasonerCombobox, ontologyTextField ],
+		monitorValid : true,
+		items : [ reasonerCombobox, ontologyCombobox],
 		bodyStyle : 'padding:5px',
 		buttons : [ {
 			xtype : 'button',
 			text : 'Save options',
+			formBind: true,
 			handler: function (event, button) {
-				window.location = 'semantic-search?URL=' + encodeURI(ontologyTextField.getValue()).replace('+', '%2B') + '&reasoner=' + reasonerCombobox.getValue();				
+				
+				saveURL(ontologyCombobox.getValue());
+			    window.location = 'semantic-search?URL=' + encodeURI(ontologyCombobox.getValue()).replace('+', '%2B') + '&reasoner=' + reasonerCombobox.getValue();
 			}
 		},{
 			xtype : 'button',
 			text : 'Reload',
+			formBind: true,
 			handler: function (event, button) {
 				window.location = 'semantic-search?URL=' + encodeURI(ontologyTextField.getValue()).replace('+', '%2B') + '&reasoner=' + reasonerCombobox.getValue() + '&reload=true';				
 			}

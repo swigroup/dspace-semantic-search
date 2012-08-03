@@ -98,7 +98,8 @@ public class SemanticSearchServlet extends DSpaceServlet {
 					.valueOf(reasoner), reload, sid);
 			Version v = semanticUnit.getReasoner().getReasonerVersion();
 			String version = Integer.toString(v.getMajor()) + "."
-					+ Integer.toString(v.getMinor());
+					+ Integer.toString(v.getMinor()) + "."
+					+ v.getPatch()+ "." + v.getBuild();
 			long startTime = System.nanoTime();
 			if (semanticUnit.initializeReasoner(semanticUnit.getReasoner()) > 0) {
 				double totalTime = (System.nanoTime() - startTime) / 1.0E06;
@@ -184,7 +185,7 @@ public class SemanticSearchServlet extends DSpaceServlet {
 				log.error("reasoner NPE", exception);
 			} catch (Exception exception) {
 				JSPUILogger.logException(
-						"Reasoner threw an Exception", request,
+						"Reasoner threw an Exception of " + exception.getClass(), request,
 						exception);
 				log.error("reasoner Exception", exception);
 			}

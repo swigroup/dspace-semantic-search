@@ -24,7 +24,7 @@ public class OWLReasonerPelletImpl implements OWLReasonerFactory
         log.info("New reasoner based on Pellet was created");
 
         PelletReasonerFactory reasonerFactory = PelletReasonerFactory.getInstance();
-        OWLReasoner reasoner = reasonerFactory.createNonBufferingReasoner(ontology);
+        OWLReasoner reasoner = reasonerFactory.createReasoner(ontology);
         
         return reasoner;
     }

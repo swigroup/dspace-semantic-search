@@ -102,7 +102,8 @@ public class SemanticUnit {
 		double totalTime = (System.nanoTime() - startTime) / 1.0E06;
 		Version v = reasoner.getReasonerVersion();
 		String version = Integer.toString(v.getMajor()) + "."
-				+ Integer.toString(v.getMinor());
+				+ Integer.toString(v.getMinor())+ "."
+				+ v.getPatch()+ "." + v.getBuild();
 		log.info(LogManager.getHeader(null, "SemanticSearch-Inst",
 				"Reasoner: "
 						+ getReasoner().getReasonerName()
@@ -131,11 +132,14 @@ public class SemanticUnit {
 		/* Initialize the reasoner: Precompute all inferences. Silently ignore
 		 NPEs.
 	 	UPDATE: Certain inference types (e.g. Data Property Assertions) take too
-	 	long or fail (HerMiT) and it is unclear wether they contribute to query
+	 	long or fail (HerMiT) and it is unclear whether they contribute to query
 	 	performance, since our query policy is class oriented. Therefore we 
 	 	would cause precomputation for some inference types only. 
 		 */
-		InferenceType[] allowedInferences = {InferenceType.CLASS_HIERARCHY, InferenceType.CLASS_ASSERTIONS};
+		InferenceType[] allowedInferences = 
+				{InferenceType.CLASS_HIERARCHY, 
+				 InferenceType.CLASS_ASSERTIONS};
+		
 		for (InferenceType t : allowedInferences) {
 			try {
 				if (!reasoner.isPrecomputed(t) && reasoner.getPrecomputableInferenceTypes().contains(t)) {
