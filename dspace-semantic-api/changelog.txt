@@ -1,3 +1,4 @@
+r262	- Update help for "Reload" button 
 r251	- SemanticSearchServlet: print the class of generic reasoner exceptions
 	- More detailed reasoner version logging
 	- Added ontology URL history in options (fixes issue 27)
