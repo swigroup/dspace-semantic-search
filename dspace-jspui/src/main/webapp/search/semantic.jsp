@@ -17,6 +17,7 @@
 <%@ page import="java.net.URI"%>
 <%@ page import="java.util.regex.Matcher"%>
 <%@ page import="java.util.regex.Pattern"%>
+<%@ page import="java.text.DecimalFormat"%>
 <%@page import="org.semanticweb.owlapi.model.OWLIndividual"%>
 <%@page import="org.semanticweb.owlapi.model.OWLNamedIndividual"%>
 <%@page import="org.semanticweb.owlapi.model.IRI"%>
@@ -40,6 +41,13 @@
     String reasoner = (String) session.getAttribute("reasoner");
 
     String localContext = "&expression=" + URLEncoder.encode(expression, "UTF-8");
+
+    double totalTime = session.getAttribute("totalTime") == null ? 0 : (Double) session
+            .getAttribute("totalTime");
+    if (totalTime != 0){
+      DecimalFormat df = new DecimalFormat("#.####");
+      totalTime = Double.parseDouble(df.format(totalTime));
+    }
 
     if (URL.equals(""))
     {
@@ -201,6 +209,7 @@
       <fmt:param><%=offset + 1%></fmt:param>
       <fmt:param><%=offset + step%></fmt:param>
       <fmt:param><%=length%></fmt:param>
+      <fmt:param><%=totalTime%></fmt:param>
     </fmt:message>
   </p>
 

@@ -124,6 +124,7 @@ public class SemanticSearchServlet extends DSpaceServlet {
 
 					double totalTime = (System.nanoTime() - startTime) / 1.0E06;
           
+          //need to pass this parameter in order to print the total query time (new feature in dspace-3.x)
           request.getSession().setAttribute("totalTime", totalTime);
 
 					// TODO: Number of results should be returned by appropriate

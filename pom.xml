@@ -478,13 +478,12 @@
             <version>3.1</version>
             <type>war</type>
          </dependency>
-         
+         <!-- DSpace Semantic Api -->
          <dependency>
             <groupId>org.dspace</groupId>
             <artifactId>dspace-semantic-api</artifactId>
-            <version>${project.version}</version>
+            <version>3.1</version>
          </dependency>
-
          <dependency>
             <groupId>org.dspace</groupId>
             <artifactId>dspace-jspui</artifactId>
