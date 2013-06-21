@@ -50,7 +50,7 @@ import org.dspace.storage.rdbms.TableRowIterator;
  * Class defining methods for sending new item e-mail alerts to users
  * 
  * @author Robert Tansley
- * @version $Revision: 6857 $
+ * @version $Revision$
  */
 public class Subscribe
 {

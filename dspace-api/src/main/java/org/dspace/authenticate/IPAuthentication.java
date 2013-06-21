@@ -39,7 +39,7 @@ import org.dspace.eperson.Group;
  * <p>
  * For supported IP ranges see {@link org.dspace.authenticate.IPMatcher}.
  * 
- * @version $Revision: 6792 $
+ * @version $Revision$
  * @author Robert Tansley
  */
 public class IPAuthentication implements AuthenticationMethod

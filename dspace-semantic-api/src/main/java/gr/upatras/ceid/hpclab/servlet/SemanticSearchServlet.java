@@ -123,6 +123,8 @@ public class SemanticSearchServlet extends DSpaceServlet {
 					executeQueryExpression(request, semanticUnit);
 
 					double totalTime = (System.nanoTime() - startTime) / 1.0E06;
+          
+          request.getSession().setAttribute("totalTime", totalTime);
 
 					// TODO: Number of results should be returned by appropriate
 					// method (executeQueryExpression)

@@ -34,7 +34,7 @@ import java.util.*;
  * withdrawn within a particular range of dates.
  * 
  * @author Robert Tansley
- * @version $Revision: 6552 $
+ * @version $Revision$
  */
 public class Harvest
 {

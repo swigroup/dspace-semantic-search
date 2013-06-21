@@ -28,7 +28,7 @@ import java.net.UnknownHostException;
  * {@code 2001:18e8:3:171::/64}</li>
  * </ul>
  * 
- * @version $Revision: 6024 $
+ * @version $Revision$
  * @author Robert Tansley
  */
 public class IPMatcher

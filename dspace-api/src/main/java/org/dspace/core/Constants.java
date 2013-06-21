@@ -12,7 +12,7 @@ package org.dspace.core;
  * must never be changed!!
  * 
  * @author David Stuve
- * @version $Revision: 6129 $
+ * @version $Revision$
  */
 public class Constants
 {

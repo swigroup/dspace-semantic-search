@@ -35,7 +35,7 @@ import org.dspace.storage.rdbms.TableRowIterator;
  * removing bitstreams has instant effect in the database.
  * 
  * @author Robert Tansley
- * @version $Revision: 6948 $
+ * @version $Revision$
  */
 public class Bundle extends DSpaceObject
 {
@@ -810,5 +810,11 @@ public class Bundle extends DSpaceObject
         {
             return null;
         }
+    }
+
+    @Override
+    public void updateLastModified()
+    {
+
     }
 }

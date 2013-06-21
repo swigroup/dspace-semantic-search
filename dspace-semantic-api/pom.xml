@@ -12,7 +12,7 @@
    <parent>
       <groupId>org.dspace</groupId>
       <artifactId>dspace-parent</artifactId>
-       <version>1.8.2</version>
+       <version>1.8</version>
       <relativePath>..</relativePath>
    </parent>
 
@@ -48,8 +48,11 @@
        <artifactId>servlet-api</artifactId>
      </dependency>
      <dependency>
-       <groupId>org.dspace</groupId>
-       <artifactId>dspace-jspui-api</artifactId>
+        <groupId>org.dspace</groupId>
+        <artifactId>dspace-jspui</artifactId>
+        <version>3.0</version>
+        <type>jar</type>
+        <classifier>classes</classifier>
      </dependency>
      <dependency>
        <groupId>owlapi</groupId>

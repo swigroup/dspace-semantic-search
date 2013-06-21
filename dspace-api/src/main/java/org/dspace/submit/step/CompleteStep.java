@@ -41,7 +41,7 @@ import org.dspace.xmlworkflow.XmlWorkflowManager;
  * @see org.dspace.submit.AbstractProcessingStep
  * 
  * @author Tim Donohue
- * @version $Revision: 6526 $
+ * @version $Revision$
  */
 public class CompleteStep extends AbstractProcessingStep
 {

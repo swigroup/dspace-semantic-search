@@ -46,7 +46,7 @@ import org.dspace.xmlworkflow.XmlWorkflowManager;
  * Container class for code that is useful to many packagers.
  *
  * @author Larry Stone
- * @version $Revision: 6940 $
+ * @version $Revision$
  */
 
 public class PackageUtils

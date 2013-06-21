@@ -51,7 +51,7 @@ import java.sql.SQLException;
  * @author Tim Donohue
  * @author Wendy Bossons (based on earlier CC license step work, but updated
  * for DSpace 1.8 and CC web services api + curation)
- * @version $Revision: 6785 $
+ * @version $Revision$
  */
 public class CCLicenseStep extends AbstractProcessingStep
 {

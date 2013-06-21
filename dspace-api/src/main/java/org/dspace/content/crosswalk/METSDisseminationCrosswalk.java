@@ -37,7 +37,7 @@ import org.jdom.input.SAXBuilder;
  * OAI-PMH server.
  *
  * @author Larry Stone
- * @version $Revision: 6467 $
+ * @version $Revision$
  */
 public class METSDisseminationCrosswalk
     implements DisseminationCrosswalk

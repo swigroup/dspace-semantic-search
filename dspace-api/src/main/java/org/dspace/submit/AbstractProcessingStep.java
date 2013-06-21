@@ -50,7 +50,7 @@ import org.dspace.core.Context;
  * @see org.dspace.app.util.SubmissionStepConfig
  * 
  * @author Tim Donohue
- * @version $Revision: 6626 $
+ * @version $Revision$
  */
 public abstract class AbstractProcessingStep
 {

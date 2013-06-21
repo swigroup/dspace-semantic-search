@@ -44,7 +44,7 @@ import org.dspace.submit.AbstractProcessingStep;
  * @see org.dspace.submit.AbstractProcessingStep
  * 
  * @author Tim Donohue
- * @version $Revision: 6375 $
+ * @version $Revision$
  */
 public class UploadStep extends AbstractProcessingStep
 {

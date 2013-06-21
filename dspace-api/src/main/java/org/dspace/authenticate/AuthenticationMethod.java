@@ -34,7 +34,7 @@ import org.dspace.eperson.EPerson;
  * @see AuthenticationManager
  *
  * @author Larry Stone
- * @version $Revision: 6130 $
+ * @version $Revision$
  */
 public interface AuthenticationMethod {
 
