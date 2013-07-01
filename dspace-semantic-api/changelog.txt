@@ -1,3 +1,10 @@
+Ôªø-------------------------------------------------------------------------------
+	   	DSpace 1.8.2 with SSv2.2 (SSv2.2)		July 1, 2013
+-------------------------------------------------------------------------------
+7960a0e3af41	- Empty webapps folders fix for Git
+-------------------------------------------------------------------------------
+99893f31d9b6 (svn r268)	- Migrate to Git			June 10, 2013
+-------------------------------------------------------------------------------
 r262	- Update help for "Reload" button 
 r251	- SemanticSearchServlet: print the class of generic reasoner exceptions
 	- More detailed reasoner version logging
@@ -11,7 +18,7 @@ r234	- Handling of empty autocomplete lists in jsp, in case of exceptions.
 r219	DSpace 1.8.2 with SSv2.1 (SSv2.1_r2)			Apr 23, 2012
 --------------------------------------------------------------------------------
 r203	- Update for DSpace 1.8.2 
-	- Read oai base URL from ìoai.cfgî 
+	- Read oai base URL from ‚Äúoai.cfg‚Äù 
 	- HTML encoding for exception messages in the front-end 
 	- Selective precomputation of reasoning operations                         
 --------------------------------------------------------------------------------
