@@ -1,10 +1,22 @@
-﻿-------------------------------------------------------------------------------
 
-8f1f42f9e8ba   	DSpace 1.8.2 with SSv2.2 (SSv2.2)		July 1, 2013
+	   	DSpace 3.2 with SSv2.3 (SSv2.3)			Oct 20, 2013
+-------------------------------------------------------------------------------
+40beedd9a190 	- Properly export XOAI metadata to QDC
+32325e882cc9 	- towards dspace-3.x-SSv2.2:
+		   (1) fix pom files [versions, declaration 
+		   of dependencies] for compatibility with 
+		   dspace-3.x
+		   (2) add missing dspace.oai.url declaration 
+		   inside oai.cfg
+		   (3) add the query time printing feature 
+		   [new in dspace-3.x] for semantic queries 
+		   as well
+-------------------------------------------------------------------------------
+8f1f42f9e8ba   	DSpace 1.8.2 with SSv2.2 (SSv2.2)		Jul 1, 2013
 -------------------------------------------------------------------------------
 7960a0e3af41	- Empty webapps folders fix for Git
 -------------------------------------------------------------------------------
-99893f31d9b6 (svn r268)	- Migrate to Git			June 10, 2013
+99893f31d9b6 (svn r268)	- Migrate to Git			Jun 10, 2013
 -------------------------------------------------------------------------------
 r262	- Update help for "Reload" button 
 r251	- SemanticSearchServlet: print the class of generic reasoner exceptions
