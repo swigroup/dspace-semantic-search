@@ -1,5 +1,5 @@
-
-	   	DSpace 3.2 with SSv2.3 (SSv2.3)			Oct 20, 2013
+﻿
+84e9eb4ba1c1   	DSpace 3.2 with SSv2.3 (SSv2.3)			Oct 20, 2013
 -------------------------------------------------------------------------------
 40beedd9a190 	- Properly export XOAI metadata to QDC
 32325e882cc9 	- towards dspace-3.x-SSv2.2:
