@@ -25,6 +25,7 @@
 <%@page import="gr.upatras.ceid.hpclab.reasoner.SupportedReasoner"%>
 <%@page import="gr.upatras.ceid.hpclab.owl.OWLDSpaceQueryManager"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Locale"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashSet"%>
@@ -45,7 +46,9 @@
     double totalTime = session.getAttribute("totalTime") == null ? 0 : (Double) session
             .getAttribute("totalTime");
     if (totalTime != 0){
-      DecimalFormat df = new DecimalFormat("#.####");
+      DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
+      df.setMinimumFractionDigits(4);
+      df.setMaximumFractionDigits(4);
       totalTime = Double.parseDouble(df.format(totalTime));
     }
 
@@ -88,6 +91,33 @@
     }
 %>
 
+
+  <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/ext-all.css" /> 
+  <%-- <link rel="stylesheet" type="text/css" href="ext-4.0.7/resources/css/ext-all.css">  --%>
+  <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/xtheme-gray.css" />
+
+
+     
+  <script type="text/javascript" src="ext-3.3.0/adapter/prototype/ext-prototype-adapter.js"></script>>
+  <script type="text/javascript" src="ext-3.3.0/ext-all.js"></script> 
+  <script type="text/javascript" src="grouping-combobox.js"></script>  
+  <script type="text/javascript" src="ui.js"></script> 
+  
+   <%-- by @GS --%>  
+<link rel="stylesheet" href="codemirror/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="ss-custom.css" />
+<link rel="stylesheet" href="codemirror/addon/hint/show-hint.css">
+
+<script src="codemirror/lib/codemirror.js"></script>
+<script src="codemirror/addon/edit/matchbrackets.js"></script>
+<script src="codemirror/mode/sparql/sparql.js"></script> 
+<script src="codemirror/mode/ms/ms.js"></script>      
+<script src="codemirror/addon/display/placeholder.js"></script> 
+
+<script src="codemirror/addon/hint/sparql-hint.js"></script>
+<script src="codemirror/addon/hint/ms-hint.js"></script>
+<script src="codemirror/addon/hint/show-hint.js"></script>
+
 <dspace:layout locbar="nolink" titlekey="jsp.search.semantic.title">
 
 
@@ -95,20 +125,12 @@
     <tr>
       <td width="25%"/>
       <td>
-        <div id="destino" style="width:500px; margin:auto; margin-top:20px;"></div>
-      <td align="left" valign="top" width="25%" class="standard">
+        <div id="destino" style="width:500px; margin:auto; margin-top:20px;"></div>        
+        <td align="left" valign="top" width="25%" class="standard">
         <dspace:popup page="<%= LocaleSupport.getLocalizedMessage(pageContext,\"help.index\") + \"#semantic\"%>"><fmt:message key="jsp.help"/></dspace:popup>
       </td>
-    </tr> 
+    </tr>
   </table> 
-  
-  <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/ext-all.css" />
-  <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/xtheme-gray.css" />  
-  <script type="text/javascript" src="ext-3.3.0/adapter/prototype/ext-prototype-adapter.js"></script>
-  <script type="text/javascript" src="ext-3.3.0/ext-all.js"></script>
-  <script type="text/javascript" src="grouping-combobox.js"></script>  
-  <script type="text/javascript" src="ui.js"></script>  
-
 
 
 <style type="text/css">
@@ -122,7 +144,12 @@
 }
 </style>
 
-    <script type="text/javascript">      
+
+
+
+    <script type="text/javascript"> 
+    
+         
       var dataClasses = [ 
       <% 
       
@@ -171,7 +198,9 @@
          
          appInit('<%= expression %>', '<%= reasoner %>', '<%= URL %>');
       });
+      
     </script>
+
 
 
   <%
