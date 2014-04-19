@@ -8,6 +8,7 @@
 
 --%>
 
+<%@page import="java.util.Locale"%>
 <%-- Semantic Search JSP --%>
  
 <%@ page contentType="text/html;charset=UTF-8"%>
@@ -45,7 +46,9 @@
     double totalTime = session.getAttribute("totalTime") == null ? 0 : (Double) session
             .getAttribute("totalTime");
     if (totalTime != 0){
-      DecimalFormat df = new DecimalFormat("#.####");
+      DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
+      df.setMinimumFractionDigits(4);
+      df.setMaximumFractionDigits(4);
       totalTime = Double.parseDouble(df.format(totalTime));
     }
 
@@ -294,7 +297,7 @@
       </td>
       <td class="<%=row%>RowOddCol">
         <a
-          href="<%=request.getContextPath()%>/semantic-search?indURI=<%=URLEncoder.encode(iri.toString(), "UTF-8")%>">
+          href="<%=request.getContextPath()%>/semantic-search/resource/<%=URLEncoder.encode(iri.toString(), "UTF-8")%>">
           
           <%
         String name = iri.getFragment();

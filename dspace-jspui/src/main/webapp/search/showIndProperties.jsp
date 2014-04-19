@@ -73,7 +73,7 @@
       <tr>
         <td class="itemHeader">
           <fmt:message key="jsp.search.showindproperties.individual" />
-          <%=request.getParameter("indURI")%></td>
+          <%=request.getAttribute("indURI")%></td>
       </tr>
     </table>
 
@@ -99,7 +99,7 @@
                       {
           %>
           <a
-            href='<%="semantic-search?expression="
+            href='<%=request.getContextPath()+"/semantic-search?expression="
                                 + URLEncoder.encode(shortFormProvider
                                         .getShortForm((OWLEntity) owl_class), "UTF-8")%>'><%=shortFormProvider.getShortForm((OWLEntity) owl_class)%></a>
           <%
@@ -175,7 +175,7 @@
                           field = shortFormProvider.getShortForm((OWLEntity) a.getProperty());
                       }
 
-                      link = "semantic-search?indURI="
+                      link = request.getContextPath()+"/semantic-search/resource/"
                               + URLEncoder.encode(((OWLNamedIndividual) owlin).getIRI()
                                       .toString(), "UTF-8");
       %>
@@ -280,7 +280,7 @@
                       {
                           field = shortFormProvider.getShortForm((OWLEntity) a.getProperty());
                       }
-                      link = "semantic-search?indURI="
+                      link = request.getContextPath()+"/semantic-search/resource/"
                               + URLEncoder.encode(((OWLNamedIndividual) owlin).getIRI()
                                       .toString(), "UTF-8");
       %>
