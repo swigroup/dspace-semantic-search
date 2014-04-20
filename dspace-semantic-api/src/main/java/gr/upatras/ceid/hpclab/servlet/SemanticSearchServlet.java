@@ -86,7 +86,7 @@ public class SemanticSearchServlet extends DSpaceServlet {
                             + ", results=(" + resultsSize + "), time= "
                             + totalTime + " ms."
                             + "Ontology URL: "
-                            /* should be replaced (returns null. getDefaultDocumentIRI()???)*/ + (semanticUnit.getOntology().getOntologyID().getDefaultDocumentIRI())
+                            /* should be replaced (returns null. getDefaultDocumentIRI()???)*/ + (semanticUnit.getManager().getOntologyDocumentIRI(semanticUnit.getOntology()))
                             + "\n" + logInfo));
                 }
             }

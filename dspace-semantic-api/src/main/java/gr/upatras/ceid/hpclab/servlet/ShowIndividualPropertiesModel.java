@@ -16,8 +16,10 @@ import javax.ws.rs.core.MediaType;
 import com.sun.jersey.api.view.Viewable;
 import javax.ws.rs.PathParam;
 import gr.upatras.ceid.hpclab.owl.*;
+import java.io.PrintWriter;
 import org.dspace.app.webui.util.UIUtil;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
 @Path("/semantic-search/resource/{id}")
 
@@ -33,7 +35,16 @@ public class ShowIndividualPropertiesModel {
 
         try {
             SemanticUnit su = SemanticUnitContext.getInstanceFromRequest(UIUtil.obtainContext(request), request);
-      
+            OWLNamedIndividual individual = su.getManager()
+                .getOWLDataFactory().getOWLNamedIndividual(indIRI);
+            
+            PrintWriter print = new PrintWriter(System.out, true);
+            RDFXMLIndividualRenderer output = new RDFXMLIndividualRenderer (su.getManager(), su.getOntology(), print);
+          //  new OWLXMLObjectRenderer(output).visit(individual);
+           // output.render();
+            output.render(individual);
+            print.flush();
+            //System.out.println (ToStringRenderer.getInstance().getRendering (individual));
         
         indp.getIndividualProperties (request, indIRI, su);
         }
