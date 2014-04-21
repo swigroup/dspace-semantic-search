@@ -19,6 +19,8 @@ import gr.upatras.ceid.hpclab.owl.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -32,32 +34,41 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 @Path("/semantic-search/")
 public class ShowIndividualPropertiesModel {
 
-    @Context
-    UriInfo uriInfo;
+    @Context HttpServletRequest request;
+    @Context UriInfo uriInfo;
 
-  /*  @GET
-    @Path("/resource/")
+    @GET
+    @Path("/resource/{id}")
     @Produces(MediaType.TEXT_HTML)
-    public Response redirectHTML() {
+    public Response redirectHTML(@PathParam("id") String id ) {
         UriBuilder addressBuilder = uriInfo.getBaseUriBuilder();
-        addressBuilder.path("/page/");
+        try {
+            addressBuilder.path("/semantic-search/page/"+URLEncoder.encode(id, "UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+            JSPUILogger
+                    .logException("Error", request, ex);
+        }
         return Response.seeOther(addressBuilder.build()).build();
     }
     
     @GET
-    @Path("/resource/")
-    @Produces(MediaType.APPLICATION_XML)
-    public Response redirectXML() {
+    @Path("/resource/{id}")
+    @Produces("application/rdf+xml")
+    public Response redirectXML(@PathParam("id") String id) {
         UriBuilder addressBuilder = uriInfo.getBaseUriBuilder();
-        addressBuilder.path("/data/");
+        try {
+            addressBuilder.path("/semantic-search/data/"+URLEncoder.encode(id, "UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+            JSPUILogger
+                    .logException("Error", request, ex);
+        }
         return Response.seeOther(addressBuilder.build()).build();
     }
-*/
+
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Path("/{parameter: resource|page}/{id}")
-    public Viewable showHTML(@Context HttpServletRequest request,
-            @PathParam("id") String id) {
+    @Path("/page/{id}")
+    public Viewable showHTML(@PathParam("id") String id) {
         IndividualProperties indp = new IndividualProperties();
         IRI indIRI = IRI.create(id);
         request.setAttribute("indURI", id);
@@ -73,11 +84,9 @@ public class ShowIndividualPropertiesModel {
     }
 
     @GET
-    @Path("/{parameter: resource|data}/{id}")
+    @Path("/data/{id}")
     @Produces("application/rdf+xml")
-    public Response showRDF(@Context
-            final HttpServletRequest request,
-            @PathParam("id") String id) throws SQLException {
+    public Response showRDF(@PathParam("id") String id) throws SQLException {
         final IRI indIRI = IRI.create(id);
         final SemanticUnit su = SemanticUnitContext.getInstanceFromRequest(UIUtil.obtainContext(request), request);
 
