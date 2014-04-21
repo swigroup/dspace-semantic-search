@@ -45,11 +45,12 @@
 
     double totalTime = session.getAttribute("totalTime") == null ? 0 : (Double) session
             .getAttribute("totalTime");
+    String time = null;
     if (totalTime != 0){
       DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
       df.setMinimumFractionDigits(4);
       df.setMaximumFractionDigits(4);
-      totalTime = Double.parseDouble(df.format(totalTime));
+      time = df.format(totalTime);
     }
 
     if (URL.equals(""))
@@ -212,7 +213,7 @@
       <fmt:param><%=offset + 1%></fmt:param>
       <fmt:param><%=offset + step%></fmt:param>
       <fmt:param><%=length%></fmt:param>
-      <fmt:param><%=totalTime%></fmt:param>
+      <fmt:param><%=time%></fmt:param>
     </fmt:message>
   </p>
 

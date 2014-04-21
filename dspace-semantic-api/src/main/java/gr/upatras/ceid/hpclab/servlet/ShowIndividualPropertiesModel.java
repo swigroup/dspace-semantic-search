@@ -16,50 +16,92 @@ import javax.ws.rs.core.MediaType;
 import com.sun.jersey.api.view.Viewable;
 import javax.ws.rs.PathParam;
 import gr.upatras.ceid.hpclab.owl.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import org.dspace.app.webui.util.UIUtil;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
-@Path("/semantic-search/resource/{id}")
-
+@Path("/semantic-search/")
 public class ShowIndividualPropertiesModel {
 
+    @Context
+    UriInfo uriInfo;
+
+  /*  @GET
+    @Path("/resource/")
+    @Produces(MediaType.TEXT_HTML)
+    public Response redirectHTML() {
+        UriBuilder addressBuilder = uriInfo.getBaseUriBuilder();
+        addressBuilder.path("/page/");
+        return Response.seeOther(addressBuilder.build()).build();
+    }
+    
+    @GET
+    @Path("/resource/")
+    @Produces(MediaType.APPLICATION_XML)
+    public Response redirectXML() {
+        UriBuilder addressBuilder = uriInfo.getBaseUriBuilder();
+        addressBuilder.path("/data/");
+        return Response.seeOther(addressBuilder.build()).build();
+    }
+*/
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Viewable index(@Context HttpServletRequest request, @PathParam("id") String id) {
-        System.out.println("/INDEX called");
+    @Path("/{parameter: resource|page}/{id}")
+    public Viewable showHTML(@Context HttpServletRequest request,
+            @PathParam("id") String id) {
         IndividualProperties indp = new IndividualProperties();
         IRI indIRI = IRI.create(id);
         request.setAttribute("indURI", id);
 
         try {
             SemanticUnit su = SemanticUnitContext.getInstanceFromRequest(UIUtil.obtainContext(request), request);
-            OWLNamedIndividual individual = su.getManager()
-                .getOWLDataFactory().getOWLNamedIndividual(indIRI);
-            
-            PrintWriter print = new PrintWriter(System.out, true);
-            RDFXMLIndividualRenderer output = new RDFXMLIndividualRenderer (su.getManager(), su.getOntology(), print);
-          //  new OWLXMLObjectRenderer(output).visit(individual);
-           // output.render();
-            output.render(individual);
-            print.flush();
-            //System.out.println (ToStringRenderer.getInstance().getRendering (individual));
-        
-        indp.getIndividualProperties (request, indIRI, su);
-        }
-        catch (Exception exception) {
-                    JSPUILogger
+            indp.getIndividualProperties(request, indIRI, su);
+        } catch (Exception exception) {
+            JSPUILogger
                     .logException("Error", request, exception);
-       }
-        return new Viewable("/search/showIndProperties.jsp", null);}
-    
-    @GET
-    // ("application/rdf+xml")
-    @Produces(MediaType.APPLICATION_XML)
-    public Viewable index2(@Context HttpServletRequest request, @PathParam("id") String id) {
-        request.setAttribute("obj", new String("IT Works"));
-        System.out.println("/INDEX called");
+        }
         return new Viewable("/search/showIndProperties.jsp", null);
-    }    
+    }
+
+    @GET
+    @Path("/{parameter: resource|data}/{id}")
+    @Produces("application/rdf+xml")
+    public Response showRDF(@Context
+            final HttpServletRequest request,
+            @PathParam("id") String id) throws SQLException {
+        final IRI indIRI = IRI.create(id);
+        final SemanticUnit su = SemanticUnitContext.getInstanceFromRequest(UIUtil.obtainContext(request), request);
+
+        StreamingOutput stream = new StreamingOutput() {
+            @Override
+            public void write(OutputStream out) throws IOException, WebApplicationException {
+
+                PrintWriter print = new PrintWriter(out, true);
+                try {
+                    OWLNamedIndividual individual = su.getManager()
+                            .getOWLDataFactory().getOWLNamedIndividual(indIRI);
+
+                    RDFXMLIndividualRenderer output = new RDFXMLIndividualRenderer(su.getManager(), su.getOntology(), print);
+                    output.render(individual);
+
+                } catch (Exception exception) {
+                    JSPUILogger
+                            .logException("Error", request, exception);
+                }
+
+            }
+        };
+
+
+        return Response.ok(stream).build();
+    }
 }
