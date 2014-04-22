@@ -115,11 +115,11 @@
         <td class="itemHeader">
           <fmt:message key="jsp.search.showindproperties.individual" />
           <%=request.getParameter("indURI")%>
-          <a href="<%=request.getContextPath()%>/semantic-search/data/?indURI=<%=request.getParameter("indURI")%>">
+          <a href="<%=request.getContextPath()%>/semantic-search/data/<%=URLEncoder.encode(request.getParameter("indURI"),"UTF-8")%>">
           <img src="image/rdf.png" alt="RDF" height="27px" align="right" >
           </a>
           <% if (!myname.equals("")){ %>
-             <a href='http://dbpedia.org/resource/<%=myname.replace("_"," ")%>' target='_blank'>
+             <a href='http://dbpedia.org/resource/<%=URLEncoder.encode(myname.replace(" ","_"),"UTF-8")%>' target='_blank'>
              <img src="image/dbpedia.png" alt="DBpedia search" height="27px" align="right" style="position:relative; right:10px;">
              </a>   
           <% } %>
@@ -263,7 +263,7 @@
 
           <a href='<%=link%>'><%=name%></a>
           <% if ((field.equals("dcterms:contributor")||field.equals("dspace-ont:author")||field.equals("dcterms:type")||field.equals("dspace-ont:sponsorship"))&& !isInverse)  { %>
-          <a href='http://dbpedia.org/resource/<%=name.replace("_"," ")%>' target='_blank'>
+          <a href='http://dbpedia.org/resource/<%=URLEncoder.encode(name.replace(" ","_"), "UTF-8")%>' target='_blank'>
           <img src="image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
           </a>
           <% } %>
@@ -398,7 +398,7 @@
         </td>
         <td><%=res[0]%>
           <% if (field.equals("dcterms:subject")||field.equals("dcterms:publisher"))  { %>
-          <a href='http://dbpedia.org/resource/<%=res[0]%>' target='_blank'>
+          <a href='http://dbpedia.org/resource/<%=URLEncoder.encode(res[0].replace(" ","_"),"UTF-8")%>' target='_blank'>
           <img src="image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
           </a>
           <% } %>
