@@ -45,11 +45,12 @@
 
     double totalTime = session.getAttribute("totalTime") == null ? 0 : (Double) session
             .getAttribute("totalTime");
+    String time = null;
     if (totalTime != 0){
       DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
       df.setMinimumFractionDigits(4);
       df.setMaximumFractionDigits(4);
-      totalTime = Double.parseDouble(df.format(totalTime));
+      time = df.format(totalTime/1000); // divide with 1000 because totaltime is in the form of mseconds
     }
 
     if (URL.equals(""))
