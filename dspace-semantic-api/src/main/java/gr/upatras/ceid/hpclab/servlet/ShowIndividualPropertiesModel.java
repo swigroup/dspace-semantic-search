@@ -38,7 +38,7 @@ public class ShowIndividualPropertiesModel {
     @Context UriInfo uriInfo;
 
     @GET
-    @Path("/resource/{id}")
+    @Path("/resource/{id:.+}")
     @Produces(MediaType.TEXT_HTML)
     public Response redirectHTML(@PathParam("id") String id ) {
         UriBuilder addressBuilder = uriInfo.getBaseUriBuilder();
@@ -52,7 +52,7 @@ public class ShowIndividualPropertiesModel {
     }
     
     @GET
-    @Path("/resource/{id}")
+    @Path("/resource/{id:.+}")
     @Produces("application/rdf+xml")
     public Response redirectXML(@PathParam("id") String id) {
         UriBuilder addressBuilder = uriInfo.getBaseUriBuilder();
@@ -67,7 +67,7 @@ public class ShowIndividualPropertiesModel {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Path("/page/{id}")
+    @Path("/page/{id:.+}")
     public Viewable showHTML(@PathParam("id") String id) {
         IndividualProperties indp = new IndividualProperties();
         IRI indIRI = IRI.create(id);
@@ -84,7 +84,7 @@ public class ShowIndividualPropertiesModel {
     }
 
     @GET
-    @Path("/data/{id}")
+    @Path("/data/{id:.+}")
     @Produces("application/rdf+xml")
     public Response showRDF(@PathParam("id") String id) throws SQLException {
         final IRI indIRI = IRI.create(id);
