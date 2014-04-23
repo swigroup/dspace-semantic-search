@@ -63,17 +63,69 @@
 
     Set<OWLOntology> importsClosure = semanticUnit.getImportsClosure();
     ShortFormProvider shortFormProvider = semanticUnit.getShortFormProvider();
+                
+    //Check if the individual has particular inverse properties in order to 
+    //trigger dbpedia URL injection.         
+             
+    boolean hasInverses = false;
+    String myfield="";
+    String myname="" ;
+    
+    if (!object_assertions.isEmpty())
+    {   
+      OWLIndividual individual = (OWLIndividual) request.getAttribute("individual");           
+      
+      for (OWLObjectPropertyAssertionAxiom a : object_assertions)
+      {
+        OWLIndividual owlin = a.getObject();
+        myfield = shortFormProvider.getShortForm((OWLEntity) a.getProperty());
+        if (owlin == individual)
+        {   
+          if (myfield.equals("dcterms:contributor")||myfield.equals("dspace-ont:author")||myfield.equals("dcterms:type")||myfield.equals("dspace-ont:sponsorship")) {
+            hasInverses = true;
+          }
+        }
+      }
+    
+      if (hasInverses) {
+        myname = individual.getSignature().iterator().next().getIRI().getFragment();
+        if (myname == null)
+        {
+          myname = individual.toStringID();
+          if (myname.endsWith("/"))
+          {
+            myname = myname.substring(0, myname.length() - 1);
+          }
+          int index = myname.lastIndexOf("/");
+          if (index >= 0)
+          {
+            myname = myname.substring(index + 1, myname.length());
+          }
+        }
+      } 
+    }
 %>
 
 <dspace:layout locbar="nolink" titlekey="jsp.search.advanced.title">
-
-  <div align="center">
+   
+   <div align="center">
 
     <table class="show_ind_table" cellspacing="1">
       <tr>
         <td class="itemHeader">
           <fmt:message key="jsp.search.showindproperties.individual" />
-          <%=request.getAttribute("indURI")%></td>
+          <%=request.getParameter("indURI")%>
+          <a href="<%=request.getContextPath()%>/semantic-search/data/<%=URLEncoder.encode(request.getParameter("indURI"),"UTF-8")%>">
+          <img src="image/rdf.png" alt="RDF" height="27px" align="right" >
+          </a>
+          <% if (!myname.equals("")){ %>
+             <a href='http://dbpedia.org/resource/<%=URLEncoder.encode(myname.replace(" ","_"),"UTF-8")%>' target='_blank'>
+             <img src="image/dbpedia.png" alt="DBpedia search" height="27px" align="right" style="position:relative; right:10px;">
+             </a>   
+          <% } %>
+          
+
+        </td>
       </tr>
     </table>
 
@@ -97,6 +149,7 @@
                       int i = 1;
                       for (OWLClass owl_class : types)
                       {
+                    
           %>
           <a
             href='<%=request.getContextPath()+"/semantic-search?expression="
@@ -141,17 +194,17 @@
         </td>
       </tr>
 
+
       <%
-          int row = 0;
-                  for (OWLObjectPropertyAssertionAxiom a : object_assertions)
-                  {
-                      String field = "";
-                      OWLIndividual owlin = a.getObject();
+      int row = 0;
+      for (OWLObjectPropertyAssertionAxiom a : object_assertions)
+      {
+        String field = "";
+        OWLIndividual owlin = a.getObject();
 
-                      OWLIndividual individual = (OWLIndividual) request
-                              .getAttribute("individual");
+        OWLIndividual individual = (OWLIndividual) request.getAttribute("individual");
 
-                      Set<OWLObjectPropertyExpression> inverses = new HashSet<OWLObjectPropertyExpression>();
+        Set<OWLObjectPropertyExpression> inverses = new HashSet<OWLObjectPropertyExpression>();
 
                       String link = "";
                       boolean isInverse = false;
@@ -181,42 +234,45 @@
       %>
       <tr class='row<%=row % 2%>'>
         <td class="property">
-
           <%
-              if (isInverse)
-                          {
+          if (isInverse)
+          {
           %>
           <span id="inverse">(<fmt:message key="jsp.search.showindproperties.inverse" />)</span>
           <%
-              }
+          }
           %>
 
           <%=field%></td>
         <td>
-          <%
-   String name = owlin.getSignature().iterator().next().getIRI().getFragment();
-   if (name == null)
-   {
-     name = owlin.toStringID();
-       if (name.endsWith("/"))
-       {
-         name = name.substring(0, name.length() - 1);
-       }
-        int index = name.lastIndexOf("/");
-         if (index >= 0)
-         {
-           name = name.substring(index + 1, name.length());
-         }
-    }
-
+        <%
+          String name = owlin.getSignature().iterator().next().getIRI().getFragment();
+          if (name == null)
+          {
+            name = owlin.toStringID();
+            if (name.endsWith("/"))
+            {
+              name = name.substring(0, name.length() - 1);
+            }
+            int index = name.lastIndexOf("/");
+            if (index >= 0)
+            {
+              name = name.substring(index + 1, name.length());
+            }
+          }
           %>
 
           <a href='<%=link%>'><%=name%></a>
-        </td>
+          <% if ((field.equals("dcterms:contributor")||field.equals("dspace-ont:author")||field.equals("dcterms:type")||field.equals("dspace-ont:sponsorship"))&& !isInverse)  { %>
+          <a href='http://dbpedia.org/resource/<%=URLEncoder.encode(name.replace(" ","_"), "UTF-8")%>' target='_blank'>
+          <img src="image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
+          </a>
+          <% } %>
+        </td>                     
       </tr>
       <%
-          row++;
-                  }
+      row++;
+      }   //end of for
       %>
 
     </table>
@@ -228,8 +284,8 @@
     <%-- Display the negativeobject properties of Individual --%>
 
     <%
-        if (!negative_object_assertions.isEmpty())
-            {
+    if (!negative_object_assertions.isEmpty())
+    {
     %>
 
     <table class="show_ind_table" cellspacing="1">
@@ -248,14 +304,14 @@
       </tr>
 
       <%
-          int row = 0;
-                  for (OWLNegativeObjectPropertyAssertionAxiom a : negative_object_assertions)
-                  {
-                      String field = "";
-                      OWLIndividual owlin = a.getObject();
+        int row = 0;
+        for (OWLNegativeObjectPropertyAssertionAxiom a : negative_object_assertions)
+        {
+          String field = "";
+          OWLIndividual owlin = a.getObject();
 
-                      OWLIndividual individual = (OWLIndividual) request
-                              .getAttribute("individual");
+          OWLIndividual individual = (OWLIndividual) request.getAttribute("individual");
+          Set<OWLObjectPropertyExpression> inverses = new HashSet();
 
                       Set<OWLObjectPropertyExpression> inverses = new HashSet();
 
@@ -291,21 +347,21 @@
         </td>
       </tr>
       <%
-          row++;
-                  }
+      row++;
+      } //end of for
       %>
 
     </table>
 
     <%
-        }
+    }       // end if that checks emptyness of negative_object_assertions
     %>
 
     <%-- Display the data properties of Individual --%>
 
     <%
-        if (!data_assertions.isEmpty())
-            {
+    if (!data_assertions.isEmpty())
+    {
     %>
 
     <table class="show_ind_table" cellspacing="1">
@@ -329,44 +385,49 @@
         </td>
       </tr>
       <%
-          int row = 0;
-                  for (OWLDataPropertyAssertionAxiom a : data_assertions)
-                  {
-                      String field = shortFormProvider.getShortForm((OWLEntity) a.getProperty());
+      int row = 0;
+      for (OWLDataPropertyAssertionAxiom a : data_assertions)
+      {
+        String field = shortFormProvider.getShortForm((OWLEntity) a.getProperty());
 
-                      Object obj = a.getObject();
+        Object obj = a.getObject();
 
-                      String value = "-";
-                      String lang = "-";
-                      String type = "-";
-                      String[] res = new String[3];
+        String value = "-";
+        String lang = "-";
+        String type = "-";
+        String[] res = new String[3];
 
-                      res = getValues(obj, shortFormProvider);
+        res = getValues(obj, shortFormProvider);
       %>
       <tr class='row<%=row % 2%>'>
         <td class="property"><%=field%></td>
         </td>
-        <td><%=res[0]%></td>
+        <td><%=res[0]%>
+          <% if (field.equals("dcterms:subject")||field.equals("dcterms:publisher"))  { %>
+          <a href='http://dbpedia.org/resource/<%=URLEncoder.encode(res[0].replace(" ","_"),"UTF-8")%>' target='_blank'>
+          <img src="image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
+          </a>
+          <% } %>
+        </td>
         <td><%=res[2]%></td>
         <td class="language"><%=res[1]%></td>
       </tr>
       <%
-          row++;
-
-                  }
+        row++;
+      }  // end of for
       %>
 
     </table>
 
     <%
-        }
+    }     // end of if 
     %>
 
     <%-- Display the negative data properties of Individual --%>
 
     <%
-        if (!negative_data_assertions.isEmpty())
-            {
+    if (!negative_data_assertions.isEmpty())
+    {
     %>
 
     <table class="show_ind_table" cellspacing="1">
@@ -390,19 +451,19 @@
         </td>
       </tr>
       <%
-          int row = 0;
-                  for (OWLNegativeDataPropertyAssertionAxiom a : negative_data_assertions)
-                  {
-                      String field = a.getProperty().toString();
+      int row = 0;
+      for (OWLNegativeDataPropertyAssertionAxiom a : negative_data_assertions)
+      {
+        String field = a.getProperty().toString();
 
-                      Object obj = a.getObject();
+        Object obj = a.getObject();
 
-                      String value = "-";
-                      String lang = "-";
-                      String type = "-";
-                      String[] res = new String[3];
+        String value = "-";
+        String lang = "-";
+        String type = "-";
+        String[] res = new String[3];
 
-                      res = getValues(obj, shortFormProvider);
+        res = getValues(obj, shortFormProvider);
       %>
       <tr class='row<%=row % 2%>'>
         <td class="property"><%=field%></td>
@@ -412,23 +473,22 @@
         <td class="language"><%=res[1]%></td>
       </tr>
       <%
-          row++;
-
-                  }
+        row++;
+      }   // end of for
       %>
 
     </table>
 
     <%
-        }
+    }   // end of if
     %>
 
 
     <%-- Display the annotations of Individual --%>
 
     <%
-        if (!annotations.isEmpty())
-            {
+    if (!annotations.isEmpty())
+    {
     %>
 
     <table class="show_ind_table" cellspacing="1">
@@ -453,43 +513,43 @@
       </tr>
 
       <%
-          int row = 0;
-                  for (OWLAnnotationAssertionAxiom a : annotations)
-                  {
-                      OWLAnnotation annotation = a.getAnnotations().iterator().next();
-                      IRI annotation_uri = annotation.getProperty().getIRI();
-                      String annotion_property = "";
+      int row = 0;
+      for (OWLAnnotationAssertionAxiom a : annotations)
+      {
+        OWLAnnotation annotation = a.getAnnotations().iterator().next();
+        IRI annotation_uri = annotation.getProperty().getIRI();
+        String annotion_property = "";
 
-                      if (annotation_uri.getFragment() != null)
-                      {
-                          annotion_property = annotation_uri.getFragment();
-                      }
-                      else
-                      {
-                          annotion_property = annotation_uri.toString();
-                      }
+        if (annotation_uri.getFragment() != null)
+        {
+          annotion_property = annotation_uri.getFragment();
+        }
+        else
+        {
+          annotion_property = annotation_uri.toString();
+        }
 
-                      String value = "-";
-                      String lang = "-";
-                      String type = "-";
+        String value = "-";
+        String lang = "-";
+        String type = "-";
 
-                      value = annotation.getValue().toString();
+        value = annotation.getValue().toString();
 
-                      /*
-                       if (annotation.isAnnotationByConstant())
-                       {
-                       String[] res = new String[3];
-                       OWLConstant owlc = a.getAnnotation().getAnnotationValueAsConstant();
-                       res = getValues(owlc, shortFormProvider);
-                       value = res[0];
-                       lang = res[1];
-                       type = res[2];
-                       }
-                       else
-                       {
-                       value = annotation.getAnnotationValue().toString();
-                       }
-                       */
+        /*
+        if (annotation.isAnnotationByConstant())
+        {
+          String[] res = new String[3];
+          OWLConstant owlc = a.getAnnotation().getAnnotationValueAsConstant();
+          res = getValues(owlc, shortFormProvider);
+          value = res[0];
+          lang = res[1];
+          type = res[2];
+        }
+        else
+        {
+          value = annotation.getAnnotationValue().toString();
+        }
+      */
       %>
       <tr class='row<%=row % 2%>'>
         <td class="property"><%=annotion_property%></td>
@@ -499,13 +559,13 @@
       </tr>
 
       <%
-          row++;
-                  }
+        row++;
+       } // end of for
       %>
 
     </table>
     <%
-        }
+      } // end of if
     %>
   </div>
 
@@ -537,4 +597,5 @@
         }
 
         return returnValues;
-    }%>
+    }
+  %>

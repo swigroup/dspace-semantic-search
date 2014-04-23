@@ -53,14 +53,15 @@ function getAutocompleteStore() {
 	});
 }
 
-function getTermAutocompleteComboBox(label, filterComboBox/*, operationComboBox*/, rightField, filterComboBox) {
+function getTermAutocompleteComboBox(label, filterComboBox/*, operationComboBox*/, rightField, filterComboBox, pctext) {
 	var store = new Ext.data.ArrayStore( {
 		fields : [ 'id', 'value', 'group' ],
 		data : dataFull
 	});
 	
 	return new Ext.ux.form.GroupingComboBox( {
-		store : store,
+		emptyText: pctext, //added by @gs
+    store : store,
 		groupField: 'group',
 		fieldLabel : label,
 		displayField : 'value',
@@ -111,7 +112,8 @@ function getRightAutocompleteComboBox(label/*, operationComboBox*/) {
 	});
 
 	return new Ext.form.ComboBox( {
-		store : store,
+   	emptyText: 'entity or value and/or expression in parenthesis',   //added by @gs - works as placeholder
+    store : store,
 		fieldLabel : label,
 		displayField : 'value',
 		typeAhead : true,
@@ -119,35 +121,23 @@ function getRightAutocompleteComboBox(label/*, operationComboBox*/) {
 		mode : 'local',
 		queryParam : 'query',
 		selectOnFocus : true,
-		width : 250,
+		width : 295,
 		hideTrigger : true,
-		validator: function(value) {
-		    /*
-            if (operationComboBox.getValue()) {
-		    	return true;
-		    }
-		    */
-
-// GS: changed in order to accept free text in right value field
-//			if (!value || value=='' || isValidClass(value)) {
-//  		  return true;
-//			}
-//		  else {
-//		    return 'The right value needs to be a class';
-//			}
-        return true;
+    validator: function(value) {
+       return true;
 		}
 	});
 }
 
-function getStaticComboBox(label, width, data) {
+function getStaticComboBox(label, width, data, pctext) { //pctext added by @gs
 	var store = new Ext.data.ArrayStore( {
 		fields : [ 'id', 'value' ],
 		data : data
 	});
 
 	return new Ext.form.ComboBox( {
-		store : store,
+    emptyText: pctext, //added by @gs
+    store : store,
 		fieldLabel : label,
 		displayField : 'value',
 		valueField: 'id',
@@ -182,8 +172,8 @@ function appInit(expression, reasonerValue, ontologyValue) {
 	var store = getAutocompleteStore();
 	
 	var filterComboBox = getStaticComboBox("Restriction", 100, [ [ 'some', 'some' ], [ 'min', 'min' ], [ 'max', 'max' ], [ 'only', 'only' ],
-		[ 'value', 'value' ], [ 'exactly', 'exactly' ]]);
-	filterComboBox.disable();
+		[ 'value', 'value' ], [ 'exactly', 'exactly' ]], "select one...");  //last parameter adde by @gs
+  filterComboBox.disable();
 
 	/*
 	var operationComboBox = getStaticComboBox("with value", 100, [ 
@@ -206,25 +196,26 @@ function appInit(expression, reasonerValue, ontologyValue) {
 		conditionalRadioButtons.enable();
 	}
 	
-	var termField = getTermAutocompleteComboBox("Search for", filterComboBox, /*operationComboBox, */rightField, filterComboBox);
+	var termField = getTermAutocompleteComboBox("Search for", filterComboBox, /*operationComboBox, */rightField, filterComboBox, "entity or kind of relation");
 	termField.allowBlank = false;
 
 	var notCheckbox = new Ext.form.Checkbox({
-		boxLabel : 'not',
+    boxLabel : 'not',
 		name : 'condition'
 	});
 	
+
 	var form = new Ext.FormPanel( {
 		labelWidth : 60,
 		items : [ {
 			xtype: 'compositefield',
 			fieldLabel : 'Search for',
-			items: [ notCheckbox, termField ]
+			items: [ notCheckbox, termField ]     
 		}, filterComboBox, {
 			xtype: 'compositefield',
-			fieldLabel : 'Expression',
-			items: [ /*operationComboBox,*/ rightField ]
-		}, conditionalRadioButtons ],
+			fieldLabel : 'Expression',  
+			items: [ /*operationComboBox,*/ rightField ]   
+		}, conditionalRadioButtons],
 		bodyStyle : 'padding:5px',
 		buttons : [ {
 			xtype : 'button',
@@ -233,8 +224,9 @@ function appInit(expression, reasonerValue, ontologyValue) {
 				if (form.getForm().isValid()) {
 					var selectedRadio = conditionalRadioButtons.getValue();
 					
-					if (queryLabel.getValue().length > 0 && !selectedRadio) {
-						Ext.MessageBox.alert('Error', 'Either a "Condition" must be selected or press the "Clear query" button to start with a new request');
+					//if (queryLabel.getValue().length > 0 && !selectedRadio) {
+					if (mseditor.getValue().length > 0 && !selectedRadio) {
+            Ext.MessageBox.alert('Error', 'Either a "Condition" must be selected or press the "Clear query" button to start with a new request');
 						return;
 					}
 
@@ -276,8 +268,10 @@ function appInit(expression, reasonerValue, ontologyValue) {
 						value += getFullTermDefinition(rightField.getValue());
 					}
 
-					queryLabel.setValue(queryLabel.getValue() + value);
-					conditionalRadioButtons.enable();
+				// queryLabel.setValue(queryLabel.getValue() + value);      
+			    mseditor.setValue(mseditor.getValue() + value);        //handler if codemirror is used - added by @gs
+          
+          conditionalRadioButtons.enable();
 					form.getForm().reset();
 				}
 				else {
@@ -290,17 +284,18 @@ function appInit(expression, reasonerValue, ontologyValue) {
 	var reasonerCombobox = getStaticComboBox("Reasoner", 200, [[ 'FACTPLUSPLUS', 'Fact++'], [ 'PELLET', 'Pellet' ], [ 'HERMIT', 'HermiT' ]]);
 	reasonerCombobox.setValue(reasonerValue);
 	
-    Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+  Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 	Ext.state.Manager.getProvider(); 
     
     var urlStore = new Ext.data.SimpleStore({ 
-        fields: ['url'] 
-        , data: Ext.state.Manager.get('URLStore', []) 
-    });
+        fields: ['url'], 
+        data: Ext.state.Manager.get('URLStore', []) 
+    });    
     var path = window.location.pathname;
     var defaultOnt = "http://"+window.location.host+path.substring(0, path.lastIndexOf('/'))+'/dspace-ont';
     var aRecord = new urlStore.recordType({url:defaultOnt});
     urlStore.insert(0, aRecord);
+    
     function saveURL(url) { 
         if (Ext.isEmpty(url)) 
             return;
@@ -321,6 +316,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
             urlStore.loadData(data); 
         } 
     }	
+   
 	var ontologyCombobox = new Ext.form.ComboBox({
 		   fieldLabel:'Ontology',
 		   displayField: 'url',
@@ -339,6 +335,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 		});
 	ontologyCombobox.setValue(ontologyValue);
 	
+  
 	var optionsForm = new Ext.FormPanel( {
 		labelWidth : 60,
 		monitorValid : true,
@@ -362,58 +359,448 @@ function appInit(expression, reasonerValue, ontologyValue) {
 			}
 		} ]
 	});
+ 
 
-	var queryLabel = new Ext.form.TextField({
-		fieldLabel : 'Generated query',
-		anchor : "-10px",
-		value: expression
-	});
+////////////////////////  MANCHESTER SYNTAX /////////////////////////////////
 
-        var reasonerLabel = new Ext.form.Label({
-                text : "Loaded reasoner is " + reasonerValue
-        });
-	
-	var queryExplain = new Ext.form.FieldSet( {
-		labelWidth : 100,
-		bodyStyle : 'font:12px tahoma,arial,helvetica,sans-serif; text-align:right;',
-		items: [ queryLabel, reasonerLabel ]
-	});
+   var msStore = new Ext.data.SimpleStore({ 
+        fields: ['query'],
+        data: Ext.state.Manager.get('MSStore', []) 
+  });
+
+
+   function saveMSQuery(query) { 
+      if (Ext.isEmpty(query)) 
+         return;
+
+      msStore.clearFilter(false);
+         
+      if ((msStore.findExact('query', query) < 0)) {  // replaced "find" with "findExact"
+
+         var msdata = [[query, 'query']];   // σωστό!
+         var count = msStore.getTotalCount(); 
+         var limit = count >= 10? 9: count;  //@gs "count>=10"! and not "count>10"
+         
+          for (var i = 0; i < limit; i++) {
+              msdata.push([msStore.getAt(i).get('query')]); 
+          }
+                                            
+          if (Ext.state.Manager.getProvider()) 
+             Ext.state.Manager.set('MSStore', msdata); 
+          
+           msStore.removeAll();
+           msStore.loadData(msdata);     
+        }
+      
+    }
+
+var mshistoryGrid = new Ext.grid.GridPanel({
+    id: 'mshistoryGrid',
+    frame: false, 
+    border: true,
+    store: msStore,
+    bodyStyle: 'text-align:left; border-right-style:solid; border-width:1px;',
+    viewConfig: {
+      forceFit: true,       // for column to fit exactly the panel width
+      scrollOffset: 0,
+      headersDisabled: true //@gs - for not highlighting header on mouse over       
+    },     
+    columns: [
+            {id:'mshistory', header: 'Query History', dataIndex:'query', sortable: false, resizable: false}   // query: same as spstore
+    ],
+    //sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+    enableHdMenu: false,      // disables header menu
+    height: 70, //  the height of its container
+    width: 355, //  same as mshistoryPanel
+    hideHeaders: false,
+    stripeRows: true,
+});   
+  
+  var mshistoryPanel = new Ext.Panel({
+    id: 'mshistoryPanel',
+    floating: true,
+    frame: false,
+    border: false,   // false because we added bodyStyle at grid
+    width: 355,     // a bit less than generatedQuery panel
+    height: 70, //a bit less than queryPanel
+    items: [mshistoryGrid],
+    hidden: true,
+    shadow: true
+ }); 
+
+
+
+var reasonerLabel = new Ext.form.Label({
+    text : "Loaded reasoner is " + reasonerValue,
+    x: 310,
+    y: 45,
+  });
+  
+var generatedQueryLabel = new Ext.form.Label({
+    text : "Generated query: ",
+    bodyStyle : 'font:11px tahoma,arial,helvetica,sans-serif; text-align:left;',
+    x: 5,
+    y: 10
+  });  
+  
+  
+var generatedQuery = new Ext.Panel( {
+		id: 'msPanel',
+    frame: false,
+    border: false,
+    width: 360,
+    height: 35,
+    hidden: false,
+    items: [
+    {
+      width: 360, 
+      style: 'text-align:left;',
+      html: '<textarea id="msquery" name="ms" style="display:none;"></textarea>'
+    }],
+    x: 100,
+    y: 5
+  });
+
+
+  var msqueryPanel = new Ext.Panel({
+    id: 'msqueryPanel',
+    frame: false,
+    border: true,
+    height: 80,
+    layout: 'absolute',
+    bodyStyle : 'font:11px tahoma,arial,helvetica,sans-serif; text-align:left;',
+    items: [generatedQueryLabel, generatedQuery, mshistoryPanel, {
+      xtype: 'button',
+      id: 'mshistoryButton',
+      //text: 'History',
+      iconCls: 'add24',
+      arrowAlign: 'bottom',
+      //cls   : 'wrap-button',
+      height: 35, // for absolute layout
+      width: 22,  // for absolute layout - do not change
+      x: 460,     // same as the width of generatedquery (360) + x offset (100)
+      y: 5,
+      menu:[], // fake menu, so as to show arrow on the button
+      handler: mshistoryBtnHandler   // see below
+    }, reasonerLabel]
+ });
+
 
 	var searchPanel = new Ext.Panel( {
-		title : 'Search',
-		bodyStyle : 'padding:5px',
+    title : 'Search',
 		buttonAlign : 'center',
 		autoHeight : true,
-		items : [ form, queryExplain ],
-		buttons : [ {
+		items : [ form, msqueryPanel],      // instead of generatedquery
+	//@gs - the following bodyCFG was added so as to remove the border that surrounds
+  //the items of this Panel (excluding buttons) - this border appears becaues we use the renderTo option
+  	bodyCfg: {
+        cls: 'no-border-class .x-panel-body',  // Default class not applied if Custom element specified 
+        style: {'body-style':'none;'},
+    },    
+    buttons : [ {
 			xtype : 'button',
 			text : 'Search',
 			handler: function(event) {
-			    if (queryLabel.getValue().length>0) {
-					window.location = 'semantic-search?semantic=true&syntax=man&expression=' + encodeURI(queryLabel.getValue()); 
-				}
-			}
-		}, {
+			  if (mseditor.getValue().length>0) {
+					
+          var mscur = mseditor.getValue();
+          saveMSQuery(mscur);     // for query history -- added by @gs
+          mshistoryPanel.setVisible(false);
+          generatedQuery.setVisible(true);
+          
+          window.location = 'semantic-search?semantic=true&syntax=man&expression=' + encodeURI(mseditor.getValue()); 
+                 
+          }
+      
+		  }} ,{
+			xtype : 'button',
+	 		text : 'Clear query',
+		  handler: function(event) {
+			   form.getForm().reset();
+         mseditor.setValue("");           //handler if codemirror is used - added by @gs
+	       conditionalRadioButtons.disable();
+         conditionalRadioButtons.reset();
+			}, 
+      }],
+      
+    renderTo: Ext.getBody()
+	});
+  
+     
+   var mspressed = false;
+   var mshistoryBtnHandler = Ext.getCmp('mshistoryButton').on('click', function(event) {
+        mspressed = true;
+        mshistoryPanel.setPosition(101,5);  // for covering queryPanel's body
+         if (!mshistoryPanel.isVisible()){ 
+            mshistoryPanel.setVisible(true);
+         }
+         else{
+            mshistoryPanel.setVisible(false);
+         }
+      });
+ 
+  Ext.getCmp('mshistoryButton').on('mouseout', function(event) {
+    mspressed = false;
+  });
+
+
+  
+  var mseditor = CodeMirror.fromTextArea(document.getElementById("msquery"), { 
+       mode: "manchestersyntax",
+       tabMode: "indent",
+       lineWrapping: true,
+       matchBrackets: true,     
+       placeholder: "type your DL query or put all pieces together (\"Add term\")",
+       extraKeys: {
+          // @gs - star searching on pressing enter
+          "Enter": function(event) {if (mseditor.getValue().length>0) { window.location = 'semantic-search?semantic=true&syntax=man&expression=' +encodeURI(mseditor.getValue()); } },
+          "Ctrl-Space": "autocomplete"
+       }
+   });
+   mseditor.setSize(null,30); // height 30 --> 2 lines 
+   mseditor.setValue(expression);     // added by @gs : keeps query when interface is refreshed, after "searh" is pressed
+      
+  
+/* @gs : shows hint when clicking Ctrl+Space 
+  CodeMirror.commands.autocomplete = function(cm) {
+     CodeMirror.showHint(cm, CodeMirror.hint.ms);
+  };
+
+
+  var orig = CodeMirror.hint.ms;
+  
+  CodeMirror.hint.ms = function(cm) {
+   var inner = orig(cm) //|| {from: cm.getCursor(), to: cm.getCursor(), list: []};
+    
+   var countObj = dataObjectProperties.size(); 
+   var countCl = dataClasses.size();  
+             
+    for (var i = 0; i < countObj; i++) 
+        inner.list.push(dataObjectProperties[i][0]);   
+    
+    for (var i = 0; i < countCl; i++) 
+        inner.list.push(dataClasses[i][0]);   
+    
+    return inner
+};          */
+   
+////////////////////////  SPARQL end-point /////////////////////////////////
+
+  var spStore = new Ext.data.SimpleStore({ 
+        fields: ['query'],
+        data: Ext.state.Manager.get('SPStore', []) 
+  });
+
+        
+   function saveQuery(query) { 
+      if (Ext.isEmpty(query)) 
+         return;
+
+      spStore.clearFilter(false);
+         
+      if ((spStore.findExact('query', query) < 0)) {  // replaced "find" with "findExact"
+
+         var data = [[query, 'query']];   // σωστό!
+         var count = spStore.getTotalCount(); 
+         var limit = count >= 10? 9: count;  //@gs "count>=10"! and not "count>10"
+         
+          for (var i = 0; i < limit; i++) {
+              data.push([spStore.getAt(i).get('query')]); 
+          }
+                                            
+          if (Ext.state.Manager.getProvider()) 
+             Ext.state.Manager.set('SPStore', data); 
+          
+           spStore.removeAll();
+           spStore.loadData(data);     
+        }
+      
+    }	        
+
+var historyGrid = new Ext.grid.GridPanel({
+    id: 'historyGrid',
+    frame: false, 
+    store: spStore,
+    bodyStyle: 'text-align:left; border-style:solid; border-width:1px;',
+    viewConfig: {
+      forceFit: true,       // for column to fit exactly the panel width
+      scrollOffset: 0,
+      headersDisabled: true //@gs - for not highlighting header on mouse over       
+    },     
+    columns: [
+            {id:'history', header: 'Query History', dataIndex:'query', sortable: false, resizable: false}   // query: same as spstore
+    ],
+    //sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+    enableHdMenu: false,      // disables header menu
+    height: 80, //  the height of its container
+    width: 425,
+    hideHeaders: false,
+    stripeRows: true,
+});   
+  
+  var historyPanel = new Ext.Panel({
+    id: 'historyPanel',
+    floating: true, // for not being like haveing transparency!
+    frame: false,
+    border: false,
+    width: 425,  // 465 (sparqlPanel) - 25 (x offeset for this panel) // -15 (we want it a bit smaller)
+    height: 80, //a bit less than queryPanel
+    items: [historyGrid],
+    hidden: true,
+    x: 25,
+    y: 0,
+    shadow: true
+ });     
+ 
+
+  var sparqlPanel = new Ext.Panel({
+    id: 'sparqlPanel',
+    frame: false,
+    border: false,
+    width: 455,
+    height: 100,
+    hidden: false,
+    items: [{
+      style: 'font-size:11px; text-align:left;',
+      html: '<textarea id="spquery" name="sp" style="display:none;" autocomplete="on" draggable="true">PREFIX a: &lt;http://www.w3.org/2000/10/annotation-ns#> \n# Comment! \n\nSELECT ?x ?y ?z \nWHERE { ?x ?y ?z .}</textarea>',
+      } ],
+    x: 0,
+    y: 0
+ });
+  
+  var queryPanel = new Ext.Panel({
+    id: 'queryPanel',
+    frame: false,
+    border: true,
+    height: 100,
+    //width: 470,
+    layout: 'absolute',
+    items: [sparqlPanel, historyPanel, {
+      xtype: 'button',
+      id: 'historyButton',
+      iconCls: 'add24',
+      arrowAlign: 'bottom',
+      height: 100, // for absolute layout
+      //cls : 'hitoryBtn', 
+      width: 22,  // for absolute layout - do not change
+      x: 455,      // same as the width of sparqlPanel - do not change
+      y: 0,
+      menu:[], // fake menu, so as to show arrow on the button
+      handler: historyBtnHandler   // see below
+    }]
+ });
+ 
+   var pressed = false;
+   var historyBtnHandler = Ext.getCmp('historyButton').on('click', function(event) {
+        pressed = true;
+        historyPanel.setPosition(25,0);  // for covering queryPanel's body
+         if (!historyPanel.isVisible()){ 
+            historyPanel.setVisible(true);
+         }
+         else{
+            historyPanel.setVisible(false);
+         }
+      });
+ 
+  Ext.getCmp('historyButton').on('mouseout', function(event) {
+    pressed = false;
+  });
+ 
+ 
+  var queryLabelSP = new Ext.form.Label({
+    style: 'padding:5px;', 
+    html : "Query:"
+  });
+
+  var reasonerLabelSP = new Ext.form.Label({
+    html : "Loaded reasoner is " + reasonerValue
+  });
+  
+  var advancedPanelSP = new Ext.Panel( {
+    title : 'SPARQL Query',
+    frame:false, 
+    bodyBorder: false,
+    labelWidth : 60,
+		monitorValid : true,
+    bodyStyle : 'font:12px tahoma,arial,helvetica,sans-serif; padding:10px; text-align:right;',		
+    buttonAlign : 'center',
+    autoHeight : true,
+    //@gs - the following bodyCFG was added so as to remove the border that surrounds
+    //the items of this Panel (excluding buttons) - this border appears becaues we used the renderTo option
+  	bodyCfg: {
+        cls: 'no-border-class .x-panel-body',  // Default class not applied if Custom element specified 
+        style: {'body-style':'none;'}
+    }, 
+    items: [
+      queryPanel, reasonerLabelSP
+    ],
+    buttons : [ {
+			xtype : 'button',
+			text : 'Search',
+      handler: function(event) {
+        if (speditor.getValue().length>0) {
+					var cur = speditor.getValue();
+          saveQuery(cur);     // for query history -- added by @gs
+          historyPanel.setVisible(false);
+          sparqlPanel.setVisible(true);
+         // advancedPanelSP.doLayout();
+         // @GS: need to call the sparql specific servlet
+        }        
+			 }     
+		  }, {
 			xtype : 'button',
 			text : 'Clear query',
 			handler: function(event) {
-			   form.getForm().reset();
-			   queryLabel.setValue("");
-	           conditionalRadioButtons.disable();
-               conditionalRadioButtons.reset();
+			     historyPanel.setVisible(false);
+           sparqlPanel.setVisible(true);
+           speditor.setValue("");
 			}
-		} ]
+		}],
+    renderTo: document.body
 	});
 
-	var advancedPanel = new Ext.Panel( {
-		title : 'Advanced topics'
-	});
+  historyGrid.on("rowclick", function(e){  
+      historyPanel.setVisible(false);
+      sparqlPanel.setVisible(true);    
+      var row = historyGrid.getSelectionModel().getSelected();
+      var record = row.get('query');  // Get the Record
+      speditor.setValue(record);     
+      historyGrid.getSelectionModel().clearSelections();
+      historyGrid.getView().focusRow(0);
+  });   
+  
+  
+  mshistoryGrid.on("rowclick", function(e){  
+      mshistoryPanel.setVisible(false);
+      msqueryPanel.setVisible(true);    
+      var row = mshistoryGrid.getSelectionModel().getSelected();
+      var record = row.get('query');  // Get the Record
+      mseditor.setValue(record);     
+      mshistoryGrid.getSelectionModel().clearSelections();
+      mshistoryGrid.getView().focusRow(0);
+  });   
+     
+  
+ var speditor = CodeMirror.fromTextArea(document.getElementById("spquery"), { 
+        mode: "application/x-sparql-query",
+        tabMode: "indent",
+        lineWrapping: true,
+        matchBrackets: true,
+        lineNumbers: "on",  
+        placeholder: "write your SPARQL query",
+        extraKeys: {"Ctrl-Space": "autocomplete"}
+   });
+   speditor.setSize(null,100);      //(width, height)
+  // speditor.setValue(expression);     // added by @gs : keeps query when search button is pressed
 
+     
 	var optionsPanel = new Ext.Panel( {
-		title : 'Options',
+		id: 'options-panel',
+    title : 'Options',
 		bodyStyle : 'padding:5px',
 		buttonAlign : 'center',
 		autoHeight : true,
+    //tabTip : 'change ontology and/or reasoner',             //added by @GS
 		items : [ optionsForm ]
 	});
 
@@ -422,8 +809,20 @@ function appInit(expression, reasonerValue, ontologyValue) {
 		activeTab : 0,
 		deferredRender: false,
 		forceLayout: true,
-		items : [ searchPanel, advancedPanel, optionsPanel ]
-	});
+		items : [ searchPanel, advancedPanelSP, optionsPanel ],
+  });
 	
-	termField.focus();
+
+ // Ext.util.Observable.capture(Ext.getCmp(historyGrid.id), function(evname) {console.log(evname, arguments);})
+
+  document.onclick = docclickhandler; 
+  
+  function docclickhandler() {  
+      if(!pressed)
+         historyPanel.setVisible(false);
+      if(!mspressed)
+         mshistoryPanel.setVisible(false);
+  }
+
+  termField.focus();  
 }

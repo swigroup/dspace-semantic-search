@@ -1,20 +1,27 @@
-/target/
-/dspace-services/target/
-/dspace-jspui/target/
-/dspace-semantic-api/target/
-/dspace-api/target/
-/dspace-oai/target/
-/dspace/target/
-/dspace/modules/additions/target/
-/dspace-xmlui/target/
-/dspace/modules/xmlui/target/
-/dspace-lni/target/
-/dspace/modules/lni/target/
-/dspace/modules/jspui/target/
-/dspace-sword/target/
-/dspace/modules/sword/target/
-/dspace-swordv2/target/
-/dspace/modules/swordv2/target/
-/dspace/modules/solr/target/
-/dspace/modules/oai/target/
-/dspace-lni/dspace-lni-client/target/
+## Ignore the MVN compiled output directories from version tracking
+target/
+
+## Ignore project files created by Eclipse
+.settings/
+.project
+.classpath
+
+## Ignore project files created by IntelliJ IDEA
+*.iml
+*.ipr
+*.iws
+.idea/
+
+## Ignore project files created by NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+META-INF/
+
+## Ignore all *.properties file in root folder, EXCEPT build.properties (the default)
+/*.properties
+!/build.properties
