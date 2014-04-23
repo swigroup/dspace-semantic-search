@@ -114,8 +114,8 @@
       <tr>
         <td class="itemHeader">
           <fmt:message key="jsp.search.showindproperties.individual" />
-          <%=request.getParameter("indURI")%>
-          <a href="<%=request.getContextPath()%>/semantic-search/data/<%=URLEncoder.encode(request.getParameter("indURI"),"UTF-8")%>">
+          <%=request.getAttribute("indURI")%>
+          <a href="<%=request.getContextPath()%>/semantic-search/data/<%=URLEncoder.encode(request.getAttribute("indURI"),"UTF-8")%>">
           <img src="image/rdf.png" alt="RDF" height="27px" align="right" >
           </a>
           <% if (!myname.equals("")){ %>
@@ -149,7 +149,6 @@
                       int i = 1;
                       for (OWLClass owl_class : types)
                       {
-                    
           %>
           <a
             href='<%=request.getContextPath()+"/semantic-search?expression="
@@ -354,7 +353,7 @@
     </table>
 
     <%
-    }       // end if that checks emptyness of negative_object_assertions
+    }       // end if that checks emptiness of negative_object_assertions
     %>
 
     <%-- Display the data properties of Individual --%>

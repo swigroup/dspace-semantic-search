@@ -50,7 +50,7 @@
       DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
       df.setMinimumFractionDigits(4);
       df.setMaximumFractionDigits(4);
-      time = df.format(totalTime/1000); // divide with 1000 because totaltime is in the form of mseconds
+      time = df.format(totalTime/1000); // divide with 1000 because totaltime is in the form of milliseconds
     }
 
     if (URL.equals(""))
@@ -324,7 +324,7 @@
       </td>
       <td class="<%=row%>RowOddCol">
         <a
-          href="<%=request.getContextPath()%>/semantic-search?indURI=<%=URLEncoder.encode(iri.toString(), "UTF-8")%>">
+          href="<%=request.getContextPath()%>/semantic-search/resource/<%=URLEncoder.encode(iri.toString(), "UTF-8")%>">
           
           <%
         String name = iri.getFragment();
