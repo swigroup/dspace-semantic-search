@@ -115,7 +115,7 @@
         <td class="itemHeader">
           <fmt:message key="jsp.search.showindproperties.individual" />
           <%=request.getAttribute("indURI")%>
-          <a href="<%=request.getContextPath()%>/semantic-search/data/<%=URLEncoder.encode(request.getAttribute("indURI"),"UTF-8")%>">
+          <a href="<%=request.getContextPath()%>/semantic-search/data/<%=URLEncoder.encode(request.getAttribute("indURI").toString(),"UTF-8")%>">
           <img src="image/rdf.png" alt="RDF" height="27px" align="right" >
           </a>
           <% if (!myname.equals("")){ %>
@@ -311,8 +311,6 @@
 
           OWLIndividual individual = (OWLIndividual) request.getAttribute("individual");
           Set<OWLObjectPropertyExpression> inverses = new HashSet();
-
-                      Set<OWLObjectPropertyExpression> inverses = new HashSet();
 
                       String link = "";
                       boolean isInverse = false;
