@@ -72,3 +72,24 @@
     text-overflow: clip;
     overflow: visible;
 }
+
+
+#queryURL:hover #querytooltip {
+    display: block;
+}
+
+
+#querytooltip {
+    display: none;
+    background: #CCE5FF;
+    margin-left: 0px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1000;
+    width:auto;
+    height:auto;
+}
+
+#queryURL {
+    margin:2;
+}

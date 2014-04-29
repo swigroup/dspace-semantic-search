@@ -19,7 +19,6 @@
 <%@ page import="java.util.SortedSet"%>
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.Iterator"%>
-<%@ page import="java.net.URLEncoder"%>
 <%@ page import="java.net.URI"%>
 <%@ page import="org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom"%>
 <%@ page import="org.semanticweb.owlapi.model.OWLNegativeObjectPropertyAssertionAxiom"%>
@@ -41,6 +40,9 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace"%>
+
+<link rel="stylesheet" type="text/css" href="ss-custom.css" />
+
 
 <%
     Set<OWLObjectPropertyAssertionAxiom> object_assertions = (Set<OWLObjectPropertyAssertionAxiom>) request
@@ -106,6 +108,50 @@
     }
 %>
 
+<script>
+
+function loadXMLDoc(s){
+  document.getElementById('querytooltip').style.display = 'block';
+  var keyword=s.replace(" ","_");              //@gs change with the keyword
+
+  var xmlhttp;
+  if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	   xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	   xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+  
+	var query_url = "http://lookup.dbpedia.org/api/search.asmx/KeywordSearch?QueryString="+keyword;
+	xmlhttp.open("GET",query_url,false);
+	xmlhttp.send();
+	xmlDoc=xmlhttp.responseXML;
+	
+	var x=xmlDoc.getElementsByTagName("Result");
+	var result="";
+	var resultURI="";
+	if (x.length!=0){
+		for (i=0;i<x.length;i++)
+		{ 
+			//resultURI=encodeURI(x[i].getElementsByTagName("URI")[0].childNodes[0].nodeValue);
+			resultURI=x[i].getElementsByTagName("URI")[0].childNodes[0].nodeValue;
+			
+			result=result+'<a href="'+resultURI+'" target="_blank">'+resultURI+'</a></br>';
+		}
+		document.getElementById("querytooltip").innerHTML="\n"+result;
+	}
+	else{
+		document.getElementById("querytooltip").innerHTML="\nNo results";
+	}
+}
+
+function hideTooltip(){
+  document.getElementById('querytooltip').style.display = 'none';
+}
+
+</script>
 <dspace:layout locbar="nolink" titlekey="jsp.search.advanced.title">
    
    <div align="center">
@@ -116,14 +162,16 @@
           <fmt:message key="jsp.search.showindproperties.individual" />
           <%=request.getAttribute("indURI")%>
           <a href="<%=request.getContextPath()%>/semantic-search/data/<%=URLEncoder.encode(request.getAttribute("indURI").toString(),"UTF-8")%>">
-          <img src="/jspui/image/rdf.png" alt="RDF" height="27px" align="right" >
+          <div id='ld-image' style="padding:2px;">
+          <img src="<%= request.getContextPath() %>/image/rdf.png" alt="RDF" height="27px" align="right" style="padding:2px;">
           </a>
           <% if (!myname.equals("")){ %>
-             <a href='http://dbpedia.org/resource/<%=URLEncoder.encode(myname.replace(" ","_"),"UTF-8")%>' target='_blank'>
-             <img src="/jspui/image/dbpedia.png" alt="DBpedia search" height="27px" align="right" style="position:relative; right:10px;">
-             </a>   
+            <div id='queryURL' onmouseover='loadXMLDoc("<%=myname%>")' onmouseout='hideTooltip()'>
+            <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="27px" align="right" style="padding:2px;">
+            <span id='querytooltip' style="position:relative; rigth:1px;"> </span>
           <% } %>
-          
+            </div>
+          </div>
 
         </td>
       </tr>
@@ -260,12 +308,12 @@
             }
           }
           %>
-
-          <a href='<%=link%>'><%=name%></a>
+            <div id='queryURL' onmouseover='loadXMLDoc("<%=name%>")' onmouseout='hideTooltip()'>
+            <a href='<%=link%>'><%=name%></a>
           <% if ((field.equals("dcterms:contributor")||field.equals("dspace-ont:author")||field.equals("dcterms:type")||field.equals("dspace-ont:sponsorship"))&& !isInverse)  { %>
-          <a href='http://dbpedia.org/resource/<%=URLEncoder.encode(name.replace(" ","_"), "UTF-8")%>' target='_blank'>
-          <img src="/jspui/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
-          </a>
+              <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
+              <span id='querytooltip'> </span>
+              </div>
           <% } %>
         </td>                     
       </tr>
@@ -399,11 +447,13 @@
       <tr class='row<%=row % 2%>'>
         <td class="property"><%=field%></td>
         </td>
-        <td><%=res[0]%>
+        <td>
+        <div id='queryURL' onmouseover='loadXMLDoc("<%=res[0]%>")' onmouseout='hideTooltip()'>
+        <%=res[0]%>
           <% if (field.equals("dcterms:subject")||field.equals("dcterms:publisher"))  { %>
-          <a href='http://dbpedia.org/resource/<%=URLEncoder.encode(res[0].replace(" ","_"),"UTF-8")%>' target='_blank'>
-          <img src="/jspui/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
-          </a>
+              <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
+              <span id='querytooltip'> </span>
+              </div>
           <% } %>
         </td>
         <td><%=res[2]%></td>
