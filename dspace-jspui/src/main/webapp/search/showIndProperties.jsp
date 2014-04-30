@@ -41,7 +41,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace"%>
 
-<link rel="stylesheet" type="text/css" href="ss-custom.css" />
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/ss-custom.css" />
 
 
 <%
@@ -166,9 +166,9 @@ function hideTooltip(){
           <img src="<%= request.getContextPath() %>/image/rdf.png" alt="RDF" height="27px" align="right" style="padding:2px;">
           </a>
           <% if (!myname.equals("")){ %>
-            <div id='queryURL' onmouseover='loadXMLDoc("<%=myname%>")' onmouseout='hideTooltip()'>
+            <div id='queryURL'onclick='loadXMLDoc("<%=myname%>")' onmouseout='hideTooltip()' >
             <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="27px" align="right" style="padding:2px;">
-            <span id='querytooltip' style="position:relative; rigth:1px;"> </span>
+            <span id='querytooltip'> </span>
           <% } %>
             </div>
           </div>
@@ -308,7 +308,7 @@ function hideTooltip(){
             }
           }
           %>
-            <div id='queryURL' onmouseover='loadXMLDoc("<%=name%>")' onmouseout='hideTooltip()'>
+            <div id='queryURL' onclick='loadXMLDoc("<%=name%>")' onmouseout='hideTooltip()'>
             <a href='<%=link%>'><%=name%></a>
           <% if ((field.equals("dcterms:contributor")||field.equals("dspace-ont:author")||field.equals("dcterms:type")||field.equals("dspace-ont:sponsorship"))&& !isInverse)  { %>
               <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
@@ -448,7 +448,7 @@ function hideTooltip(){
         <td class="property"><%=field%></td>
         </td>
         <td>
-        <div id='queryURL' onmouseover='loadXMLDoc("<%=res[0]%>")' onmouseout='hideTooltip()'>
+        <div id='queryURL' onclick='loadXMLDoc("<%=res[0]%>")' onmouseout='hideTooltip()'>
         <%=res[0]%>
           <% if (field.equals("dcterms:subject")||field.equals("dcterms:publisher"))  { %>
               <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
