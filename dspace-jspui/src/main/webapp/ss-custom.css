@@ -73,26 +73,25 @@
     overflow: visible;
 }
 
-
+/*
 #queryURL:hover #querytooltip {
-    display: block;
-}
+    display: none;
+}  */
 
 
 #querytooltip {
     display: none;
     background: #CCE5FF;
-    margin-left: 0px;
     padding: 5px;
     position: absolute;
     z-index: 1000;
     width:auto;
     height:auto;
-    right: 10px; 
     border: 1px solid #989898;
     box-shadow: rgb(168,168,168) 5px 5px 5px 0px;
 }
 
 #queryURL {
-    margin:2;
+    position: relative;
+    height: auto;
 }

@@ -141,14 +141,16 @@ function loadXMLDoc(s){
 			result=result+'<a href="'+resultURI+'" target="_blank">'+resultURI+'</a></br>';
 		}
 		document.getElementById("querytooltip").innerHTML="\n"+result;
+    document.getElementById("querytooltip").innerHTML=document.getElementById("querytooltip").innerHTML + "<a href='javascript:hideTooltip()'> <i>[close]</i> </a>"
 	}
 	else{
-		document.getElementById("querytooltip").innerHTML="\nNo results";
+		document.getElementById("querytooltip").innerHTML="\nNo results" + "<a href=javascript:hideTooltip()'> <i>[close]</i> </a>";
 	}
 }
 
-function hideTooltip(){
-  document.getElementById('querytooltip').style.display = 'none';
+function hideTooltip(id){
+  document.getElementById("querytooltip").style.display = 'none';
+  
 }
 
 </script>
@@ -166,9 +168,9 @@ function hideTooltip(){
           <img src="<%= request.getContextPath() %>/image/rdf.png" alt="RDF" height="27px" align="right" style="padding:2px;">
           </a>
           <% if (!myname.equals("")){ %>
-            <div id='queryURL'onclick='loadXMLDoc("<%=myname%>")' onmouseout='hideTooltip()' >
+            <div id='queryURL' onclick='loadXMLDoc("<%=myname%>")'>
             <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="27px" align="right" style="padding:2px;">
-            <span id='querytooltip'> </span>
+            <div id='querytooltip'> </div>
           <% } %>
             </div>
           </div>
@@ -308,11 +310,11 @@ function hideTooltip(){
             }
           }
           %>
-            <div id='queryURL' onclick='loadXMLDoc("<%=name%>")' onmouseout='hideTooltip()'>
-            <a href='<%=link%>'><%=name%></a>
+             <a href='<%=link%>'><%=name%></a>
           <% if ((field.equals("dcterms:contributor")||field.equals("dspace-ont:author")||field.equals("dcterms:type")||field.equals("dspace-ont:sponsorship"))&& !isInverse)  { %>
+              <div id="queryURL" onclick="loadXMLDoc('<%=name%>')">
               <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
-              <span id='querytooltip'> </span>
+              <div id='querytooltip'></div>
               </div>
           <% } %>
         </td>                     
@@ -448,11 +450,11 @@ function hideTooltip(){
         <td class="property"><%=field%></td>
         </td>
         <td>
-        <div id='queryURL' onclick='loadXMLDoc("<%=res[0]%>")' onmouseout='hideTooltip()'>
         <%=res[0]%>
           <% if (field.equals("dcterms:subject")||field.equals("dcterms:publisher"))  { %>
+              <div id='queryURL' onclick='loadXMLDoc("<%=res[0]%>")'>
               <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
-              <span id='querytooltip'> </span>
+              <div id='querytooltip'> </div>
               </div>
           <% } %>
         </td>
