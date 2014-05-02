@@ -826,3 +826,58 @@ var historyGrid = new Ext.grid.GridPanel({
 
   termField.focus();  
 }
+
+/* Handles LD facility and DBpedia lookup service */
+
+function loadXMLDoc(name, elem){
+
+ var cords = elem.getBoundingClientRect();  
+ var mouseY = Math.round (cords.top);  // top
+ var mouseX = Math.round (cords.left);  // left
+
+  document.getElementById('querytooltip').style.top = mouseY + "px";
+  document.getElementById('querytooltip').style.left = mouseX + "px";
+  document.getElementById('querytooltip').style.display = 'block';
+  
+  var keyword=name.replace(" ","_"); 
+
+  var xmlhttp;
+  if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	   xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	   xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+  
+	var query_url = "http://lookup.dbpedia.org/api/search.asmx/KeywordSearch?QueryString="+keyword;
+	xmlhttp.open("GET",query_url,false);
+	xmlhttp.send();
+	xmlDoc=xmlhttp.responseXML;
+	
+	var x=xmlDoc.getElementsByTagName("Result");
+	var result="";
+	var resultURI="";
+	if (x.length!=0){
+		for (i=0;i<x.length;i++)
+		{ 
+			resultURI=encodeURI(x[i].getElementsByTagName("URI")[0].childNodes[0].nodeValue);
+			//resultURI=x[i].getElementsByTagName("URI")[0].childNodes[0].nodeValue;
+			
+			result=result+'<a href="'+resultURI+'" target="_blank">'+resultURI+'</a>&nbsp;</br>';
+		}
+		document.getElementById("querytooltip").innerHTML="<a href='javascript:hideTooltip()' style='float:right;'><b>[X]</b></a>";
+    document.getElementById("querytooltip").innerHTML=document.getElementById("querytooltip").innerHTML + result;
+    
+	}
+	else{
+		document.getElementById("querytooltip").innerHTML="<a href='javascript:hideTooltip()' style='float:right;'><b>[X]</b></a>";
+    document.getElementById("querytooltip").innerHTML=document.getElementById("querytooltip").innerHTML + "No results"+"&nbsp;";
+	}
+}
+
+function hideTooltip(){
+  document.getElementById("querytooltip").style.display = 'none';
+  
+}

@@ -11,7 +11,7 @@
 <%-- Semantic Search JSP --%>
  
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ page  import="javax.servlet.jsp.jstl.fmt.LocaleSupport" %>
+<%@ page import="javax.servlet.jsp.jstl.fmt.LocaleSupport" %>
 <%@ page import="org.apache.commons.lang.StringEscapeUtils"%>
 <%@ page import="java.net.URLEncoder"%>
 <%@ page import="java.net.URI"%>
@@ -30,13 +30,15 @@
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="org.semanticweb.owlapi.model.OWLClass"%>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace"%>
+
 
 <%
     String URL = session.getAttribute("URL") == null ? "" : (String) session
             .getAttribute("URL");
-	boolean reload = request.getParameter("reload") == null ? false : Boolean.parseBoolean((String) request.getParameter("reload")) ;
+	  boolean reload = request.getParameter("reload") == null ? false : Boolean.parseBoolean((String) request.getParameter("reload")) ;
     String expression = request.getParameter("expression") == null ? "" : request
             .getParameter("expression");
     String reasoner = (String) session.getAttribute("reasoner");
@@ -92,21 +94,17 @@
     }
 %>
 
-
-  <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/ext-all.css" /> 
-  <%-- <link rel="stylesheet" type="text/css" href="ext-4.0.7/resources/css/ext-all.css">  --%>
-  <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/xtheme-gray.css" />
-
-
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/semantic.css" />
+<link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/ext-all.css" /> 
+<link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/xtheme-gray.css" />
      
-  <script type="text/javascript" src="ext-3.3.0/adapter/prototype/ext-prototype-adapter.js"></script>>
-  <script type="text/javascript" src="ext-3.3.0/ext-all.js"></script> 
-  <script type="text/javascript" src="grouping-combobox.js"></script>  
-  <script type="text/javascript" src="ui.js"></script> 
+<script type="text/javascript" src="ext-3.3.0/adapter/prototype/ext-prototype-adapter.js"></script>>
+<script type="text/javascript" src="ext-3.3.0/ext-all.js"></script> 
+<script type="text/javascript" src="grouping-combobox.js"></script>  
+<script type="text/javascript" src="ui.js"></script> 
   
-   <%-- by @GS --%>  
+<%-- by @GS --%>  
 <link rel="stylesheet" href="codemirror/lib/codemirror.css">
-<link rel="stylesheet" type="text/css" href="ss-custom.css" />
 <link rel="stylesheet" href="codemirror/addon/hint/show-hint.css">
 
 <script src="codemirror/lib/codemirror.js"></script>
@@ -134,24 +132,10 @@
   </table> 
 
 
-<style type="text/css">
-.x-combo-list-group {
-  font: bold 12px tahoma,arial,helvetica,sans-serif;
-  padding: 2px;
-  border: 1px solid #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-</style>
-
-
-
-
-    <script type="text/javascript"> 
+  <script type="text/javascript"> 
     
          
-      var dataClasses = [ 
+    var dataClasses = [ 
       <% 
       
          for (int i=0 ; i<classList.size() ; i++)
@@ -200,7 +184,7 @@
          appInit('<%= expression %>', '<%= reasoner %>', '<%= URL %>');
       });
       
-    </script>
+  </script>
 
 
 

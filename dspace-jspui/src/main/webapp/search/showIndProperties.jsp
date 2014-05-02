@@ -41,9 +41,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace"%>
 
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/ss-custom.css" />
-
-
 <%
     Set<OWLObjectPropertyAssertionAxiom> object_assertions = (Set<OWLObjectPropertyAssertionAxiom>) request
             .getAttribute("object_assertions");
@@ -73,7 +70,7 @@
     String myfield="";
     String myname="" ;
     
-    if (!object_assertions.isEmpty())
+    if (object_assertions!=null && !object_assertions.isEmpty())
     {   
       OWLIndividual individual = (OWLIndividual) request.getAttribute("individual");           
       
@@ -108,52 +105,10 @@
     }
 %>
 
-<script>
 
-function loadXMLDoc(s){
-  document.getElementById('querytooltip').style.display = 'block';
-  var keyword=s.replace(" ","_");              //@gs change with the keyword
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/semantic.css" />
+<script type="text/javascript" src="<%=request.getContextPath()%>/ui.js"></script>
 
-  var xmlhttp;
-  if (window.XMLHttpRequest)
-	  {// code for IE7+, Firefox, Chrome, Opera, Safari
-	   xmlhttp=new XMLHttpRequest();
-	  }
-	else
-	  {// code for IE6, IE5
-	   xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	  }
-  
-	var query_url = "http://lookup.dbpedia.org/api/search.asmx/KeywordSearch?QueryString="+keyword;
-	xmlhttp.open("GET",query_url,false);
-	xmlhttp.send();
-	xmlDoc=xmlhttp.responseXML;
-	
-	var x=xmlDoc.getElementsByTagName("Result");
-	var result="";
-	var resultURI="";
-	if (x.length!=0){
-		for (i=0;i<x.length;i++)
-		{ 
-			//resultURI=encodeURI(x[i].getElementsByTagName("URI")[0].childNodes[0].nodeValue);
-			resultURI=x[i].getElementsByTagName("URI")[0].childNodes[0].nodeValue;
-			
-			result=result+'<a href="'+resultURI+'" target="_blank">'+resultURI+'</a></br>';
-		}
-		document.getElementById("querytooltip").innerHTML="\n"+result;
-    document.getElementById("querytooltip").innerHTML=document.getElementById("querytooltip").innerHTML + "<a href='javascript:hideTooltip()'> <i>[close]</i> </a>"
-	}
-	else{
-		document.getElementById("querytooltip").innerHTML="\nNo results" + "<a href=javascript:hideTooltip()'> <i>[close]</i> </a>";
-	}
-}
-
-function hideTooltip(id){
-  document.getElementById("querytooltip").style.display = 'none';
-  
-}
-
-</script>
 <dspace:layout locbar="nolink" titlekey="jsp.search.advanced.title">
    
    <div align="center">
@@ -168,7 +123,7 @@ function hideTooltip(id){
           <img src="<%= request.getContextPath() %>/image/rdf.png" alt="RDF" height="27px" align="right" style="padding:2px;">
           </a>
           <% if (!myname.equals("")){ %>
-            <div id='queryURL' onclick='loadXMLDoc("<%=myname%>")'>
+            <div id='queryURL' onclick='loadXMLDoc("<%=myname%>",this)'>
             <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="27px" align="right" style="padding:2px;">
             <div id='querytooltip'> </div>
           <% } %>
@@ -182,7 +137,7 @@ function hideTooltip(id){
     <%-- Display the classes of Individual --%>
 
     <%
-        if (!types.isEmpty())
+        if (types!=null && !types.isEmpty())
             {
     %>
 
@@ -224,7 +179,7 @@ function hideTooltip(id){
     <%-- Display the object properties of Individual --%>
 
     <%
-        if (!object_assertions.isEmpty())
+        if (object_assertions!=null && !object_assertions.isEmpty())
             {
     %>
 
@@ -312,7 +267,7 @@ function hideTooltip(id){
           %>
              <a href='<%=link%>'><%=name%></a>
           <% if ((field.equals("dcterms:contributor")||field.equals("dspace-ont:author")||field.equals("dcterms:type")||field.equals("dspace-ont:sponsorship"))&& !isInverse)  { %>
-              <div id="queryURL" onclick="loadXMLDoc('<%=name%>')">
+              <div id='queryURL' onclick='loadXMLDoc("<%=name%>", this)'>
               <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
               <div id='querytooltip'></div>
               </div>
@@ -333,7 +288,7 @@ function hideTooltip(id){
     <%-- Display the negativeobject properties of Individual --%>
 
     <%
-    if (!negative_object_assertions.isEmpty())
+    if (negative_object_assertions!=null && !negative_object_assertions.isEmpty())
     {
     %>
 
@@ -407,7 +362,7 @@ function hideTooltip(id){
     <%-- Display the data properties of Individual --%>
 
     <%
-    if (!data_assertions.isEmpty())
+    if (data_assertions!=null && !data_assertions.isEmpty())
     {
     %>
 
@@ -452,7 +407,7 @@ function hideTooltip(id){
         <td>
         <%=res[0]%>
           <% if (field.equals("dcterms:subject")||field.equals("dcterms:publisher"))  { %>
-              <div id='queryURL' onclick='loadXMLDoc("<%=res[0]%>")'>
+              <div id='queryURL' onclick='loadXMLDoc("<%=res[0]%>", this)'>
               <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
               <div id='querytooltip'> </div>
               </div>
@@ -475,7 +430,7 @@ function hideTooltip(id){
     <%-- Display the negative data properties of Individual --%>
 
     <%
-    if (!negative_data_assertions.isEmpty())
+    if (negative_data_assertions!=null && !negative_data_assertions.isEmpty())
     {
     %>
 
@@ -536,7 +491,7 @@ function hideTooltip(id){
     <%-- Display the annotations of Individual --%>
 
     <%
-    if (!annotations.isEmpty())
+    if (annotations!=null && !annotations.isEmpty())
     {
     %>
 

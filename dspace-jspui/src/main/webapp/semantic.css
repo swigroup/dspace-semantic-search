@@ -1,0 +1,289 @@
+
+/* CSS Document */
+
+/* semantic search custom styling */
+
+body
+{
+    position: relative;
+}
+div.autosuggest
+{
+    position: absolute;
+    padding: 0 0 0 0;
+ 	  border: solid 1px #000044;
+    background-color: #ffffff;
+}
+div.autosuggest div.as_header,
+div.autosuggest div.as_footer
+{
+    position: relative;
+    height: 6px;
+    padding: 0 6px;
+    overflow: hidden;
+}
+div.autosuggest div.as_header div.as_corner,
+div.autosuggest div.as_footer div.as_corner
+{
+    position: absolute;
+    top: 20px;
+    left: 0;
+    height: 6px;
+    width: 5px;
+}
+div.autosuggest div.as_header div.as_bar,
+div.autosuggest div.as_footer div.as_bar
+{
+    height: 6px;
+    overflow: hidden;
+}
+div.autosuggest ul
+{
+    list-style: none;
+    margin: 0 0 -4px 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+div.autosuggest ul li
+{
+    color: #222222;
+    font-size: 8pt;
+    padding: 0;
+    line-height: 9px;
+    margin: 0 4px 4px;
+    text-align: left;
+}
+div.autosuggest ul li a
+{
+    color: #222222;
+    display: block;
+    text-decoration: none;
+    position: relative;
+    padding: 0;
+    width: 100%;
+}
+div.autosuggest ul li a:hover
+{
+    background-color: #444;
+}
+div.autosuggest ul li.as_highlight a:hover
+{
+    background-color: #ddddff;
+}
+div.autosuggest ul li a span
+{
+    display: block;
+    padding: 3px 6px;
+/*	font-weight: bold;*/
+}
+div.autosuggest ul li a span small
+{
+    font-weight: normal;
+    color: #999;
+}
+div.autosuggest ul li.as_highlight a span small
+{
+    color: #ccc;
+}
+div.autosuggest ul li.as_highlight a
+{
+    background-color: #ddddff;
+}
+div.autosuggest ul li.as_highlight a span
+{
+    background-position: bottom left;
+    background-repeat: no-repeat;
+}
+div.autosuggest ul li a .tl,
+div.autosuggest ul li a .tr
+{
+    background-repeat: no-repeat;
+    width: 6px;
+    height: 6px;
+    position: absolute;
+    top: 0;
+    padding: 0;
+    margin: 0;
+}
+div.autosuggest ul li a .tr
+{
+    right: 0;
+}
+div.autosuggest ul li.as_highlight a .tl
+{
+    left: 0;
+}
+div.autosuggest ul li.as_highlight a .tr
+{
+    right: 0;
+}
+div.autosuggest ul li.as_warning
+{
+    font-weight: bold;
+    text-align: center;
+}
+div.autosuggest ul em
+{
+    font-style: normal;
+    font-weight: bolder;
+    color: #11aa11;
+}
+form.autocomplete {display: inline;}
+
+.show_ind_table {
+    width: 90%;
+    margin-bottom: 15px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 0;
+    background-color: #cfdbe7;
+    font-size: 12px;
+}
+.show_ind_table .table_title {
+    background-color: #a1b8d0;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold; 
+}
+.show_ind_table .header {
+    background-color: #bbbbbb;
+    font-size: 14px;
+    font-weight: bold;
+}
+.show_ind_table .row0 {
+    background-color: #fefecd;
+    text-align: left;
+}
+.show_ind_table .row1 {
+    background-color: #ffffff;
+    text-align: left;
+}
+.show_ind_table td {
+    padding: 5px;
+}
+.show_ind_table .language {
+    text-align: center;
+}
+.show_ind_table .property {
+    font-style: italic;
+    font-family: "Times New Roman", serif;
+    font-size: 15px;
+}
+.show_ind_table .itemHeader {
+    text-align: left;
+    background-color: #bbbbbb;
+    font-size: 18px;
+    font-weight: bold;
+}
+.show_ind_table #inverse {
+    font-size: 90%;
+    font-style: normal;
+}
+
+.x-combo-list-group {
+  font: bold 12px tahoma,arial,helvetica,sans-serif;
+  padding: 2px;
+  border: 1px solid #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+
+/******* overlay for codemirror.css ******/ 
+
+/* added by @gs for styling codemirror placeholder */
+.CodeMirror pre.CodeMirror-placeholder {  
+  color:#C0C0C0;
+  font:11px tahoma, arial, helvetica, sans-serif; 
+}
+
+/* added by @gs for controlling font inside codemirror textarea  */
+.CodeMirror pre {
+  font-size: 11px;
+}
+
+/* added by @GS for Manchester Syntax syntax highlighting*/
+.cm-s-default .cm-ms-restriction {color: #C323AE;}
+.cm-s-default .cm-ms-boolean {color: #13D2BC;}
+.cm-s-default .cm-ms-keyword {color: blue;}
+
+
+.CodeMirror-gutters {
+  width: 22px;   /* width of the grey frame      */
+}
+/*.CodeMirror-sizer {
+  left: 2px; /* distance (of query) from grey frame 
+  margin-left: 0px;
+}   */
+.CodeMirror-linenumbers {}
+.CodeMirror-linenumber {
+  min-width: 0px;        /* this min-max declaration makes the difference !  */
+  max-width: 0px;
+  font-size: 11px;
+}
+
+/****** overlay for ext-all.css ******/
+
+/* added by @GS for removing the title of the sparql tab panel (it was appearing twice)*/
+.x-panel-header {
+    display:none;
+}
+
+
+/* added by @GS for setting the font size of the grid panel (used for query history) */
+.x-grid3-cell-inner, .x-grid3-hd-inner{
+    font-size:11px !important;
+    white-space: normal; /* for word wrapping */
+  /*  background-color: red !important;    */
+}
+
+/****** overlay for xtheme-gray.css ******/
+
+/* added by @GS for styling emptytext */ 
+.x-form-empty-field {
+    color:#C0C0C0;
+    font:11px tahoma, arial, helvetica, sans-serif;   /*added by @GS for styling emptytext */
+}
+
+/* added by @GS for making menu of history button disappear */ 
+.x-menu-floating {
+    border-color: transparent;
+    background-color: transparent;
+}
+
+.x-shadow .xst{
+    visibility: hidden;
+} 
+
+.wrap-button .x-button-label {
+    font: 3px tahoma, arial, helvetica, sans-serif;
+    white-space: normal;
+    text-overflow: clip;
+    overflow: visible;
+}
+
+/*
+#queryURL:hover #querytooltip {
+    display: none;
+}  */
+
+
+#querytooltip {
+    display: none;
+    background: #CCE5FF;
+    padding: 5px;
+    position: fixed;
+    z-index: 1000;
+    width:auto;
+    height:auto;
+    border: 1px solid #989898;
+    box-shadow: rgb(168,168,168) 5px 5px 5px 0px;
+}
+
+#queryURL {
+    position: relative;
+    height: auto;
+}
