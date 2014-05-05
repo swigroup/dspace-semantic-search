@@ -94,7 +94,7 @@
     }
 %>
 
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/semantic.css" />
+<link rel="stylesheet" type="text/css" href="semantic.css" />
 <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/ext-all.css" /> 
 <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/xtheme-gray.css" />
      
@@ -103,22 +103,21 @@
 <script type="text/javascript" src="grouping-combobox.js"></script>  
 <script type="text/javascript" src="ui.js"></script> 
   
-<%-- by @GS --%>  
+<%-- @GS - For syntax highlighting --%>  
 <link rel="stylesheet" href="codemirror/lib/codemirror.css">
 <link rel="stylesheet" href="codemirror/addon/hint/show-hint.css">
 
-<script src="codemirror/lib/codemirror.js"></script>
-<script src="codemirror/addon/edit/matchbrackets.js"></script>
-<script src="codemirror/mode/sparql/sparql.js"></script> 
-<script src="codemirror/mode/ms/ms.js"></script>      
-<script src="codemirror/addon/display/placeholder.js"></script> 
+<script type="text/javascript" src="codemirror/lib/codemirror.js"></script>
+<script type="text/javascript" src="codemirror/addon/edit/matchbrackets.js"></script>
+<script type="text/javascript" src="codemirror/mode/sparql/sparql.js"></script> 
+<script type="text/javascript" src="codemirror/mode/ms/ms.js"></script>      
+<script type="text/javascript" src="codemirror/addon/display/placeholder.js"></script> 
 
-<script src="codemirror/addon/hint/sparql-hint.js"></script>
-<script src="codemirror/addon/hint/ms-hint.js"></script>
-<script src="codemirror/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="codemirror/addon/hint/sparql-hint.js"></script>
+<script type="text/javascript" src="codemirror/addon/hint/ms-hint.js"></script>
+<script type="text/javascript" src="codemirror/addon/hint/show-hint.js"></script>
 
 <dspace:layout locbar="nolink" titlekey="jsp.search.semantic.title">
-
 
   <table width="100%" border="0">
     <tr>

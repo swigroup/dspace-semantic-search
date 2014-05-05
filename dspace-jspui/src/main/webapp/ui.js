@@ -857,15 +857,15 @@ function loadXMLDoc(name, elem){
 	xmlDoc=xmlhttp.responseXML;
 	
 	var x=xmlDoc.getElementsByTagName("Result");
-	var result="";
+
+  var result="";
 	var resultURI="";
+  
 	if (x.length!=0){
 		for (i=0;i<x.length;i++)
 		{ 
-			resultURI=encodeURI(x[i].getElementsByTagName("URI")[0].childNodes[0].nodeValue);
-			//resultURI=x[i].getElementsByTagName("URI")[0].childNodes[0].nodeValue;
-			
-			result=result+'<a href="'+resultURI+'" target="_blank">'+resultURI+'</a>&nbsp;</br>';
+      resultURI=x[i].getElementsByTagName("URI")[0].childNodes[0].nodeValue;
+		  result=result+'<a href="'+resultURI+'" target="_blank">'+resultURI+'</a>&nbsp;</br>';
 		}
 		document.getElementById("querytooltip").innerHTML="<a href='javascript:hideTooltip()' style='float:right;'><b>[X]</b></a>";
     document.getElementById("querytooltip").innerHTML=document.getElementById("querytooltip").innerHTML + result;

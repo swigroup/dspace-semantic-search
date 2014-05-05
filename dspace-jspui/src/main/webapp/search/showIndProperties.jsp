@@ -12,6 +12,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="org.apache.commons.lang.StringEscapeUtils"%>
+<%@ page import="javax.servlet.jsp.jstl.fmt.LocaleSupport" %>
 <%@ page import="java.net.URLEncoder"%>
 <%@ page import="java.net.URI"%>
 <%@ page import="java.util.Set"%>
@@ -40,6 +41,7 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace"%>
+
 
 <%
     Set<OWLObjectPropertyAssertionAxiom> object_assertions = (Set<OWLObjectPropertyAssertionAxiom>) request
@@ -105,12 +107,11 @@
     }
 %>
 
-
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/semantic.css" />
 <script type="text/javascript" src="<%=request.getContextPath()%>/ui.js"></script>
 
 <dspace:layout locbar="nolink" titlekey="jsp.search.advanced.title">
-   
+
    <div align="center">
 
     <table class="show_ind_table" cellspacing="1">
@@ -123,9 +124,9 @@
           <img src="<%= request.getContextPath() %>/image/rdf.png" alt="RDF" height="27px" align="right" style="padding:2px;">
           </a>
           <% if (!myname.equals("")){ %>
-            <div id='queryURL' onclick='loadXMLDoc("<%=myname%>",this)'>
+            <div id="queryURL" onclick="loadXMLDoc('<%=URLEncoder.encode(myname,"UTF-8")%>', this)">
             <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="27px" align="right" style="padding:2px;">
-            <div id='querytooltip'> </div>
+            <div id="querytooltip"> </div>
           <% } %>
             </div>
           </div>
@@ -267,9 +268,9 @@
           %>
              <a href='<%=link%>'><%=name%></a>
           <% if ((field.equals("dcterms:contributor")||field.equals("dspace-ont:author")||field.equals("dcterms:type")||field.equals("dspace-ont:sponsorship"))&& !isInverse)  { %>
-              <div id='queryURL' onclick='loadXMLDoc("<%=name%>", this)'>
+              <div id="queryURL" onclick="loadXMLDoc('<%=URLEncoder.encode(name,"UTF-8")%>', this)">
               <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
-              <div id='querytooltip'></div>
+              <div id="querytooltip"></div>
               </div>
           <% } %>
         </td>                     
@@ -407,9 +408,9 @@
         <td>
         <%=res[0]%>
           <% if (field.equals("dcterms:subject")||field.equals("dcterms:publisher"))  { %>
-              <div id='queryURL' onclick='loadXMLDoc("<%=res[0]%>", this)'>
+              <div id="queryURL" onclick="loadXMLDoc('<%=URLEncoder.encode(res[0],"UTF-8")%>', this)">
               <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
-              <div id='querytooltip'> </div>
+              <div id="querytooltip"> </div>
               </div>
           <% } %>
         </td>
