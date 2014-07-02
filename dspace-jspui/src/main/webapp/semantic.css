@@ -131,6 +131,7 @@ div.autosuggest ul em
 }
 form.autocomplete {display: inline;}
 
+/*
 .show_ind_table {
     width: 90%;
     margin-bottom: 15px;
@@ -179,7 +180,7 @@ form.autocomplete {display: inline;}
 .show_ind_table #inverse {
     font-size: 90%;
     font-style: normal;
-}
+}       */
 
 .x-combo-list-group {
   font: bold 12px tahoma,arial,helvetica,sans-serif;
@@ -225,6 +226,11 @@ form.autocomplete {display: inline;}
   font-size: 11px;
 }
 
+.CodeMirror-vscrollbar {
+  overflow-y: hidden !important; /* vertical scrollbar should be 'hidden' - otherwise overwrites history button*/
+}
+
+
 /****** overlay for ext-all.css ******/
 
 /* added by @GS for removing the title of the sparql tab panel (it was appearing twice)*/
@@ -265,10 +271,83 @@ form.autocomplete {display: inline;}
     overflow: visible;
 }
 
+
+/* new style for ext-js (necessary because of bootstrap specific style)*/
+.x-form-item {
+ font-size: 16px;
+}
+
+.x-tab-panel-header {
+ font-size: 16px;
+}
+
+.x-panel-btns {
+  width: auto !important;
+}
+
+.x-panel-footer {
+  width: auto !important;
+}
+
+.x-shadow {
+  width: 100%;
+}
+.x-abs-layout-item {
+  width: 100%;
+}
+
+.x-menu.x-menu-floating.x-layer {
+  visibility: hidden !important;
+}
+
+/* places  radtio buttons' labels (and, or) a bit lower */
+.x-form-cb-label {
+  top: 10px !important;
+}
+
+/*hides border of div "destino"*/
+#destino{          
+  border: none;
+}
+
+
+/*#x-panel{
+position: relative; 
+z-index: 1000; 
+visibility: visible; 
+left: 0px; 
+top: 0px; 
+width: auto;
+}         */
+
+
+
+.x-panel .x-abs-layout-item {
+width: auto;
+}
+
+.x-shadow{
+  width: auto;
+}
+
+#generatedQuery{          
+  border: none;
+}
+
+.x-panel-body .x-panel-body-noheader {
+  border-color: white;
+}
+
 /*
 #queryURL:hover #querytooltip {
     display: none;
 }  */
+
+/*for labels size ("generated query" and "loaded reasoner is...")*/
+label {
+  font-size:11px !important; /* tahoma,arial,helvetica,sans-serif;*/ 
+  padding:5px; 
+}
 
 
 #querytooltip {
@@ -283,7 +362,71 @@ form.autocomplete {display: inline;}
     box-shadow: rgb(168,168,168) 5px 5px 5px 0px;
 }
 
+/* a class that only applies to the individual's (top) query tooltip, as the standard 
+   style (above) doesn't render it correctly */
+.left {
+    left: 150px !important;
+}
+
+
 #queryURL {
     position: relative;
     height: auto;
 }
+
+div.x-sheet.x-msgbox { 
+}
+
+/* these two styles (below) fix error message box width (so as not to exceed screen)*/
+.x-window.x-window-plain.x-window-dlg {
+  width: auto;
+  max-width: 300px !important;
+}
+
+.ext-mb-content {
+   width: auto;
+    max-width: 300px !important;
+}
+
+
+/* brings back the css style that the ext-js overwrites (inside semantic.jsp)*/
+
+h1 {
+ font-size: 36px !important;
+}
+
+h2 {
+ font-size: 30px !important;
+}
+
+h4 {
+ font-size: 18px !important;
+}
+
+h1, h2, h3 {
+  margin-top: 20px !important;
+  margin-bottom: 10px !important;
+}
+
+h4 {
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+
+/*custom styles for bootstrap */
+
+.header{
+ font-weight: bold;
+ font-size: 14px;
+}
+
+.btn-ss {
+  padding: 0px 0px;
+  margin: 0px 5px;
+}
+
+.panel-heading{
+ font-weight: bold;
+ font-size: 14px;
+} 
