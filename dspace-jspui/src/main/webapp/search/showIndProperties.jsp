@@ -112,11 +112,28 @@
 
 <dspace:layout locbar="nolink" titlekey="jsp.search.advanced.title">
 
-   <div align="center">
 
-    <table class="show_ind_table" cellspacing="1">
-      <tr>
-        <td class="itemHeader">
+   <div class="panel panel-info">
+      <div class="panel-heading">
+          <fmt:message key="jsp.search.showindproperties.individual" />
+          <%=request.getAttribute("indURI")%>
+          <a href="<%=request.getContextPath()%>/semantic-search/data/<%=URLEncoder.encode(request.getAttribute("indURI").toString(),"UTF-8")%>">
+      
+          <div class="btn-group pull-right"> 
+            <a href="<%=request.getContextPath()%>/semantic-search/data/<%=URLEncoder.encode(request.getAttribute("indURI").toString(),"UTF-8")%>" class="btn btn-default btn-ss">
+            <img src="<%= request.getContextPath() %>/image/rdf.png" alt="RDF" height="27px" class="btn btn-default btn-ss">
+            </a>
+            <% if (!myname.equals("")){ %>
+            <span id="queryURL" onclick="loadXMLDoc('<%=URLEncoder.encode(myname,"UTF-8")%>', this)">
+              <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="27px" class="btn btn-default btn-ss">
+              <div id="querytooltip" class="left"> </div>
+            </span>
+          <% } %>
+          </div>
+        
+      </div>
+    </div>
+   <!-- <table align="center" class="table" style="font-weight: bold;">
           <fmt:message key="jsp.search.showindproperties.individual" />
           <%=request.getAttribute("indURI")%>
           <a href="<%=request.getContextPath()%>/semantic-search/data/<%=URLEncoder.encode(request.getAttribute("indURI").toString(),"UTF-8")%>">
@@ -131,23 +148,21 @@
             </div>
           </div>
 
-        </td>
-      </tr>
-    </table>
+    </table> -->
 
+    </br>
     <%-- Display the classes of Individual --%>
+
 
     <%
         if (types!=null && !types.isEmpty())
             {
     %>
-
-    <table class="show_ind_table" cellspacing="1">
-      <tr class="table_title">
-        <td>
+    <div class="panel panel-info">
+      <table align="center" class="table table-bordered table-striped" cellspacing="1">
+      <div class="panel-heading" align="center">
           <fmt:message key="jsp.search.showindproperties.classes" />
-        </td>
-      </tr>
+      </div>
       <tr class='row0'>
         <td>
           <%
@@ -171,7 +186,8 @@
         </td>
       </tr>
 
-    </table>
+      </table>
+    </div>
 
     <%
         }
@@ -184,20 +200,19 @@
             {
     %>
 
-    <table class="show_ind_table" cellspacing="1">
-      <tr class="table_title">
-        <td colspan="2">
+    <div class="panel panel-info">
+      <table align="center" class="table table-bordered table-striped" cellspacing="1">
+        <div class="panel-heading" align="center">
           <fmt:message key="jsp.search.showindproperties.objectproperty" />
-        </td>
-      </tr>
-      <tr class="header">
-        <td>
-          <fmt:message key="jsp.search.showindproperties.field" />
-        </td>
-        <td>
-          <fmt:message key="jsp.search.showindproperties.value" />
-        </td>
-      </tr>
+        </div>
+        <tr class="header">
+          <td>
+            <fmt:message key="jsp.search.showindproperties.field" />
+          </td>
+          <td>
+            <fmt:message key="jsp.search.showindproperties.value" />
+          </td>
+       </tr>
 
 
       <%
@@ -268,10 +283,10 @@
           %>
              <a href='<%=link%>'><%=name%></a>
           <% if ((field.equals("dcterms:contributor")||field.equals("dspace-ont:author")||field.equals("dcterms:type")||field.equals("dspace-ont:sponsorship"))&& !isInverse)  { %>
-              <div id="queryURL" onclick="loadXMLDoc('<%=URLEncoder.encode(name,"UTF-8")%>', this)">
-              <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
+              <span id="queryURL" onclick="loadXMLDoc('<%=URLEncoder.encode(name,"UTF-8")%>', this)">
+              <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right" class="btn btn-default btn-ss">
               <div id="querytooltip"></div>
-              </div>
+              </span>
           <% } %>
         </td>                     
       </tr>
@@ -281,6 +296,7 @@
       %>
 
     </table>
+    </div>
 
     <%
         }
@@ -293,20 +309,19 @@
     {
     %>
 
-    <table class="show_ind_table" cellspacing="1">
-      <tr class="table_title">
-        <td colspan="2">
+    <div class="panel panel-info">
+      <table align="center" class="table table-bordered table-stripped" cellspacing="1">
+        <div class="panel-heading" align="center">
           <fmt:message key="jsp.search.showindproperties.negobjectproperty" />
-        </td>
-      </tr>
-      <tr class="header">
-        <td>
-          <fmt:message key="jsp.search.showindproperties.field" />
-        </td>
-        <td>
-          <fmt:message key="jsp.search.showindproperties.value" />
-        </td>
-      </tr>
+        </div>
+        <tr class="header">
+          <td>
+            <fmt:message key="jsp.search.showindproperties.field" />
+          </td>
+          <td>
+           <fmt:message key="jsp.search.showindproperties.value" />
+          </td>
+        </tr>
 
       <%
         int row = 0;
@@ -355,6 +370,7 @@
       %>
 
     </table>
+    </div>
 
     <%
     }       // end if that checks emptiness of negative_object_assertions
@@ -367,26 +383,27 @@
     {
     %>
 
-    <table class="show_ind_table" cellspacing="1">
-      <tr class="table_title">
-        <td colspan="4">
+    <div class="panel panel-info">
+      <table align="center" class="table table-bordered table-striped" cellspacing="1">
+        <div class="panel-heading" align="center">
           <fmt:message key="jsp.search.showindproperties.dataproperty" />
-        </td>
-      </tr>
-      <tr class="header">
-        <td>
-          <fmt:message key="jsp.search.showindproperties.field" />
-        </td>
-        <td>
-          <fmt:message key="jsp.search.showindproperties.value" />
-        </td>
-        <td>
-          <fmt:message key="jsp.search.showindproperties.type" />
-        </td>
-        <td>
-          <fmt:message key="jsp.search.showindproperties.language" />
-        </td>
-      </tr>
+        </div>
+        <tr class="header">
+          <td>
+            <fmt:message key="jsp.search.showindproperties.field" />
+          </td>
+          <td>
+            <fmt:message key="jsp.search.showindproperties.value" />
+          </td>
+          <td>
+            <fmt:message key="jsp.search.showindproperties.type" />
+          </td>
+          <td>
+            <fmt:message key="jsp.search.showindproperties.language" />
+          </td>
+        </tr>
+        
+        
       <%
       int row = 0;
       for (OWLDataPropertyAssertionAxiom a : data_assertions)
@@ -408,10 +425,10 @@
         <td>
         <%=res[0]%>
           <% if (field.equals("dcterms:subject")||field.equals("dcterms:publisher"))  { %>
-              <div id="queryURL" onclick="loadXMLDoc('<%=URLEncoder.encode(res[0],"UTF-8")%>', this)">
-              <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right">
+              <span id="queryURL" onclick="loadXMLDoc('<%=URLEncoder.encode(res[0],"UTF-8")%>', this)">
+              <img src="<%= request.getContextPath() %>/image/dbpedia.png" alt="DBpedia search" height="22px" align="right" class="btn btn-default btn-ss">
               <div id="querytooltip"> </div>
-              </div>
+              </span>
           <% } %>
         </td>
         <td><%=res[2]%></td>
@@ -423,6 +440,7 @@
       %>
 
     </table>
+    </div>
 
     <%
     }     // end of if 
@@ -435,26 +453,25 @@
     {
     %>
 
-    <table class="show_ind_table" cellspacing="1">
-      <tr class="table_title">
-        <td colspan="4">
+    <div class="panel panel-info">
+      <table align="center" class="table table-bordered table-striped" cellspacing="1">
+        <div class="panel-heading" align="center">
           <fmt:message key="jsp.search.showindproperties.dataproperty" />
-        </td>
-      </tr>
-      <tr class="header">
-        <td>
-          <fmt:message key="jsp.search.showindproperties.field" />
-        </td>
-        <td>
-          <fmt:message key="jsp.search.showindproperties.value" />
-        </td>
-        <td>
-          <fmt:message key="jsp.search.showindproperties.type" />
-        </td>
-        <td>
-          <fmt:message key="jsp.search.showindproperties.language" />
-        </td>
-      </tr>
+        </div>
+        <tr class="header">
+          <td>
+            <fmt:message key="jsp.search.showindproperties.field" />
+          </td>
+          <td>
+            <fmt:message key="jsp.search.showindproperties.value" />
+          </td>
+          <td>
+            <fmt:message key="jsp.search.showindproperties.type" />
+          </td>
+          <td>
+            <fmt:message key="jsp.search.showindproperties.language" />
+          </td>
+        </tr>
       <%
       int row = 0;
       for (OWLNegativeDataPropertyAssertionAxiom a : negative_data_assertions)
@@ -483,6 +500,7 @@
       %>
 
     </table>
+    </div>
 
     <%
     }   // end of if
@@ -496,12 +514,11 @@
     {
     %>
 
-    <table class="show_ind_table" cellspacing="1">
-      <tr class="table_title">
-        <td colspan="4">
+    <div class="panel panel-info">
+      <table align="center" class="table table-bordered table-striped" cellspacing="1">
+        <div class="panel-heading" align="center">
           <fmt:message key="jsp.search.showindproperties.annotation" />
-        </td>
-      </tr>
+        </div>
       <tr class="header">
         <td>
           <fmt:message key="jsp.search.showindproperties.field" />
@@ -569,10 +586,10 @@
       %>
 
     </table>
+    </div>
     <%
       } // end of if
     %>
-  </div>
 
 </dspace:layout>
 

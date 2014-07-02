@@ -34,6 +34,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace"%>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%
     String URL = session.getAttribute("URL") == null ? "" : (String) session
@@ -95,18 +96,17 @@
 %>
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/semantic.css" />
+
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/ext-3.3.0/resources/css/ext-all.css" /> 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/ext-3.3.0/resources/css/xtheme-gray.css" />
-     
-<script type="text/javascript" src="<%=request.getContextPath()%>/ext-3.3.0/adapter/prototype/ext-prototype-adapter.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/ext-3.3.0/ext-all.js"></script> 
-<script type="text/javascript" src="<%=request.getContextPath()%>/grouping-combobox.js"></script>  
-<script type="text/javascript" src="<%=request.getContextPath()%>/ui.js"></script> 
-  
-<%-- @GS - For syntax highlighting --%>  
+
 <link rel="stylesheet" href="<%=request.getContextPath()%>/codemirror/lib/codemirror.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/codemirror/addon/hint/show-hint.css">
-
+    
+<script type="text/javascript" src="<%=request.getContextPath()%>/ext-3.3.0/adapter/prototype/ext-prototype-adapter.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/ext-3.3.0/jquery/ext-jquery-adapter.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/ext-3.3.0/ext-all.js"></script> 
+  
 <script type="text/javascript" src="<%=request.getContextPath()%>/codemirror/lib/codemirror.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/codemirror/addon/edit/matchbrackets.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/codemirror/mode/sparql/sparql.js"></script> 
@@ -117,22 +117,19 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/codemirror/addon/hint/ms-hint.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/codemirror/addon/hint/show-hint.js"></script>
 
-<dspace:layout locbar="nolink" titlekey="jsp.search.semantic.title">
+<script type="text/javascript" src="<%=request.getContextPath()%>/grouping-combobox.js"></script>  
+<script type="text/javascript" src="<%=request.getContextPath()%>/ui.js"></script>
 
-  <table width="100%" border="0">
-    <tr>
-      <td width="25%"/>
-      <td>
-        <div id="destino" style="width:500px; margin:auto; margin-top:20px;"></div>        
-        <td align="left" valign="top" width="25%" class="standard">
-        <dspace:popup page="<%= LocaleSupport.getLocalizedMessage(pageContext,\"help.index\") + \"#semantic\"%>"><fmt:message key="jsp.help"/></dspace:popup>
-      </td>
-    </tr>
-  </table> 
+<dspace:layout locbar="nolink" titlekey="jsp.layout.navbar-default.semantic">
 
+<h2><fmt:message key="jsp.layout.navbar-default.semantic"/></h2>
 
-  <script type="text/javascript"> 
-    
+  
+    <div id="destino" class="panel panel-default">
+      <div align="right"><dspace:popup page="<%= LocaleSupport.getLocalizedMessage(pageContext,\"help.index\") + \"#semantic\"%>"><fmt:message key="jsp.help"/></dspace:popup> </div>
+    </div>
+
+<script type="text/javascript">    
          
     var dataClasses = [ 
       <% 
@@ -175,25 +172,23 @@
 	 %>
      
       var dataFull = dataClasses.concat(dataObjectProperties);
-    
-      Ext.onReady(function() {
+                  
+     Ext.onReady(function() {
          Ext.BLANK_IMAGE_URL = 'ext-3.3.0/resources/images/default/s.gif';         
          Ext.QuickTips.init();
          
          appInit('<%= expression %>', '<%= reasoner %>', '<%= URL %>');
-      });
+      }); 
       
-  </script>
-
-
-
-  <%
+</script>
+ 
+ <%
       if (request.getAttribute("error") != null)
           {
-              String error = (String) request.getAttribute("error");
-              error = StringEscapeUtils.escapeHtml (error);
+              String error_ss = (String) request.getAttribute("error");
+              error_ss = StringEscapeUtils.escapeHtml (error_ss);
               Pattern p = Pattern.compile("\n");
-              Matcher m = p.matcher(error);
+              Matcher m = p.matcher(error_ss);
               StringBuffer sb = new StringBuffer();
 
               while (m.find())
@@ -217,53 +212,53 @@
   <br />
 
 
-  <p align="center">
+   <div class="alert alert-info">
     <fmt:message key="jsp.search.results.results">
       <fmt:param><%=offset + 1%></fmt:param>
       <fmt:param><%=offset + step%></fmt:param>
       <fmt:param><%=length%></fmt:param>
       <fmt:param><%=totalTime%></fmt:param>
     </fmt:message>
-  </p>
-
+    </div>
+    
+    <ul class="pagination pull-right">
+  
   <%-- Previous page/Next page --%>
-  <table align="center" border="0" width="70%">
-    <tr>
-      <td class="standard" align="left">
         <%
             if (offset >= step)
                     {
         %>
-        <a
+        <li><a
           href="<%=request.getContextPath()%>/semantic-search?offset=<%=offset - 20%><%=localContext%>"><fmt:message
-            key="jsp.browse.general.previous" /> </a>
+            key="jsp.browse.general.previous" /> </a></li>
         <%
             }
-        %>
-      </td>
-      <td class="standard" align="right">
-        <%
             if (offset + step < length)
-                    {
+              {
         %>
-        <a
+        <li><a
           href="<%=request.getContextPath()%>/semantic-search?offset=<%=offset + 20%><%=localContext%>"><fmt:message
-            key="jsp.browse.general.next" /> </a>
+            key="jsp.browse.general.next" /> </a></li>
         <%
             }
         %>
-      </td>
-    </tr>
-  </table>
-
+        </ul>
+  
+   </br></br></br></br>
   <%-- The subjects --%>
+  <div class="panel panel-info">
 
-  <table align="center" class="miscTable" summary="This table displays a list of subjects">
-    <tr>
-      <td width="150">Type</td>
-      <td width="250">Value</td>
-    </tr>
-    
+  
+   <table align="center" class="table table-bordered table-striped">
+        <thead style="font-size: 18px;">
+            <tr>
+                <th width="30%"><b>Type</b></th>
+                <th width="70%"><b>Value</b></th>
+            </tr>
+        </thead>   
+        <tbody style="font-size: 14px;">   
+   
+     
     <%
         // Row: toggles between Odd and Even
                 String row = "odd";
@@ -307,7 +302,7 @@
       </td>
       <td class="<%=row%>RowOddCol">
         <a
-          href="<%=request.getContextPath()%>/semantic-search/resource/<%=URLEncoder.encode(iri.toString(), "UTF-8")%>">
+         href="<%=request.getContextPath()%>/semantic-search/resource/<%=URLEncoder.encode(iri.toString(), "UTF-8")%>">
           
           <%
         String name = iri.getFragment();
@@ -334,36 +329,32 @@
         row = (row.equals("odd") ? "even" : "odd");
                 }
     %>
+    </tbody> 
   </table>
+  </div>
+  
+  
+  <ul class="pagination pull-right">
   <%-- Previous page/Next page --%>
-  <table align="center" border="0" width="70%">
-    <tr>
-      <td class="standard" align="left">
         <%
             if (offset >= step)
                     {
         %>
-        <a
+        <li><a
           href="<%=request.getContextPath()%>/semantic-search?offset=<%=offset - 20%><%=localContext%>"><fmt:message
-            key="jsp.browse.general.previous" /> </a>
+            key="jsp.browse.general.previous" /> </a></li>
         <%
             }
-        %>
-      </td>
-      <td class="standard" align="right">
-        <%
             if (offset + step < length)
                     {
         %>
-        <a
+        <li><a
           href="<%=request.getContextPath()%>/semantic-search?offset=<%=offset + 20%><%=localContext%>"><fmt:message
-            key="jsp.browse.general.next" /> </a>
+            key="jsp.browse.general.next" /> </a></li>
         <%
             }
         %>
-      </td>
-    </tr>
-  </table>
+    </ul>
 
   <%
       }
@@ -372,11 +363,11 @@
   %>
   <br />
   <p align="center">
-    <fmt:message key="jsp.search.semantic.noresults" />
+    <fmt:message key="jsp.search.semantic.noresults" />   
   </p>
 
   <%
       }
-  %>
-  
+  %> 
+</div> 
 </dspace:layout>

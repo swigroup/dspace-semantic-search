@@ -53,7 +53,7 @@ function getAutocompleteStore() {
 	});
 }
 
-function getTermAutocompleteComboBox(label, filterComboBox/*, operationComboBox*/, rightField, filterComboBox, pctext) {
+function getTermAutocompleteComboBox(label, rightField, filterComboBox, pctext) { // @@@ Search for
 	var store = new Ext.data.ArrayStore( {
 		fields : [ 'id', 'value', 'group' ],
 		data : dataFull
@@ -62,15 +62,18 @@ function getTermAutocompleteComboBox(label, filterComboBox/*, operationComboBox*
 	return new Ext.ux.form.GroupingComboBox( {
 		emptyText: pctext, //added by @gs
     store : store,
+    anchor: '90%', 
 		groupField: 'group',
 		fieldLabel : label,
 		displayField : 'value',
 		typeAhead : true,
 		triggerAction : 'all',
-		mode : 'local',
+    // allowBlank: 'true', // it is overwritten - it is set to 'true' when getTermAutocompleteComboBox is called so this configuration
+    mode : 'local',
 		queryParam : 'query',
 		selectOnFocus : true,
-		width : 250,
+    //width: 110,
+		// autoWidth : true,
 		hideTrigger : true,
 		listeners: {
 			'change': function(field, newValue, oldValue) {		    			
@@ -98,38 +101,39 @@ function getTermAutocompleteComboBox(label, filterComboBox/*, operationComboBox*
 			else if (isValidRelation(value)) {
 				return true;
 			}
-		    else {
+		  else {
 				return 'The term value needs to be a class or a relation';
 			}
-		}
+		} 
 	});
 }
 
-function getRightAutocompleteComboBox(label/*, operationComboBox*/) {
+function getRightAutocompleteComboBox(label) {      // @@@ expression
 	var store = new Ext.data.ArrayStore( {
 		fields : [ 'id', 'value' ],
 		data : dataClasses
 	});
 
 	return new Ext.form.ComboBox( {
-   	emptyText: 'entity or value and/or expression in parenthesis',   //added by @gs - works as placeholder
+    emptyText: 'entity or value and/or expression in parenthesis',   //added by @gs - works as placeholder
     store : store,
+    anchor: '90%', // added by @gs - sets relative width
 		fieldLabel : label,
 		displayField : 'value',
 		typeAhead : true,
 		triggerAction : 'all',
 		mode : 'local',
 		queryParam : 'query',
-		selectOnFocus : true,
-		width : 295,
-		hideTrigger : true,
+		selectOnFocus : true, 
+    //autoWidth: true,
+    hideTrigger : true,
     validator: function(value) {
        return true;
 		}
 	});
 }
 
-function getStaticComboBox(label, width, data, pctext) { //pctext added by @gs
+function getStaticComboBox(label, /*width,*/ data, pctext) { //pctext added by @gs
 	var store = new Ext.data.ArrayStore( {
 		fields : [ 'id', 'value' ],
 		data : data
@@ -138,6 +142,7 @@ function getStaticComboBox(label, width, data, pctext) { //pctext added by @gs
 	return new Ext.form.ComboBox( {
     emptyText: pctext, //added by @gs
     store : store,
+    anchor: '90%', // added by @gs - sets relative width
 		fieldLabel : label,
 		displayField : 'value',
 		valueField: 'id',
@@ -146,7 +151,7 @@ function getStaticComboBox(label, width, data, pctext) { //pctext added by @gs
 		forceSelection: true,
 		autoSelect: true,
 		mode : 'local',
-		width: width,
+		//width: width,
 		forceSelection : true,
 		triggerAction : 'all',
 		selectOnFocus : true
@@ -157,7 +162,8 @@ function getConditionalRadioButtons() {
 	return new Ext.form.RadioGroup({
 		fieldLabel : 'Condition',
 		autoHeight : true,
-		width : 100,
+    //autoWidth : true,  
+	  width : 110,
 		items : [ {
 			boxLabel : 'and',
 			name : 'condition'
@@ -171,7 +177,7 @@ function getConditionalRadioButtons() {
 function appInit(expression, reasonerValue, ontologyValue) {
 	var store = getAutocompleteStore();
 	
-	var filterComboBox = getStaticComboBox("Restriction", 100, [ [ 'some', 'some' ], [ 'min', 'min' ], [ 'max', 'max' ], [ 'only', 'only' ],
+	var filterComboBox = getStaticComboBox("Restriction", /*110,*/ [ [ 'some', 'some' ], [ 'min', 'min' ], [ 'max', 'max' ], [ 'only', 'only' ],
 		[ 'value', 'value' ], [ 'exactly', 'exactly' ]], "select one...");  //last parameter adde by @gs
   filterComboBox.disable();
 
@@ -184,10 +190,10 @@ function appInit(expression, reasonerValue, ontologyValue) {
 	operationComboBox.disable();
 	*/
 	
-	var rightField = getRightAutocompleteComboBox("Expression"/*, operationComboBox*/);
+	var rightField = getRightAutocompleteComboBox("Expression"); // @@ Expression
 	rightField.disable();
 	
-	var conditionalRadioButtons = getConditionalRadioButtons();
+	var conditionalRadioButtons = getConditionalRadioButtons();   // @@@ Condition
 	
 	if (! expression) {
         conditionalRadioButtons.disable();
@@ -196,34 +202,51 @@ function appInit(expression, reasonerValue, ontologyValue) {
 		conditionalRadioButtons.enable();
 	}
 	
-	var termField = getTermAutocompleteComboBox("Search for", filterComboBox, /*operationComboBox, */rightField, filterComboBox, "entity or kind of relation");
-	termField.allowBlank = false;
+  // @@ Search for
+	var termField = getTermAutocompleteComboBox("Search for", rightField, filterComboBox, "entity or kind of relation");
+	termField.allowBlank = true; // orignally was 'false'
 
 	var notCheckbox = new Ext.form.Checkbox({
+    width: '50',
     boxLabel : 'not',
 		name : 'condition'
 	});
 	
 
 	var form = new Ext.FormPanel( {
-		labelWidth : 60,
-		items : [ {
-			xtype: 'compositefield',
-			fieldLabel : 'Search for',
-			items: [ notCheckbox, termField ]     
-		}, filterComboBox, {
-			xtype: 'compositefield',
-			fieldLabel : 'Expression',  
-			items: [ /*operationComboBox,*/ rightField ]   
-		}, conditionalRadioButtons],
+		labelWidth : 70, 
+		autoHeight : true,
+    monitorValid : true,
 		bodyStyle : 'padding:5px',
-		buttons : [ {
+   // bodyStyle : 'font:12px tahoma,arial,helvetica,sans-serif; padding:5px; text-align:right;',		
+    bodyCfg: {
+        cls: 'need-border-class .x-panel-body',  // Default class not applied if Custom element specified 
+        style: {'border':'1px solid #C0C0C0;'},
+    },
+    items : [ /*{
+			xtype: 'compositefield',
+      //fieldLabel : ' ',   
+			items: [ notCheckbox, termField]      
+		},*/ notCheckbox, termField, filterComboBox, rightField,  /*
+    {
+			xtype: 'compositefield',
+			fieldLabel : 'Search for',   
+			items: [ termField ]     
+		}, 
+    filterComboBox,    // @@@ Restriction
+    {
+			xtype: 'compositefield',
+			fieldLabel : 'Expression',        
+			items: [ rightField ]   
+		}, */
+    conditionalRadioButtons],
+		buttonAlign: 'center',
+    buttons : [ {
 			xtype : 'button',
 			text : 'Add term',
 			handler: function (event, button) {
 				if (form.getForm().isValid()) {
 					var selectedRadio = conditionalRadioButtons.getValue();
-					
 					//if (queryLabel.getValue().length > 0 && !selectedRadio) {
 					if (mseditor.getValue().length > 0 && !selectedRadio) {
             Ext.MessageBox.alert('Error', 'Either a "Condition" must be selected or press the "Clear query" button to start with a new request');
@@ -281,8 +304,9 @@ function appInit(expression, reasonerValue, ontologyValue) {
 		} ]
 	});
 
-	var reasonerCombobox = getStaticComboBox("Reasoner", 200, [[ 'FACTPLUSPLUS', 'Fact++'], [ 'PELLET', 'Pellet' ], [ 'HERMIT', 'HermiT' ]]);
-	reasonerCombobox.setValue(reasonerValue);
+	var reasonerCombobox = getStaticComboBox("Reasoner", /*200,*/ [[ 'FACTPLUSPLUS', 'Fact++'], [ 'PELLET', 'Pellet' ], [ 'HERMIT', 'HermiT' ]]);
+	
+  reasonerCombobox.setValue(reasonerValue);
 	
   Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 	Ext.state.Manager.getProvider(); 
@@ -318,10 +342,10 @@ function appInit(expression, reasonerValue, ontologyValue) {
     }	
    
 	var ontologyCombobox = new Ext.form.ComboBox({
-		   fieldLabel:'Ontology',
+		   fieldLabel: 'Ontology',
 		   displayField: 'url',
 		   valueField: 'url',
-		   width: 400,
+       anchor : '90%',      //works, even though layout of optionsForm is not set to "anchor"....
 		   vtype: 'url',
 		   vtypeText: 'Please enter a valid URL for your ontology',
 		   store: urlStore,
@@ -337,10 +361,11 @@ function appInit(expression, reasonerValue, ontologyValue) {
 	
   
 	var optionsForm = new Ext.FormPanel( {
-		labelWidth : 60,
+		labelWidth : 70,
 		monitorValid : true,
 		items : [ reasonerCombobox, ontologyCombobox],
 		bodyStyle : 'padding:5px',
+    buttonAlign: 'center',
 		buttons : [ {
 			xtype : 'button',
 			text : 'Save options',
@@ -399,7 +424,7 @@ var mshistoryGrid = new Ext.grid.GridPanel({
     frame: false, 
     border: true,
     store: msStore,
-    bodyStyle: 'text-align:left; border-right-style:solid; border-width:1px;',
+    //bodyStyle: 'text-align:left; border-right-style:solid; border-width:1px;',
     viewConfig: {
       forceFit: true,       // for column to fit exactly the panel width
       scrollOffset: 0,
@@ -408,94 +433,134 @@ var mshistoryGrid = new Ext.grid.GridPanel({
     columns: [
             {id:'mshistory', header: 'Query History', dataIndex:'query', sortable: false, resizable: false}   // query: same as spstore
     ],
-    //sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
     enableHdMenu: false,      // disables header menu
     height: 70, //  the height of its container
-    width: 355, //  same as mshistoryPanel
     hideHeaders: false,
     stripeRows: true,
 });   
   
   var mshistoryPanel = new Ext.Panel({
     id: 'mshistoryPanel',
-    floating: true,
+    floating: true,   // for not being like having transparency
     frame: false,
-    border: false,   // false because we added bodyStyle at grid
-    width: 355,     // a bit less than generatedQuery panel
-    height: 70, //a bit less than queryPanel
+    boxMaxWidth : 750,
+    boxMinWidth : 150,
+    //border: false,  // false because we added bodyStyle at grid
+    bodyCfg: { //@gs DO NOT DELETE - places border to the history panel
+        cls: 'need-border-class x-panel-body',  // Default class not applied if Custom element specified 
+        style: {'border':'1px solid #C0C0C0;'},
+    }, 
+    layout:{
+        type:'fit',
+        align:'stretch'
+    },
+    height: 70,     //a bit less than queryPanel
     items: [mshistoryGrid],
     hidden: true,
-    shadow: true
+    shadow: true,
+    x:0,
+    y:5
  }); 
 
 
 
 var reasonerLabel = new Ext.form.Label({
-    text : "Loaded reasoner is " + reasonerValue,
-    x: 310,
-    y: 45,
-  });
+    //text : "Loaded reasoner is " + reasonerValue,
+    html : "Loaded reasoner is " + reasonerValue,
+   });
   
 var generatedQueryLabel = new Ext.form.Label({
-    text : "Generated query: ",
-    bodyStyle : 'font:11px tahoma,arial,helvetica,sans-serif; text-align:left;',
-    x: 5,
-    y: 10
-  });  
+    html : "Generated"+"</br>"+"query: ",
+    //flex: 1,    //do not set!
+    });  
   
   
 var generatedQuery = new Ext.Panel( {
-		id: 'msPanel',
+		id: 'generatedQuery',
+    //fieldLabel: 'Generated query:',
     frame: false,
     border: false,
-    width: 360,
-    height: 35,
+    height: 36,
     hidden: false,
+    bodyCfg: { //@gs DO NOT DELETE - hides double border
+        cls: 'need-border-class x-panel-body',  // Default class not applied if Custom element specified 
+        style: {'border':'1px solid #C0C0C0;'},
+    }, 
     items: [
     {
-      width: 360, 
       style: 'text-align:left;',
       html: '<textarea id="msquery" name="ms" style="display:none;"></textarea>'
     }],
-    x: 100,
-    y: 5
+    x: 0,
+    y: 0
   });
+
+
+  var msWithHistory = new Ext.Panel({
+    id: 'msWithHistory',
+    frame: false,
+    border: true,
+    height: 70,
+    flex: 9,
+    layout: 'absolute',
+    items: [generatedQuery, mshistoryPanel]
+ });
 
 
   var msqueryPanel = new Ext.Panel({
     id: 'msqueryPanel',
     frame: false,
     border: true,
-    height: 80,
-    layout: 'absolute',
-    bodyStyle : 'font:11px tahoma,arial,helvetica,sans-serif; text-align:left;',
-    items: [generatedQueryLabel, generatedQuery, mshistoryPanel, {
+    height: 70,
+    layout: {
+      type: 'hbox',
+      align: 'strech',
+    },
+    bodyCfg: {
+        cls: 'no-border-class x-panel-body',  // Default class not applied if Custom element specified 
+        style: {'border':'none;'},
+    },  
+    bodyStyle : 'text-align:left;', 
+    items: [generatedQueryLabel, msWithHistory, {
       xtype: 'button',
       id: 'mshistoryButton',
-      //text: 'History',
       iconCls: 'add24',
       arrowAlign: 'bottom',
-      //cls   : 'wrap-button',
-      height: 35, // for absolute layout
-      width: 22,  // for absolute layout - do not change
-      x: 460,     // same as the width of generatedquery (360) + x offset (100)
-      y: 5,
+      height: 36, // for absolute layout
+      width: 24,  // for absolute layout - do not change
+      flex: 1,
+      style: {              // always on top of panels
+          'z-index': 1000 
+      } ,
       menu:[], // fake menu, so as to show arrow on the button
       handler: mshistoryBtnHandler   // see below
-    }, reasonerLabel]
+    }],
  });
 
+ var mslabelsAndFields = new Ext.Panel( {
+		id: 'mslabelsAndFields',
+    frame: false,
+    border: false,
+    hidden: false,
+    autowidth: true,
+    anchor: '95%',     //searchPanel's layout is set to 'anchor'
+    //height: 100,   
+    bodyStyle : 'padding:5px; text-align:right;',
+    items: [ msqueryPanel, reasonerLabel],
+  });
 
 	var searchPanel = new Ext.Panel( {
     title : 'Search',
 		buttonAlign : 'center',
 		autoHeight : true,
-		items : [ form, msqueryPanel],      // instead of generatedquery
-	//@gs - the following bodyCFG was added so as to remove the border that surrounds
-  //the items of this Panel (excluding buttons) - this border appears becaues we use the renderTo option
+    monitorValid : true,
+    layout: 'anchor',   // necessary because controls msLabelsAndFields' width
+    items : [ form,   mslabelsAndFields],      // instead of generatedquery
+     //@gs - the following bodyCFG was added so as to remove the border that surrounds
+    //the items of this Panel (excluding buttons) - this border appears becaues we used the renderTo option
   	bodyCfg: {
-        cls: 'no-border-class .x-panel-body',  // Default class not applied if Custom element specified 
-        style: {'body-style':'none;'},
+        cls: 'no-border-class x-panel-body',  // Default class not applied if Custom element specified 
+        style: {'border-style':'none;'},
     },    
     buttons : [ {
 			xtype : 'button',
@@ -530,7 +595,7 @@ var generatedQuery = new Ext.Panel( {
    var mspressed = false;
    var mshistoryBtnHandler = Ext.getCmp('mshistoryButton').on('click', function(event) {
         mspressed = true;
-        mshistoryPanel.setPosition(101,5);  // for covering queryPanel's body
+        mshistoryPanel.setPosition(0,0);  // for covering queryPanel's body
          if (!mshistoryPanel.isVisible()){ 
             mshistoryPanel.setVisible(true);
          }
@@ -550,7 +615,7 @@ var generatedQuery = new Ext.Panel( {
        tabMode: "indent",
        lineWrapping: true,
        matchBrackets: true,     
-       placeholder: "type your DL query or put all pieces together (\"Add term\")",
+       placeholder: "using the \"Add term\" button put all pieces together or type your type DL query dirctly",
        extraKeys: {
           // @gs - star searching on pressing enter
           "Enter": function(event) {if (mseditor.getValue().length>0) { window.location = 'semantic-search?semantic=true&syntax=man&expression=' +encodeURI(mseditor.getValue()); } },
@@ -621,7 +686,8 @@ var historyGrid = new Ext.grid.GridPanel({
     id: 'historyGrid',
     frame: false, 
     store: spStore,
-    bodyStyle: 'text-align:left; border-style:solid; border-width:1px;',
+    border: true,
+    bodyStyle: 'text-align:left;',
     viewConfig: {
       forceFit: true,       // for column to fit exactly the panel width
       scrollOffset: 0,
@@ -633,17 +699,28 @@ var historyGrid = new Ext.grid.GridPanel({
     //sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
     enableHdMenu: false,      // disables header menu
     height: 80, //  the height of its container
-    width: 425,
     hideHeaders: false,
     stripeRows: true,
 });   
   
   var historyPanel = new Ext.Panel({
     id: 'historyPanel',
-    floating: true, // for not being like haveing transparency!
+    floating: true, // for not being like having transparency!
     frame: false,
-    border: false,
-    width: 425,  // 465 (sparqlPanel) - 25 (x offeset for this panel) // -15 (we want it a bit smaller)
+    boxMaxWidth : 800,
+    boxMinWidth : 200,
+    //border: false,  // false because we added bodyStyle at grid
+    bodyCfg: { //@gs DO NOT DELETE - places border to the history panel
+        cls: 'need-border-class x-panel-body',  // Default class not applied if Custom element specified 
+        style: {'border':'1px solid #C0C0C0;'},
+    }, 
+    layout:{
+        type:'fit',
+        align:'stretch'
+    },
+    style: {              // always on top of panels
+          'z-index': 15000
+    },
     height: 80, //a bit less than queryPanel
     items: [historyGrid],
     hidden: true,
@@ -657,43 +734,65 @@ var historyGrid = new Ext.grid.GridPanel({
     id: 'sparqlPanel',
     frame: false,
     border: false,
-    width: 455,
     height: 100,
     hidden: false,
     items: [{
-      style: 'font-size:11px; text-align:left;',
+      style: 'font-size:12px; text-align:left;',
       html: '<textarea id="spquery" name="sp" style="display:none;" autocomplete="on" draggable="true">PREFIX a: &lt;http://www.w3.org/2000/10/annotation-ns#> \n# Comment! \n\nSELECT ?x ?y ?z \nWHERE { ?x ?y ?z .}</textarea>',
       } ],
     x: 0,
     y: 0
  });
   
-  var queryPanel = new Ext.Panel({
+//  console.log(document.getElementById("sparqlPanel").getWidth());
+  
+  var spWithHistory = new Ext.Panel({
+    id: 'spWithHistory',
+    frame: false,
+    border: true,
+    height: 100,
+    layout: 'absolute',
+    bodyCfg: { //@gs DO NOT DELETE - hides double border
+        cls: 'no-border-class x-panel-body x-panel-noheader',  // Default class not applied if Custom element specified 
+        style: {'border-top':'none;'},
+    },   
+    flex: 9, //its container (queryPanel) has layout of type "hbox"
+    items: [sparqlPanel, historyPanel],
+ });
+ 
+   var queryPanel = new Ext.Panel({
     id: 'queryPanel',
     frame: false,
     border: true,
     height: 100,
-    //width: 470,
-    layout: 'absolute',
-    items: [sparqlPanel, historyPanel, {
+    layout: { // 1
+        type: 'hbox',
+        align: 'stretch'
+    },
+    bodyCfg: {
+        cls: 'no-border-class .x-panel-body',  // Default class not applied if Custom element specified 
+        style: {'body-style':'none;'}
+    }, 
+    items: [spWithHistory, {
       xtype: 'button',
       id: 'historyButton',
       iconCls: 'add24',
       arrowAlign: 'bottom',
       height: 100, // for absolute layout
-      //cls : 'hitoryBtn', 
-      width: 22,  // for absolute layout - do not change
-      x: 455,      // same as the width of sparqlPanel - do not change
-      y: 0,
+      width: 24,  // for absolute layout - do not change
+      floating: true,
+      style: {              // always on top of panels
+          'z-index': 3
+      } ,
+      flex: 1, 
       menu:[], // fake menu, so as to show arrow on the button
-      handler: historyBtnHandler   // see below
+      handler: historyBtnHandler,   // see below
     }]
  });
- 
    var pressed = false;
    var historyBtnHandler = Ext.getCmp('historyButton').on('click', function(event) {
         pressed = true;
-        historyPanel.setPosition(25,0);  // for covering queryPanel's body
+        historyPanel.setPosition(25,0);  // for covering spWithHistory's body
          if (!historyPanel.isVisible()){ 
             historyPanel.setVisible(true);
          }
@@ -718,9 +817,9 @@ var historyGrid = new Ext.grid.GridPanel({
   
   var advancedPanelSP = new Ext.Panel( {
     title : 'SPARQL Query',
-    frame:false, 
+    frame: false, 
     bodyBorder: false,
-    labelWidth : 60,
+    labelWidth : 70,
 		monitorValid : true,
     bodyStyle : 'font:12px tahoma,arial,helvetica,sans-serif; padding:10px; text-align:right;',		
     buttonAlign : 'center',
@@ -732,7 +831,7 @@ var historyGrid = new Ext.grid.GridPanel({
         style: {'body-style':'none;'}
     }, 
     items: [
-      queryPanel, reasonerLabelSP
+      queryPanel, reasonerLabelSP   //@@@@@@@@@@@@@@@@@@@@@
     ],
     buttons : [ {
 			xtype : 'button',
@@ -759,6 +858,7 @@ var historyGrid = new Ext.grid.GridPanel({
     renderTo: document.body
 	});
 
+  /* handler for MS history */
   historyGrid.on("rowclick", function(e){  
       historyPanel.setVisible(false);
       sparqlPanel.setVisible(true);    
@@ -769,7 +869,7 @@ var historyGrid = new Ext.grid.GridPanel({
       historyGrid.getView().focusRow(0);
   });   
   
-  
+  /* handler for SPARQL history */
   mshistoryGrid.on("rowclick", function(e){  
       mshistoryPanel.setVisible(false);
       msqueryPanel.setVisible(true);    
