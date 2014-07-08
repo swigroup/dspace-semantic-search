@@ -217,7 +217,7 @@
       <fmt:param><%=offset + 1%></fmt:param>
       <fmt:param><%=offset + step%></fmt:param>
       <fmt:param><%=length%></fmt:param>
-      <fmt:param><%=totalTime%></fmt:param>
+      <fmt:param><%=time%></fmt:param>
     </fmt:message>
     </div>
     
