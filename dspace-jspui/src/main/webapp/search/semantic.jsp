@@ -178,6 +178,7 @@
          Ext.QuickTips.init();
          
          appInit('<%= expression %>', '<%= reasoner %>', '<%= URL %>');
+         
       }); 
       
 </script>
@@ -199,7 +200,9 @@
               m.appendTail(sb);
   %>
 
-  <p align="center" class="submitFormWarn"><%=sb.toString()%></p>
+  <p align="center" class="text-warning"><%=sb.toString()%></p>
+  
+  
 
   <%
               items = null;
@@ -208,6 +211,9 @@
           if (length > 0 && items != null)
           {
   %>
+             <script type="text/javascript"> 
+                saveMSQuery();
+             </script>
 
   <br />
 

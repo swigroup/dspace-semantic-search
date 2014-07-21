@@ -174,8 +174,14 @@ function getConditionalRadioButtons() {
 	});
 }
 
+var myMS_query;
+var mySP_query;
+var msStore;
+var spStore;
+
 function appInit(expression, reasonerValue, ontologyValue) {
-	var store = getAutocompleteStore();
+
+  var store = getAutocompleteStore();
 	
 	var filterComboBox = getStaticComboBox("Restriction", /*110,*/ [ [ 'some', 'some' ], [ 'min', 'min' ], [ 'max', 'max' ], [ 'only', 'only' ],
 		[ 'value', 'value' ], [ 'exactly', 'exactly' ]], "select one...");  //last parameter adde by @gs
@@ -373,7 +379,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 			handler: function (event, button) {
 				
 				saveURL(ontologyCombobox.getValue());
-			    window.location = 'semantic-search?URL=' + encodeURI(ontologyCombobox.getValue()).replace('+', '%2B') + '&reasoner=' + reasonerCombobox.getValue();
+			  window.location = 'semantic-search?URL=' + encodeURI(ontologyCombobox.getValue()).replace('+', '%2B') + '&reasoner=' + reasonerCombobox.getValue();
 			}
 		},{
 			xtype : 'button',
@@ -388,19 +394,19 @@ function appInit(expression, reasonerValue, ontologyValue) {
 
 ////////////////////////  MANCHESTER SYNTAX /////////////////////////////////
 
-   var msStore = new Ext.data.SimpleStore({ 
+   msStore = new Ext.data.SimpleStore({ 
         fields: ['query'],
         data: Ext.state.Manager.get('MSStore', []) 
   });
 
-
-   function saveMSQuery(query) { 
+ /* function saveMSQuery() { 
+      
       if (Ext.isEmpty(query)) 
          return;
 
       msStore.clearFilter(false);
-         
-      if ((msStore.findExact('query', query) < 0)) {  // replaced "find" with "findExact"
+
+      if (msStore.findExact('query', query) < 0) {  // replaced "find" with "findExact"
 
          var msdata = [[query, 'query']];   // σωστό!
          var count = msStore.getTotalCount(); 
@@ -416,8 +422,9 @@ function appInit(expression, reasonerValue, ontologyValue) {
            msStore.removeAll();
            msStore.loadData(msdata);     
         }
-      
-    }
+      }   */
+
+    
 
 var mshistoryGrid = new Ext.grid.GridPanel({
     id: 'mshistoryGrid',
@@ -443,7 +450,7 @@ var mshistoryGrid = new Ext.grid.GridPanel({
     id: 'mshistoryPanel',
     floating: true,   // for not being like having transparency
     frame: false,
-    boxMaxWidth : 750,
+    boxMaxWidth : 500,    //750
     boxMinWidth : 150,
     //border: false,  // false because we added bodyStyle at grid
     bodyCfg: { //@gs DO NOT DELETE - places border to the history panel
@@ -568,13 +575,13 @@ var generatedQuery = new Ext.Panel( {
 			handler: function(event) {
 			  if (mseditor.getValue().length>0) {
 					
-          var mscur = mseditor.getValue();
-          saveMSQuery(mscur);     // for query history -- added by @gs
+          //var mscur = mseditor.getValue();
           mshistoryPanel.setVisible(false);
           generatedQuery.setVisible(true);
-          
-          window.location = 'semantic-search?semantic=true&syntax=man&expression=' + encodeURI(mseditor.getValue()); 
-                 
+          window.location = 'semantic-search?semantic=true&syntax=man&expression=' + encodeURI(mseditor.getValue());
+          window.onload = function () {
+          //saveMSQuery(mscur);     // for query history -- added by @gs
+          };   
           }
       
 		  }} ,{
@@ -625,6 +632,7 @@ var generatedQuery = new Ext.Panel( {
    mseditor.setSize(null,30); // height 30 --> 2 lines 
    mseditor.setValue(expression);     // added by @gs : keeps query when interface is refreshed, after "searh" is pressed
       
+   myMS_query = mseditor.getValue();
   
 /* @gs : shows hint when clicking Ctrl+Space 
   CodeMirror.commands.autocomplete = function(cm) {
@@ -651,13 +659,13 @@ var generatedQuery = new Ext.Panel( {
    
 ////////////////////////  SPARQL end-point /////////////////////////////////
 
-  var spStore = new Ext.data.SimpleStore({ 
+  spStore = new Ext.data.SimpleStore({    // now reads global variable spStore
         fields: ['query'],
         data: Ext.state.Manager.get('SPStore', []) 
   });
 
         
-   function saveQuery(query) { 
+/*   function saveSPQuery(query) { 
       if (Ext.isEmpty(query)) 
          return;
 
@@ -668,7 +676,7 @@ var generatedQuery = new Ext.Panel( {
          var data = [[query, 'query']];   // σωστό!
          var count = spStore.getTotalCount(); 
          var limit = count >= 10? 9: count;  //@gs "count>=10"! and not "count>10"
-         
+                   
           for (var i = 0; i < limit; i++) {
               data.push([spStore.getAt(i).get('query')]); 
           }
@@ -680,7 +688,7 @@ var generatedQuery = new Ext.Panel( {
            spStore.loadData(data);     
         }
       
-    }	        
+    }	  */      
 
 var historyGrid = new Ext.grid.GridPanel({
     id: 'historyGrid',
@@ -839,7 +847,7 @@ var historyGrid = new Ext.grid.GridPanel({
       handler: function(event) {
         if (speditor.getValue().length>0) {
 					var cur = speditor.getValue();
-          saveQuery(cur);     // for query history -- added by @gs
+          saveSPQuery(cur);     // ############## TO DELETE - NEED TO BE REBLACED BY METHOD CALL IN JSP
           historyPanel.setVisible(false);
           sparqlPanel.setVisible(true);
          // advancedPanelSP.doLayout();
@@ -892,7 +900,7 @@ var historyGrid = new Ext.grid.GridPanel({
    });
    speditor.setSize(null,100);      //(width, height)
   // speditor.setValue(expression);     // added by @gs : keeps query when search button is pressed
-
+   mySP_query = speditor.getValue(); // 
      
 	var optionsPanel = new Ext.Panel( {
 		id: 'options-panel',
@@ -911,8 +919,8 @@ var historyGrid = new Ext.grid.GridPanel({
 		forceLayout: true,
 		items : [ searchPanel, advancedPanelSP, optionsPanel ],
   });
-	
 
+ 
  // Ext.util.Observable.capture(Ext.getCmp(historyGrid.id), function(evname) {console.log(evname, arguments);})
 
   document.onclick = docclickhandler; 
@@ -980,4 +988,66 @@ function loadXMLDoc(name, elem){
 function hideTooltip(){
   document.getElementById("querytooltip").style.display = 'none';
   
-}
+} 
+
+ // for query history --> if query cannot be parsed, query is not stored
+
+
+
+function saveMSQuery() { 
+   
+      var query = myMS_query;
+      
+      if (Ext.isEmpty(query)) 
+         return;
+
+      msStore.clearFilter(false);
+
+      //var foundExep = checkException();  //checks if query was not parsed correctly
+      //console.log(foundExep); 
+      if (msStore.findExact('query', query) < 0) {  // replaced "find" with "findExact"
+
+         var msdata = [[query, 'query']];   // σωστό!
+         var count = msStore.getTotalCount(); 
+         var limit = count >= 10? 9: count;  //@gs "count>=10"! and not "count>10"
+         
+          for (var i = 0; i < limit; i++) {
+              msdata.push([msStore.getAt(i).get('query')]); 
+          }
+                                            
+          if (Ext.state.Manager.getProvider()) 
+             Ext.state.Manager.set('MSStore', msdata); 
+          
+           msStore.removeAll();
+           msStore.loadData(msdata);     
+        }
+      
+    }
+    
+
+            
+function saveSPQuery() { 
+      if (Ext.isEmpty(query)) 
+         return;
+
+      var query = mySP_query;
+      spStore.clearFilter(false);
+         
+      if ((spStore.findExact('query', query) < 0)) {  // replaced "find" with "findExact"
+
+         var data = [[query, 'query']];   // σωστό!
+         var count = spStore.getTotalCount(); 
+         var limit = count >= 10? 9: count;  //@gs "count>=10"! and not "count>10"
+                   
+          for (var i = 0; i < limit; i++) {
+              data.push([spStore.getAt(i).get('query')]); 
+          }
+                                            
+          if (Ext.state.Manager.getProvider()) 
+             Ext.state.Manager.set('SPStore', data); 
+          
+           spStore.removeAll();
+           spStore.loadData(data);     
+        }
+      
+    }
