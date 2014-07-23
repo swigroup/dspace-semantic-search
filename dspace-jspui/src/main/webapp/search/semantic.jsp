@@ -367,6 +367,9 @@
           else if (request.getAttribute("error") == null && !expression.equals(""))
           {
   %>
+             <script type="text/javascript"> 
+               saveMSQuery();
+             </script>
   <br />
   <p align="center">
     <fmt:message key="jsp.search.semantic.noresults" />   

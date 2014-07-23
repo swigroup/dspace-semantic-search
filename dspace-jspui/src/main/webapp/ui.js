@@ -115,7 +115,7 @@ function getRightAutocompleteComboBox(label) {      // @@@ expression
 	});
 
 	return new Ext.form.ComboBox( {
-    emptyText: 'entity or value and/or expression in parenthesis',   //added by @gs - works as placeholder
+    emptyText: 'can be either a type or an instance or an arithmetic value',   //added by @gs - works as placeholder
     store : store,
     anchor: '90%', // added by @gs - sets relative width
 		fieldLabel : label,
@@ -154,7 +154,8 @@ function getStaticComboBox(label, /*width,*/ data, pctext) { //pctext added by @
 		//width: width,
 		forceSelection : true,
 		triggerAction : 'all',
-		selectOnFocus : true
+		selectOnFocus : true,
+    itemCls : 'resize-arrow'
 	});
 }
 
@@ -184,7 +185,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
   var store = getAutocompleteStore();
 	
 	var filterComboBox = getStaticComboBox("Restriction", /*110,*/ [ [ 'some', 'some' ], [ 'min', 'min' ], [ 'max', 'max' ], [ 'only', 'only' ],
-		[ 'value', 'value' ], [ 'exactly', 'exactly' ]], "select one...");  //last parameter adde by @gs
+		[ 'value', 'value' ], [ 'exactly', 'exactly' ]], "select a keyword (some, only, min, ...)");  //last parameter adde by @gs
   filterComboBox.disable();
 
 	/*
@@ -209,7 +210,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 	}
 	
   // @@ Search for
-	var termField = getTermAutocompleteComboBox("Search for", rightField, filterComboBox, "entity or kind of relation");
+	var termField = getTermAutocompleteComboBox("Search for", rightField, filterComboBox, "a certain type or a kind of relation");
 	termField.allowBlank = true; // orignally was 'false'
 
 	var notCheckbox = new Ext.form.Checkbox({
@@ -665,7 +666,7 @@ var generatedQuery = new Ext.Panel( {
   });
 
         
-/*   function saveSPQuery(query) { 
+  function saveSPQuery(query) { 
       if (Ext.isEmpty(query)) 
          return;
 
@@ -688,7 +689,7 @@ var generatedQuery = new Ext.Panel( {
            spStore.loadData(data);     
         }
       
-    }	  */      
+    }	        
 
 var historyGrid = new Ext.grid.GridPanel({
     id: 'historyGrid',

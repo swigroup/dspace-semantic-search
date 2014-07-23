@@ -430,3 +430,8 @@ h4 {
  font-weight: bold;
  font-size: 14px;
 } 
+
+
+.resize-arrow .x-form-trigger{
+  height: inherit !important;
+}
