@@ -228,7 +228,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
    // bodyStyle : 'font:12px tahoma,arial,helvetica,sans-serif; padding:5px; text-align:right;',		
     bodyCfg: {
         cls: 'need-border-class .x-panel-body',  // Default class not applied if Custom element specified 
-        style: {'border':'1px solid #C0C0C0;'},
+        style: 'border: 1px solid #C0C0C0;',
     },
     items : [ /*{
 			xtype: 'compositefield',
@@ -456,7 +456,7 @@ var mshistoryGrid = new Ext.grid.GridPanel({
     //border: false,  // false because we added bodyStyle at grid
     bodyCfg: { //@gs DO NOT DELETE - places border to the history panel
         cls: 'need-border-class x-panel-body',  // Default class not applied if Custom element specified 
-        style: {'border':'1px solid #C0C0C0;'},
+        style: 'border: 1px solid #C0C0C0;',
     }, 
     layout:{
         type:'fit',
@@ -488,12 +488,12 @@ var generatedQuery = new Ext.Panel( {
     //fieldLabel: 'Generated query:',
     frame: false,
     border: false,
-    height: 36,
+    height: 39,     // this value handles well two lines
     hidden: false,
     bodyCfg: { //@gs DO NOT DELETE - hides double border
         cls: 'need-border-class x-panel-body',  // Default class not applied if Custom element specified 
-        style: {'border':'1px solid #C0C0C0;'},
-    }, 
+        style: 'border: 1px solid #C0C0C0; padding: 1px 0px',
+    },
     items: [
     {
       style: 'text-align:left;',
@@ -506,6 +506,10 @@ var generatedQuery = new Ext.Panel( {
 
   var msWithHistory = new Ext.Panel({
     id: 'msWithHistory',
+    bodyCfg: {
+        cls: 'no-border-class x-panel-body', 
+        style: 'margin-left: 4px;',  // necessary for clearing empty space between panel and button
+    },
     frame: false,
     border: true,
     height: 70,
@@ -526,7 +530,7 @@ var generatedQuery = new Ext.Panel( {
     },
     bodyCfg: {
         cls: 'no-border-class x-panel-body',  // Default class not applied if Custom element specified 
-        style: {'border':'none;'},
+        style: 'border: none;',
     },  
     bodyStyle : 'text-align:left;', 
     items: [generatedQueryLabel, msWithHistory, {
@@ -568,7 +572,7 @@ var generatedQuery = new Ext.Panel( {
     //the items of this Panel (excluding buttons) - this border appears becaues we used the renderTo option
   	bodyCfg: {
         cls: 'no-border-class x-panel-body',  // Default class not applied if Custom element specified 
-        style: {'border-style':'none;'},
+        style: 'border-style: none;',
     },    
     buttons : [ {
 			xtype : 'button',
@@ -579,10 +583,7 @@ var generatedQuery = new Ext.Panel( {
           //var mscur = mseditor.getValue();
           mshistoryPanel.setVisible(false);
           generatedQuery.setVisible(true);
-          window.location = 'semantic-search?semantic=true&syntax=man&expression=' + encodeURI(mseditor.getValue());
-          window.onload = function () {
-          //saveMSQuery(mscur);     // for query history -- added by @gs
-          };   
+          window.location = 'semantic-search?semantic=true&syntax=man&expression=' + encodeURI(mseditor.getValue());  
           }
       
 		  }} ,{
@@ -721,7 +722,7 @@ var historyGrid = new Ext.grid.GridPanel({
     //border: false,  // false because we added bodyStyle at grid
     bodyCfg: { //@gs DO NOT DELETE - places border to the history panel
         cls: 'need-border-class x-panel-body',  // Default class not applied if Custom element specified 
-        style: {'border':'1px solid #C0C0C0;'},
+        style: 'border: 1px solid #C0C0C0;',
     }, 
     layout:{
         type:'fit',
@@ -763,7 +764,7 @@ var historyGrid = new Ext.grid.GridPanel({
     layout: 'absolute',
     bodyCfg: { //@gs DO NOT DELETE - hides double border
         cls: 'no-border-class x-panel-body x-panel-noheader',  // Default class not applied if Custom element specified 
-        style: {'border-top':'none;'},
+        style: 'border-top: none;',
     },   
     flex: 9, //its container (queryPanel) has layout of type "hbox"
     items: [sparqlPanel, historyPanel],
@@ -780,7 +781,7 @@ var historyGrid = new Ext.grid.GridPanel({
     },
     bodyCfg: {
         cls: 'no-border-class .x-panel-body',  // Default class not applied if Custom element specified 
-        style: {'body-style':'none;'}
+        style: 'body-style: none;'
     }, 
     items: [spWithHistory, {
       xtype: 'button',
@@ -837,7 +838,7 @@ var historyGrid = new Ext.grid.GridPanel({
     //the items of this Panel (excluding buttons) - this border appears becaues we used the renderTo option
   	bodyCfg: {
         cls: 'no-border-class .x-panel-body',  // Default class not applied if Custom element specified 
-        style: {'body-style':'none;'}
+        style: 'body-style: none;'
     }, 
     items: [
       queryPanel, reasonerLabelSP   //@@@@@@@@@@@@@@@@@@@@@

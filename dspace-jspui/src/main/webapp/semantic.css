@@ -230,6 +230,12 @@ form.autocomplete {display: inline;}
   overflow-y: hidden !important; /* vertical scrollbar should be 'hidden' - otherwise overwrites history button*/
 }
 
+/* sets better padding for text in the codemirror fields */
+.CodeMirror-lines {
+  padding: 1px 0px !important;
+}
+
+
 
 /****** overlay for ext-all.css ******/
 
@@ -431,7 +437,7 @@ h4 {
  font-size: 14px;
 } 
 
-
+/* fixes height of arrow button in combo boxes */
 .resize-arrow .x-form-trigger{
   height: inherit !important;
 }
