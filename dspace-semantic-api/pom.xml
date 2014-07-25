@@ -20,6 +20,10 @@
     <repositories>
 
         <repository>
+            <id>patras</id>
+            <url>http://swig.hpclab.ceid.upatras.gr/maven/</url>
+        </repository>
+        <repository>
             <id>berkeleybop</id>
             <name>berkeleybop</name>
             <url>http://code.berkeleybop.org/maven/repository/</url>
@@ -46,11 +50,6 @@
             <artifactId>dspace-jspui</artifactId>
             <type>jar</type>
             <classifier>classes</classifier>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.manchester.cs</groupId>
-            <artifactId>factplusplus</artifactId>
-            <version>1.6.3</version>            
         </dependency>      
         <dependency>
             <groupId>junit</groupId>
@@ -107,6 +106,11 @@
             <groupId>net.sourceforge.owlapi</groupId>
             <artifactId>owlapi-distribution</artifactId>
             <version>3.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.manchester.cs</groupId>
+            <artifactId>factplusplus</artifactId>
+            <version>1.6.3</version>
         </dependency>
     </dependencies>
         
