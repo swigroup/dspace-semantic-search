@@ -21,6 +21,7 @@
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.net.URI"%>
+<%@ page import="java.net.URISyntaxException"%>
 <%@ page import="org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom"%>
 <%@ page import="org.semanticweb.owlapi.model.OWLNegativeObjectPropertyAssertionAxiom"%>
 <%@ page import="org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom"%>
@@ -596,7 +597,7 @@
 
 <%!/* Function to return the values of a Constant */
 
-    private String[] getValues(Object obj, ShortFormProvider sf)
+    private String[] getValues(Object obj, ShortFormProvider sf) throws URISyntaxException
     {
         String[] returnValues = new String[3];
 
@@ -611,9 +612,10 @@
             returnValues[0] = literal.getLiteral();
             returnValues[1] = literal.getLang();
             returnValues[2] = literal.getDatatype().toString();
-            /* In case Datatype is xsd:anyURI, make value a link */
+            /* In case Datatype is xsd:anyURI, make value a link 
+               and try escaping it first*/
             if (returnValues[2].equals("xsd:anyURI")) {
-            	returnValues[0] = "<A HREF='"+returnValues[0]+"' TARGET='_blank'>"
+            	returnValues[0] = "<A HREF=\""+new URI(returnValues[0]).toString()+"\" TARGET='_blank'>"
             	+returnValues[0]+"</A>";
             }
         }

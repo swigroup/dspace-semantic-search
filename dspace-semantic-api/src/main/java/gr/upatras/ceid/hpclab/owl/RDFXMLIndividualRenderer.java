@@ -30,7 +30,6 @@ import org.semanticweb.owlapi.model.OWLHasKeyAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
 
 /**
@@ -39,8 +38,8 @@ import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
  */
 public class RDFXMLIndividualRenderer extends RDFXMLRenderer {
 
-    public RDFXMLIndividualRenderer(OWLOntologyManager manager, OWLOntology ontology, Writer w) {
-        super(manager, ontology, w);
+    public RDFXMLIndividualRenderer(OWLOntology ontology, Writer w) {
+        super(ontology, w);
     }
 
     public void render(OWLNamedIndividual ind) throws IOException {
@@ -119,7 +118,9 @@ public class RDFXMLIndividualRenderer extends RDFXMLRenderer {
                         axioms.add(ax);
                     }
                 }
-                axioms.addAll(ontology.getAxioms(manager.getOWLDataFactory().getOWLObjectInverseOf(property)));
+                axioms.addAll(ontology.getAxioms(ontology
+                        .getOWLOntologyManager().getOWLDataFactory()
+                        .getOWLObjectInverseOf(property)));
             }
 
             public void visit(OWLAnnotationProperty property) {

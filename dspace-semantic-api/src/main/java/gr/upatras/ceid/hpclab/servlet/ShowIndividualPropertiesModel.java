@@ -99,7 +99,7 @@ public class ShowIndividualPropertiesModel {
                     OWLNamedIndividual individual = su.getManager()
                             .getOWLDataFactory().getOWLNamedIndividual(indIRI);
 
-                    RDFXMLIndividualRenderer output = new RDFXMLIndividualRenderer(su.getManager(), su.getOntology(), print);
+                    RDFXMLIndividualRenderer output = new RDFXMLIndividualRenderer(su.getOntology(), print);
                     output.render(individual);
 
                 } catch (Exception exception) {
