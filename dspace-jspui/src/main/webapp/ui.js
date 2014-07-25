@@ -409,7 +409,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 
       if (msStore.findExact('query', query) < 0) {  // replaced "find" with "findExact"
 
-         var msdata = [[query, 'query']];   // óùóôü!
+         var msdata = [[query, 'query']];   // ï¿½ï¿½ï¿½ï¿½ï¿½!
          var count = msStore.getTotalCount(); 
          var limit = count >= 10? 9: count;  //@gs "count>=10"! and not "count>10"
          
@@ -624,7 +624,7 @@ var generatedQuery = new Ext.Panel( {
        tabMode: "indent",
        lineWrapping: true,
        matchBrackets: true,     
-       placeholder: "using the \"Add term\" button put all pieces together or type your type DL query dirctly",
+       placeholder: "using the \"Add term\" button, put all pieces together or type your DL query directly",
        extraKeys: {
           // @gs - star searching on pressing enter
           "Enter": function(event) {if (mseditor.getValue().length>0) { window.location = 'semantic-search?semantic=true&syntax=man&expression=' +encodeURI(mseditor.getValue()); } },
@@ -675,7 +675,7 @@ var generatedQuery = new Ext.Panel( {
          
       if ((spStore.findExact('query', query) < 0)) {  // replaced "find" with "findExact"
 
-         var data = [[query, 'query']];   // óùóôü!
+         var data = [[query, 'query']];   // ï¿½ï¿½ï¿½ï¿½ï¿½!
          var count = spStore.getTotalCount(); 
          var limit = count >= 10? 9: count;  //@gs "count>=10"! and not "count>10"
                    
@@ -1009,7 +1009,7 @@ function saveMSQuery() {
       //console.log(foundExep); 
       if (msStore.findExact('query', query) < 0) {  // replaced "find" with "findExact"
 
-         var msdata = [[query, 'query']];   // óùóôü!
+         var msdata = [[query, 'query']];   // ï¿½ï¿½ï¿½ï¿½ï¿½!
          var count = msStore.getTotalCount(); 
          var limit = count >= 10? 9: count;  //@gs "count>=10"! and not "count>10"
          
@@ -1037,7 +1037,7 @@ function saveSPQuery() {
          
       if ((spStore.findExact('query', query) < 0)) {  // replaced "find" with "findExact"
 
-         var data = [[query, 'query']];   // óùóôü!
+         var data = [[query, 'query']];   // ï¿½ï¿½ï¿½ï¿½ï¿½!
          var count = spStore.getTotalCount(); 
          var limit = count >= 10? 9: count;  //@gs "count>=10"! and not "count>10"
                    
