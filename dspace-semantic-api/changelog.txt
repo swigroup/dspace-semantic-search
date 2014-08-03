@@ -1,4 +1,35 @@
-﻿
+-------------------------------------------------------------------------------
+f82449088f74   	DSpace 4.2 with SSv3.0 (SSv3.0)			Aug 03, 2014
+-------------------------------------------------------------------------------
+f82449088f74 	- moving to dspace-4.2
+38e88f9f4e2b 	- (1) Upgrade to owlapi v3.5
+		  (2) Upgrade to FaCT++ v1.6.3
+		  (3) escape foaf:page URL
+5f4ecb1671f9 	- (1) new placeholder texts for several  MS query fields were 
+		   added
+		  (2) syntactically correct queries with 'no results' are now kept in
+		   history
+		  (3) height of the ComboBox arrow button was fixed
+7f0fe74eacf0 	- (1) warning messages style was changed
+		  (2) only successful queries are now kept in history
+38cb714d8561 	- new fix for results time
+976b75528406 	- restore proper versioning for dspace-semantic-api
+e9c9711ea11b 	- hermit moved to 1.3.8.4
+881f21b20a42 	- semantic.css contains styles which bring back the css style
+		   that ext-all.css overwrites. It generally contais overlays for
+		   codemirror.css, ext-all.css, xtheme-gray.css. Styles affect 
+		   'semantic.jsp' and 'showIndProperties.jsp'
+46756c0c867c 	- moving to dspace 4 (dspace 4.1 with SS and LD facility)
+d4d88e08e576 	- (1) ss-specific styles now gathered in semantic.css 
+		  (2) extra check for null (properties) Set added 
+		  (3) position of DBpedia tooltip is finally correct
+be42d841e9e2 	- DBpedia lookup service tooltip
+dd72aa36d779 	- (1) enable dbpedia URL injection and RDF 
+		  (2) fix results time (from ms to sec)
+5b54ef9063bd 	- Jersey implementation for RESTful access to the individual pane
+2deeb8ab3078 	- MS syntax highlight (codemirror) + sparql endpoint 
+		   (interface only)
+-------------------------------------------------------------------------------
 84e9eb4ba1c1   	DSpace 3.2 with SSv2.3 (SSv2.3)			Oct 20, 2013
 -------------------------------------------------------------------------------
 40beedd9a190 	- Properly export XOAI metadata to QDC
