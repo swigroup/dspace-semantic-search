@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+
+<!-- start of XML -->
+
+<dspace-dc-types>
+
+  <dspace-header>
+    <title>DSpace IEEE LOM</title>
+    <contributor.author>Dimitrios Koutsomitropoulos</contributor.author>
+    <contributor.author>Georgia Solomou</contributor.author>
+    <contributor.author>Andreas Alexopoulos</contributor.author>
+    <contributor.author>Theodore Papatheodorou</contributor.author>
+    <date.created>$Date$</date.created>
+    <description.version>$Revision$</description.version>
+    <description>
+      $log$
+The wide availability of educational resources is a common objective for universities, libraries, archives and other knowledge-intensive institutions. Although generic metadata specifications (such as Dublin Core) seem to fulfill the need for documenting web-distributed objects, educational resources demand a more specialized treatment and characterization. In this article we focus on the use of learning-object specific metadata in digital repositories, as they are primarily incarnated in the LOM (learning object metadata) standard. We review relevant standards and practices, especially noting the importance of application profiling paradigms. A widespread institutional repository platform is offered by DSpace. We discuss our implementation of LOM metadata in this system as well as our interoperability extensions. To this end, we propose a potential LOM to DC mapping that we have put into use in DSpace. Finally, we introduce our implementation of an LOM ontology, as a basis for delivering Semantic Web services over educational resources.
+
+  </description>
+
+  </dspace-header>
+
+  <dc-schema>
+          <name>lom</name>
+          <namespace>http://ltsc.ieee.org/wg12/</namespace>
+  </dc-schema>
+
+  <dc-type>
+	<schema>lom</schema>
+    <element>annotation</element>
+    <qualifier></qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <!-- Used by system: do not remove -->
+  <dc-type>
+	<schema>lom</schema>
+    <element>context</element>
+    <qualifier></qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <dc-type>
+	<schema>lom</schema>
+    <element>difficulty</element>
+    <qualifier></qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <dc-type>
+	<schema>lom</schema>
+    <element>intendedenduserrole</element>
+    <qualifier></qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <dc-type>
+	<schema>lom</schema>
+    <element>interactivitytype</element>
+    <qualifier></qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <dc-type>
+	<schema>lom</schema>
+    <element>learningresourcetype</element>
+    <qualifier></qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+
+  <!-- Used by system: do not remove -->
+  <dc-type>
+	<schema>lom</schema>
+    <element>status</element>
+    <qualifier></qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <dc-type>
+	<schema>lom</schema>
+    <element>typicallearningtime</element>
+    <qualifier></qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+  <dc-type>
+	<schema>lom</schema>
+    <element>version</element>
+    <qualifier></qualifier>
+    <scope_note></scope_note>
+  </dc-type>
+
+</dspace-dc-types>

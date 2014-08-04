@@ -124,7 +124,12 @@
 
 <h2><fmt:message key="jsp.layout.navbar-default.semantic"/></h2>
 
-  
+
+      <div align="center">
+        <font size=3><fmt:message key="jsp.search.semantic.questionnaire.info"/>
+        <a href="http://goo.gl/Zt0aP"><fmt:message key="jsp.search.semantic.questionnaire.click" /></a> <font>
+      </div>
+      
     <div id="destino" class="panel panel-default">
       <div align="right"><dspace:popup page="<%= LocaleSupport.getLocalizedMessage(pageContext,\"help.index\") + \"#semantic\"%>"><fmt:message key="jsp.help"/></dspace:popup> </div>
     </div>
