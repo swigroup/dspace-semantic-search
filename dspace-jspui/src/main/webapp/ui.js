@@ -221,7 +221,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 	
 
 	var form = new Ext.FormPanel( {
-		labelWidth : 70, 
+		labelWidth : 90, 
 		autoHeight : true,
     monitorValid : true,
 		bodyStyle : 'padding:5px',
@@ -368,7 +368,7 @@ function appInit(expression, reasonerValue, ontologyValue) {
 	
   
 	var optionsForm = new Ext.FormPanel( {
-		labelWidth : 70,
+		labelWidth : 90,
 		monitorValid : true,
 		items : [ reasonerCombobox, ontologyCombobox],
 		bodyStyle : 'padding:5px',
