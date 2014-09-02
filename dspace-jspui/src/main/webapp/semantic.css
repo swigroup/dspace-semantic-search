@@ -147,7 +147,7 @@ form.autocomplete {display: inline;}
 
 /* added by @gs for styling codemirror placeholders (only) */
 .CodeMirror pre.CodeMirror-placeholder {  
-  color:#C0C0C0;
+  color: gray;
   font: 14px Helvetica Neue,Helvetica,Arial,sans-serif !important;    
 }
 
@@ -233,7 +233,7 @@ form.autocomplete {display: inline;}
 
 
 
-/* added by @GS for styling emptytext */       /**************** need fix (font size)***/
+/* added by @GS for styling emptytext */ 
 .x-form-empty-field {
     color:#C0C0C0;
     font: 14px Helvetica Neue,Helvetica,Arial,sans-serif !important;
@@ -435,7 +435,12 @@ h4 {
  font-size: 14px;
 } 
 
-/* fixes height of arrow button in combo boxes */
+/* adjusts height of arrow button in combo boxes */
 .resize-arrow .x-form-trigger{
-  height: inherit !important;
+  height: 100% !important;
+}
+
+/* adjusts padding of "generated query" label */
+label#ext-comp-1017 {
+  padding: 3px 3px 3px 0px;
 }
