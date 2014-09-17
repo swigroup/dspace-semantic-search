@@ -62,7 +62,7 @@ function getTermAutocompleteComboBox(label, rightField, filterComboBox, pctext) 
 	return new Ext.ux.form.GroupingComboBox( {
 		emptyText: pctext, //added by @gs
     store : store,
-    anchor: '90%', 
+    anchor: '96%',    
 		groupField: 'group',
 		fieldLabel : label,
 		displayField : 'value',
@@ -72,8 +72,6 @@ function getTermAutocompleteComboBox(label, rightField, filterComboBox, pctext) 
     mode : 'local',
 		queryParam : 'query',
 		selectOnFocus : true,
-    //width: 110,
-		// autoWidth : true,
 		hideTrigger : true,
 		listeners: {
 			'change': function(field, newValue, oldValue) {		    			
@@ -117,7 +115,7 @@ function getRightAutocompleteComboBox(label) {      // @@@ expression
 	return new Ext.form.ComboBox( {
     emptyText: 'can be either a type or an instance or an arithmetic value',   //added by @gs - works as placeholder
     store : store,
-    anchor: '90%', // added by @gs - sets relative width
+    anchor: '96%', // added by @gs - sets relative width
 		fieldLabel : label,
 		displayField : 'value',
 		typeAhead : true,
@@ -142,7 +140,7 @@ function getStaticComboBox(label, /*width,*/ data, pctext) { //pctext added by @
 	return new Ext.form.ComboBox( {
     emptyText: pctext, //added by @gs
     store : store,
-    anchor: '90%', // added by @gs - sets relative width
+    anchor: '96%', // added by @gs - sets relative width
 		fieldLabel : label,
 		displayField : 'value',
 		valueField: 'id',
@@ -478,7 +476,7 @@ var reasonerLabel = new Ext.form.Label({
    });
   
 var generatedQueryLabel = new Ext.form.Label({
-    html : "Generated"+"</br>"+"query: ",
+    html : "Generated"+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</br>"+"query: ",
     //flex: 1,    //do not set!
     });  
   
