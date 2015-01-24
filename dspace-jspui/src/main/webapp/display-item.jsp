@@ -29,6 +29,7 @@
 
 <%@ taglib uri="http://www.dspace.org/dspace-tags.tld" prefix="dspace" %>
 
+<%@ page import="java.net.URLEncoder" %>
 <%@ page import="org.dspace.content.Collection" %>
 <%@ page import="org.dspace.content.DCValue" %>
 <%@ page import="org.dspace.content.Item" %>
@@ -213,6 +214,10 @@
     <a class="btn btn-default" href="<%=locationLink %>?mode=simple">
         <fmt:message key="jsp.display-item.text1"/>
     </a>
+    </br></br>
+    <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/resource/">
+        <fmt:message key="jsp.display-item.semantic"/>
+    </a>
 <%
         }
 %>
@@ -236,6 +241,10 @@
 %>
     <a class="btn btn-default" href="<%=locationLink %>?mode=full">
         <fmt:message key="jsp.display-item.text2"/>
+    </a>
+    </br></br>
+    <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/resource/"> 
+        <fmt:message key="jsp.display-item.semantic"/>
     </a>
 <%
         }
