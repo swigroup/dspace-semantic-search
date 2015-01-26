@@ -591,6 +591,18 @@
     <%
       } // end of if
     %>
+    
+    <%
+    String item = request.getAttribute("indURI").toString();
+    String locationLink = request.getContextPath() + "/handle/" + item.substring(item.lastIndexOf(':')+1);     %>
+    
+     <a class="btn btn-default" href="<%=locationLink %>?mode=full">
+        <fmt:message key="jsp.display-item.text1"/>
+    </a>
+    &nbsp;
+    <a class="btn btn-default" href="<%=locationLink %>?mode=full">
+        <fmt:message key="jsp.display-item.text2"/>
+    </a>
 
 </dspace:layout>
 

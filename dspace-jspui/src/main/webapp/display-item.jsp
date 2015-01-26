@@ -194,6 +194,7 @@
 <div class="container row">
 <%
     String locationLink = request.getContextPath() + "/handle/" + handle;
+    String base= ConfigurationManager.getProperty("dspace.hostname");
 
     if (displayAll)
     {
@@ -214,10 +215,12 @@
     <a class="btn btn-default" href="<%=locationLink %>?mode=simple">
         <fmt:message key="jsp.display-item.text1"/>
     </a>
-    </br></br>
-    <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/resource/">
-        <fmt:message key="jsp.display-item.semantic"/>
+    &nbsp;
+    <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/page/oai:<%= base %>:<%= handle %>">
+        <fmt:message key="jsp.display-item.test4"/>
     </a>
+    &nbsp;
+    <a class="statisticsLink  btn btn-primary" href="<%= request.getContextPath() %>/handle/<%= handle %>/statistics"><fmt:message key="jsp.display-item.display-statistics"/></a>
 <%
         }
 %>
@@ -242,10 +245,13 @@
     <a class="btn btn-default" href="<%=locationLink %>?mode=full">
         <fmt:message key="jsp.display-item.text2"/>
     </a>
-    </br></br>
-    <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/resource/"> 
-        <fmt:message key="jsp.display-item.semantic"/>
+    &nbsp;
+    <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/page/oai:<%= base %>:<%= handle %>"> 
+        <fmt:message key="jsp.display-item.test4"/>
     </a>
+    &nbsp;
+    <a class="statisticsLink  btn btn-primary" href="<%= request.getContextPath() %>/handle/<%= handle %>/statistics"><fmt:message key="jsp.display-item.display-statistics"/></a>
+
 <%
         }
     }
@@ -268,8 +274,10 @@
 <%
         }
 %>
+    <!-- 
     <a class="statisticsLink  btn btn-primary" href="<%= request.getContextPath() %>/handle/<%= handle %>/statistics"><fmt:message key="jsp.display-item.display-statistics"/></a>
-
+     -->
+     
     <%-- SFX Link --%>
 <%
     if (ConfigurationManager.getProperty("sfx.server.url") != null)
