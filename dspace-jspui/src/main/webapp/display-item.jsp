@@ -217,7 +217,7 @@
     </a>
     &nbsp;
     <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/page/oai:<%= base %>:<%= handle %>">
-        <fmt:message key="jsp.display-item.test4"/>
+        <fmt:message key="jsp.display-item.text4"/>
     </a>
     &nbsp;
     <a class="statisticsLink  btn btn-primary" href="<%= request.getContextPath() %>/handle/<%= handle %>/statistics"><fmt:message key="jsp.display-item.display-statistics"/></a>
@@ -247,7 +247,7 @@
     </a>
     &nbsp;
     <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/page/oai:<%= base %>:<%= handle %>"> 
-        <fmt:message key="jsp.display-item.test4"/>
+        <fmt:message key="jsp.display-item.text4"/>
     </a>
     &nbsp;
     <a class="statisticsLink  btn btn-primary" href="<%= request.getContextPath() %>/handle/<%= handle %>/statistics"><fmt:message key="jsp.display-item.display-statistics"/></a>
