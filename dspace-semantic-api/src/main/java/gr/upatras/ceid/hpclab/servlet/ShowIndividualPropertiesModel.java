@@ -8,6 +8,7 @@
 package gr.upatras.ceid.hpclab.servlet;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -20,8 +21,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
@@ -70,6 +74,7 @@ public class ShowIndividualPropertiesModel {
     @Path("/page/{id:.+}")
     public Viewable showHTML(@PathParam("id") String id) {
         IndividualProperties indp = new IndividualProperties();
+        id = getIndURI(id);
         IRI indIRI = IRI.create(id);
         request.setAttribute("indURI", id);
 
@@ -87,6 +92,7 @@ public class ShowIndividualPropertiesModel {
     @Path("/data/{id:.+}")
     @Produces("application/rdf+xml")
     public Response showRDF(@PathParam("id") String id) throws SQLException {
+        id = getIndURI(id);
         final IRI indIRI = IRI.create(id);
         final SemanticUnit su = SemanticUnitContext.getInstanceFromRequest(UIUtil.obtainContext(request), request);
 
@@ -112,5 +118,15 @@ public class ShowIndividualPropertiesModel {
 
 
         return Response.ok(stream).build();
+    }
+    private String getIndURI(String id) {
+        try {
+            final URI uri = new URI (id);
+            if (!uri.isAbsolute()) {
+                id = uriInfo.getBaseUri().toString() + "semantic-search/resource/" + id;
+            }
+        } catch (URISyntaxException ex) {
+        }
+        return id;
     }
 }
