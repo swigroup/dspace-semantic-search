@@ -45,7 +45,7 @@ public class DspaceOntologyServlet extends DSpaceServlet
 
         try
         {
-            URL xsltURL = new URL("http://swig.hpclab.ceid.upatras.gr/dspace-ont/transformer.xslt");
+            URL xsltURL = new URL(ConfigurationManager.getProperty("semantic", "xslt.url"));
             InputStream xsltStream = xsltURL.openStream();
             StreamSource xsltStreamSource = new StreamSource(xsltStream);
 

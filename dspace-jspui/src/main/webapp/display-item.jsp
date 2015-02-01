@@ -216,7 +216,7 @@
         <fmt:message key="jsp.display-item.text1"/>
     </a>
     &nbsp;
-    <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/page/oai:<%= base %>:<%= handle %>">
+    <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/resource/<%= handle %>">
         <fmt:message key="jsp.display-item.text4"/>
     </a>
     &nbsp;
@@ -246,7 +246,7 @@
         <fmt:message key="jsp.display-item.text2"/>
     </a>
     &nbsp;
-    <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/page/oai:<%= base %>:<%= handle %>"> 
+    <a class="btn btn-default" href="<%=request.getContextPath()%>/semantic-search/resource/<%= handle %>"> 
         <fmt:message key="jsp.display-item.text4"/>
     </a>
     &nbsp;
